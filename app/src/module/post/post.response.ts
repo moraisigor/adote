@@ -26,11 +26,13 @@ export class PetResponse {
   readonly breed: BreedResponse
 
   constructor(pet: PetDocument) {
+    const { breed } = pet
+
     this.id = pet.id
     this.name = pet.name
     this.size = pet.size
     this.gender = pet.gender
-    this.breed = new BreedResponse(pet.breed as BreedDocument)
+    this.breed = new BreedResponse(breed as BreedDocument)
   }
 }
 
