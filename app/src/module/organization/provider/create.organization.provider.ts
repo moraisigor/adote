@@ -11,14 +11,14 @@ import { OrganizationRole } from '../type/organization.role'
 export class CreateOrganizationProvider {
   constructor(private readonly repository: OrganizationRepository) {}
 
-  async run(request: CreateOrganizationRequest, user: string): Promise<OrganizationResponse> {
+  async run(request: CreateOrganizationRequest, current: string): Promise<OrganizationResponse> {
     const { name } = request
 
     const organization = await this.repository.create({
       name,
       member: [
         {
-          user: new Types.ObjectId(user),
+          user: new Types.ObjectId(current),
           role: OrganizationRole.MANAGER
         }
       ]
