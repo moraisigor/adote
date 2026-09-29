@@ -6,7 +6,7 @@ import type { OrganizationResponse } from '@/module/organization/organization.re
 import { Gender } from '@/module/pet/type/gender'
 import { Size } from '@/module/pet/type/size'
 import type { PostResponse } from '@/module/post/post.response'
-import type { UserResponse } from '@/module/user/user.response'
+import type { UserCurrentResponse, UserResponse } from '@/module/user/user.response'
 
 import { Spec } from '../spec'
 
@@ -34,12 +34,13 @@ describe('user module', async () => {
         .headers({ Authorization: `Bearer ${hash}` })
         .end()
 
-      const response = json<UserResponse>()
+      const response = json<UserCurrentResponse>()
 
       expect(status).toBe(HttpStatus.OK)
 
       expect(response).toMatchObject({
         id: expect.any(String),
+        key: expect.any(String),
         phone: '+5599999999999',
         name: 'Name',
         contact: {
