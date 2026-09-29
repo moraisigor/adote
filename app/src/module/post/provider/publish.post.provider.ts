@@ -39,7 +39,7 @@ export class PublishPostProvider {
       )
 
       if (result) {
-        return new PublishPostResponse(post)
+        return new PublishPostResponse(result)
       }
 
       throw new BadRequestException()
