@@ -3,32 +3,24 @@ import {
   IsEmail,
   IsMongoId,
   IsNotEmpty,
-  IsNumber,
   IsOptional,
   IsPhoneNumber,
   IsString,
   IsUrl,
   Length,
-  Min,
   ValidateNested
 } from 'class-validator'
+
+import { PageRequest } from '@/helper/page'
 
 export class GetUserParam {
   @IsMongoId({ message: 'the id is not valid' })
   readonly id!: string
 }
 
-export class ListPostRequest {
-  @IsNumber()
-  @Min(1)
-  @Type(() => Number)
-  readonly page!: number
+export class ListUserRequest extends PageRequest {}
 
-  @IsNumber()
-  @Min(1)
-  @Type(() => Number)
-  readonly amount!: number
-
+export class ListPostRequest extends PageRequest {
   @IsMongoId({ message: 'the organization is not valid' })
   @IsOptional()
   readonly organization?: string

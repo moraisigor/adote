@@ -1,15 +1,7 @@
 import { Transform, Type, type TransformFnParams } from 'class-transformer'
-import {
-  isArray,
-  IsArray,
-  IsBoolean,
-  IsMongoId,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Min
-} from 'class-validator'
+import { isArray, IsArray, IsBoolean, IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator'
+
+import { PageRequest } from '@/helper/page'
 
 export class GetPostParam {
   @IsMongoId({ message: 'the id is not valid' })
@@ -31,17 +23,7 @@ export class RemovePostParam {
   readonly id!: string
 }
 
-export class ListPostRequest {
-  @IsNumber()
-  @Min(1)
-  @Type(() => Number)
-  readonly page!: number
-
-  @IsNumber()
-  @Min(1)
-  @Type(() => Number)
-  readonly amount!: number
-
+export class ListPostRequest extends PageRequest {
   @IsArray()
   @IsMongoId({ each: true, message: 'the location is not valid' })
   @IsOptional()

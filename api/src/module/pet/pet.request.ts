@@ -1,5 +1,7 @@
-import { Transform, Type, type TransformFnParams } from 'class-transformer'
-import { IsEnum, IsMongoId, IsNumber, IsOptional, IsString, Length, Min } from 'class-validator'
+import { Transform, type TransformFnParams } from 'class-transformer'
+import { IsEnum, IsMongoId, IsOptional, IsString, Length } from 'class-validator'
+
+import { PageRequest } from '@/helper/page'
 
 import { Gender } from './type/gender'
 import { Size } from './type/size'
@@ -21,17 +23,7 @@ export class RemovePetParam {
   readonly id!: string
 }
 
-export class ListPetRequest {
-  @IsNumber()
-  @Min(1)
-  @Type(() => Number)
-  readonly page!: number
-
-  @IsNumber()
-  @Min(1)
-  @Type(() => Number)
-  readonly amount!: number
-
+export class ListPetRequest extends PageRequest {
   @IsMongoId({ message: 'the organization is not valid' })
   @IsOptional()
   readonly organization?: string

@@ -12,12 +12,16 @@ export class UserRepository {
   constructor(@InjectModel(User.name) private readonly model: Model<User>) {}
 
   list(
+    skip: number,
+    limit: number,
     query?: QueryFilter<User>,
     projection?: ProjectionType<User>,
     options?: QueryOptions<User>
   ): Promise<UserDocument[]> {
     return this.model
       .find(query, projection, options)
+      .skip(skip)
+      .limit(limit)
       .populate([{ path: 'contact' }, { path: 'location' }])
       .exec()
   }
@@ -35,9 +39,9 @@ export class UserRepository {
 
   // prettier-ignore
   create(user: {
-    key: string,
-    name?: string,
-    phone: string,    
+    key: string
+    name?: string
+    phone: string
     role?: Role
   }): Promise<UserDocument> {
     return this.model.create(user)

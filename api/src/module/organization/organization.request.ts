@@ -3,16 +3,18 @@ import {
   IsArray,
   IsEmail,
   IsMongoId,
-  IsNumber,
   IsNumberString,
   IsOptional,
   IsPhoneNumber,
   IsString,
   IsUrl,
   Length,
-  Min,
   ValidateNested
 } from 'class-validator'
+
+import { PageRequest } from '@/helper/page'
+
+export class ListOrganizationRequest extends PageRequest {}
 
 export class GetOrganizationParam {
   @IsMongoId({ message: 'the id is not valid' })

@@ -8,7 +8,13 @@ import { UserCurrent } from '@/decorator/user.current.decorator'
 
 import { UserProvider } from './provider'
 import { Role } from './type/role'
-import { GetUserParam, ListPostRequest, SaveImageRequest, SaveUserRequest } from './user.request'
+import {
+  GetUserParam,
+  ListPostRequest,
+  ListUserRequest,
+  SaveImageRequest,
+  SaveUserRequest
+} from './user.request'
 import { RemoveUserResponse, UserCurrentResponse, UserResponse } from './user.response'
 
 import type { OrganizationResponse } from '../organization/organization.response'
@@ -20,8 +26,8 @@ export class UserController {
 
   @Get()
   @Permission([Role.MANAGER])
-  list(): Promise<UserResponse[]> {
-    return this.provider.list.run()
+  list(@Query() request: ListUserRequest): Promise<UserResponse[]> {
+    return this.provider.list.run(request)
   }
 
   @Get('current')

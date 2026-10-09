@@ -18,11 +18,13 @@ export class OrganizationRepository {
   }
 
   list(
+    skip: number,
+    limit: number,
     query?: QueryFilter<Organization>,
     projection?: ProjectionType<Organization>,
     options?: QueryOptions<Organization>
   ): Promise<OrganizationDocument[]> {
-    return this.model.find(query, projection, options).exec()
+    return this.model.find(query, projection, options).skip(skip).limit(limit).exec()
   }
 
   find(

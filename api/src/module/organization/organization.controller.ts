@@ -12,6 +12,7 @@ import { Role } from '@/module/user/type/role'
 import {
   CreateOrganizationRequest,
   GetOrganizationParam,
+  ListOrganizationRequest,
   RemoveOrganizationParam,
   SaveOrganizationParam,
   SaveOrganizationRequest
@@ -26,8 +27,8 @@ export class OrganizationController {
 
   @Get()
   @Permission([Role.MANAGER])
-  list(): Promise<OrganizationResponse[]> {
-    return this.provider.list.run()
+  list(@Query() request: ListOrganizationRequest): Promise<OrganizationResponse[]> {
+    return this.provider.list.run(request)
   }
 
   @Get(':id')
