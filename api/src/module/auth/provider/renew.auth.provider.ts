@@ -2,11 +2,12 @@ import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 
+import type { FastifyReply } from 'fastify'
 import { isNil } from 'lodash'
 
 import { UserRepository } from '@/module/user/repository/user.repository'
 
-import { TokenResponse } from '../auth.response'
+import { Option } from '../type/cookie'
 
 @Injectable()
 export class RenewAuthProvider {
@@ -26,7 +27,7 @@ export class RenewAuthProvider {
     this.TokenRenewExpire = this.config.getOrThrow<number>('TOKEN_RENEW_EXPIRE')
   }
 
-  async run(phone: string): Promise<TokenResponse> {
+  async run(phone: string, reply: FastifyReply): Promise<void> {
     const user = await this.repository.find({ phone })
 
     if (isNil(user)) {
@@ -58,6 +59,20 @@ export class RenewAuthProvider {
       expire: +this.TokenRenewExpire
     }
 
-    return new TokenResponse(token, renew)
+    reply.setCookie(
+      'token',
+      token.hash,
+      Object.assign({}, Option, {
+        maxAge: token.expire
+      })
+    )
+
+    reply.setCookie(
+      'renew',
+      renew.hash,
+      Object.assign({}, Option, {
+        maxAge: renew.expire
+      })
+    )
   }
 }

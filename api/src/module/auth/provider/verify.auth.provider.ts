@@ -5,11 +5,12 @@ import { JwtService } from '@nestjs/jwt'
 
 import * as bcrypt from 'bcrypt'
 import type { Cache } from 'cache-manager'
+import type { FastifyReply } from 'fastify'
 import { isNil } from 'lodash'
 
 import { UserRepository } from '@/module/user/repository/user.repository'
 
-import { TokenResponse } from '../auth.response'
+import { Option } from '../type/cookie'
 
 @Injectable()
 export class VerifyAuthProvider {
@@ -30,7 +31,7 @@ export class VerifyAuthProvider {
     this.TokenRenewExpire = this.config.getOrThrow<number>('TOKEN_RENEW_EXPIRE')
   }
 
-  async run(phone: string, code: string): Promise<TokenResponse> {
+  async run(phone: string, code: string, reply: FastifyReply): Promise<void> {
     const hash = await this.store.get<string>(phone)
 
     const value = await bcrypt.compare(code, hash ?? '')
@@ -70,6 +71,20 @@ export class VerifyAuthProvider {
       expire: +this.TokenRenewExpire
     }
 
-    return new TokenResponse(token, renew)
+    reply.setCookie(
+      'token',
+      token.hash,
+      Object.assign({}, Option, {
+        maxAge: token.expire
+      })
+    )
+
+    reply.setCookie(
+      'renew',
+      renew.hash,
+      Object.assign({}, Option, {
+        maxAge: renew.expire
+      })
+    )
   }
 }

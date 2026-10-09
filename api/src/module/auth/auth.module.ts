@@ -11,6 +11,7 @@ import { AuthController } from './auth.controller'
 import { PermissionGuard } from './guard/permission.guard'
 import { TokenGuard } from './guard/token.guard'
 import { AuthProvider } from './provider'
+import { ExpireAuthProvider } from './provider/expire.auth.provider'
 import { PhoneAuthProvider } from './provider/phone.auth.provider'
 import { RenewAuthProvider } from './provider/renew.auth.provider'
 import { VerifyAuthProvider } from './provider/verify.auth.provider'
@@ -34,6 +35,7 @@ import { TokenStrategy } from './strategy/token.strategy'
     PhoneAuthProvider,
     RenewAuthProvider,
     VerifyAuthProvider,
+    ExpireAuthProvider,
     BasicStrategy,
     TokenStrategy,
     TokenRenewStrategy,
