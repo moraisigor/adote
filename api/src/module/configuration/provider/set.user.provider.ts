@@ -4,7 +4,7 @@ import { UserRepository } from '@/module/user/repository/user.repository'
 import { Role } from '@/module/user/type/role'
 import { UserResponse } from '@/module/user/user.response'
 
-import user from '../user.json'
+import USER from '../user.json'
 
 @Injectable()
 export class SetUserProvider {
@@ -13,7 +13,7 @@ export class SetUserProvider {
   async run(): Promise<UserResponse> {
     await this.repository.remove()
 
-    const { key, name, phone } = user
+    const { key, name, phone } = USER
 
     const result = await this.repository.create({
       key,

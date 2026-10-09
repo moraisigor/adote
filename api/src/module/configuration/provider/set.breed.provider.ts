@@ -4,8 +4,8 @@ import { BreedResponse } from '@/module/breed/breed.response'
 import { BreedRepository } from '@/module/breed/repository/breed.repository'
 import { Kind } from '@/module/breed/type/kind'
 
-import cat from '../cat.json'
-import dog from '../dog.json'
+import CAT from '../cat.json'
+import DOG from '../dog.json'
 
 @Injectable()
 export class SetBreedProvider {
@@ -16,7 +16,7 @@ export class SetBreedProvider {
 
     const list = await Promise.all([
       this.repository.create(
-        cat.map((name) => {
+        CAT.map((name) => {
           return {
             name,
             kind: Kind.CAT
@@ -24,7 +24,7 @@ export class SetBreedProvider {
         })
       ),
       this.repository.create(
-        dog.map((name) => {
+        DOG.map((name) => {
           return {
             name,
             kind: Kind.DOG
