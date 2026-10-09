@@ -27,7 +27,7 @@ describe('fav module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .post(`/user/fav/${post}`)
-        .headers({ Authorization: `Bearer ${hash}` })
+        .cookies({ token: hash })
         .end()
 
       const response = json<FavResponse>()
@@ -52,7 +52,7 @@ describe('fav module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .delete(`/user/fav/${post}`)
-        .headers({ Authorization: `Bearer ${hash}` })
+        .cookies({ token: hash })
         .end()
 
       const response = json<FavResponse>()

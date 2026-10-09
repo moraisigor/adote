@@ -8,6 +8,7 @@ import { PassportModule } from '@nestjs/passport'
 import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fastify'
 import { Test } from '@nestjs/testing'
 
+import cookie from '@fastify/cookie'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 
 import { AuthModule } from '@/module/auth/auth.module'
@@ -79,6 +80,8 @@ export class Spec {
   }
 
   async start() {
+    await this.application.register(cookie)
+
     await this.application.init()
     await this.application.getHttpAdapter().getInstance().ready()
   }

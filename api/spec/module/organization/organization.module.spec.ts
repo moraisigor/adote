@@ -46,7 +46,7 @@ describe('organization module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .post('/organization')
-        .headers({ Authorization: `Bearer ${hash}` })
+        .cookies({ token: hash })
         .body({
           name: 'Create'
         })
@@ -75,7 +75,7 @@ describe('organization module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .put(`/organization/${id}`)
-        .headers({ Authorization: `Bearer ${hash}` })
+        .cookies({ token: hash })
         .body({
           name: 'Save',
           contact: {
@@ -112,7 +112,7 @@ describe('organization module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .delete(`/organization/${id}`)
-        .headers({ Authorization: `Bearer ${hash}` })
+        .cookies({ token: hash })
         .end()
 
       const response = json<RemoveOrganizationResponse>()
@@ -154,7 +154,7 @@ describe('organization module', async () => {
         const { statusCode: status, json } = await spec.application
           .inject()
           .get('/organization')
-          .headers({ Authorization: `Bearer ${hash}` })
+          .cookies({ token: hash })
           .end()
 
         const response = json<OrganizationResponse[]>()

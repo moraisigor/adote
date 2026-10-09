@@ -31,7 +31,7 @@ describe('user module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .get('/user/current')
-        .headers({ Authorization: `Bearer ${hash}` })
+        .cookies({ token: hash })
         .end()
 
       const response = json<UserResponse>()
@@ -71,7 +71,7 @@ describe('user module', async () => {
         .inject()
         .get('/user/post')
         .query({ page: '1', amount: '10' })
-        .headers({ Authorization: `Bearer ${hash}` })
+        .cookies({ token: hash })
         .end()
 
       const response = json<PostResponse[]>()
@@ -127,7 +127,7 @@ describe('user module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .get('/user/organization')
-        .headers({ Authorization: `Bearer ${hash}` })
+        .cookies({ token: hash })
         .end()
 
       const response = json<OrganizationResponse[]>()
@@ -191,7 +191,7 @@ describe('user module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .put('/user')
-        .headers({ Authorization: `Bearer ${hash}` })
+        .cookies({ token: hash })
         .body({
           name: 'Name',
           contact: {
@@ -237,7 +237,7 @@ describe('user module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .put('/user/image')
-        .headers({ Authorization: `Bearer ${hash}` })
+        .cookies({ token: hash })
         .body({
           image: 'image.jpg'
         })
@@ -291,7 +291,7 @@ describe('user module', () => {
         const { statusCode: status, json } = await spec.application
           .inject()
           .get('/user')
-          .headers({ Authorization: `Bearer ${hash}` })
+          .cookies({ token: hash })
           .end()
 
         const response = json<UserResponse[]>()

@@ -30,7 +30,7 @@ describe('pet module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .get('/pet')
-        .headers({ Authorization: `Bearer ${hash}` })
+        .cookies({ token: hash })
         .query({ page: '1', amount: '10' })
         .end()
 
@@ -68,7 +68,7 @@ describe('pet module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .get(`/pet/${id}`)
-        .headers({ Authorization: `Bearer ${hash}` })
+        .cookies({ token: hash })
         .end()
 
       const response = json<PetResponse>()
@@ -103,7 +103,7 @@ describe('pet module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .post('/pet')
-        .headers({ Authorization: `Bearer ${hash}` })
+        .cookies({ token: hash })
         .body({
           name: 'Oreo',
           kind: Kind.DOG,
@@ -144,7 +144,7 @@ describe('pet module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .post('/pet')
-        .headers({ Authorization: `Bearer ${hash}` })
+        .cookies({ token: hash })
         .body({
           name: 'Oreo',
           kind: Kind.DOG,
@@ -189,7 +189,7 @@ describe('pet module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .put(`/pet/${id}`)
-        .headers({ Authorization: `Bearer ${hash}` })
+        .cookies({ token: hash })
         .body({
           name: 'Estopinha',
           kind: Kind.DOG,
@@ -228,7 +228,7 @@ describe('pet module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .delete(`/pet/${id}`)
-        .headers({ Authorization: `Bearer ${hash}` })
+        .cookies({ token: hash })
         .end()
 
       const response = json<RemovePetResponse>()

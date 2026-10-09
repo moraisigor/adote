@@ -22,9 +22,9 @@ export class RenewAuthProvider {
     private readonly repository: UserRepository
   ) {
     this.TokenSecret = this.config.getOrThrow<string>('TOKEN_SECRET')
-    this.TokenExpire = this.config.getOrThrow<number>('TOKEN_EXPIRE')
+    this.TokenExpire = Number(this.config.getOrThrow<string>('TOKEN_EXPIRE'))
     this.TokenRenewSecret = this.config.getOrThrow<string>('TOKEN_RENEW_SECRET')
-    this.TokenRenewExpire = this.config.getOrThrow<number>('TOKEN_RENEW_EXPIRE')
+    this.TokenRenewExpire = Number(this.config.getOrThrow<string>('TOKEN_RENEW_EXPIRE'))
   }
 
   async run(phone: string, reply: FastifyReply): Promise<void> {
@@ -48,7 +48,7 @@ export class RenewAuthProvider {
         secret: this.TokenSecret,
         expiresIn: this.TokenExpire
       }),
-      expire: +this.TokenExpire
+      expire: this.TokenExpire
     }
 
     const renew = {
@@ -56,7 +56,7 @@ export class RenewAuthProvider {
         secret: this.TokenRenewSecret,
         expiresIn: this.TokenRenewExpire
       }),
-      expire: +this.TokenRenewExpire
+      expire: this.TokenRenewExpire
     }
 
     reply.setCookie(

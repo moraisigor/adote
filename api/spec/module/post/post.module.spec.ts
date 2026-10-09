@@ -173,7 +173,7 @@ describe('post module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .post('/post')
-        .headers({ Authorization: `Bearer ${hash}` })
+        .cookies({ token: hash })
         .body({
           image: ['image.jpg'],
           pet: pet,
@@ -229,7 +229,7 @@ describe('post module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .post('/post')
-        .headers({ Authorization: `Bearer ${hash}` })
+        .cookies({ token: hash })
         .body({
           image: ['image.jpg'],
           pet: pet,
@@ -287,7 +287,7 @@ describe('post module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .put(`/post/${id}`)
-        .headers({ Authorization: `Bearer ${hash}` })
+        .cookies({ token: hash })
         .body({
           image: ['image.jpg', 'image.jpg'],
           location: location,
@@ -342,7 +342,7 @@ describe('post module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .put(`/post/${id}/publish`)
-        .headers({ Authorization: `Bearer ${hash}` })
+        .cookies({ token: hash })
         .body({ publish: true })
         .end()
 
@@ -369,7 +369,7 @@ describe('post module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .delete(`/post/${post}`)
-        .headers({ Authorization: `Bearer ${hash}` })
+        .cookies({ token: hash })
         .end()
 
       const response = json<RemovePostResponse>()

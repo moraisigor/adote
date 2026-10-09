@@ -1,6 +1,6 @@
 import type { NestFastifyApplication } from '@nestjs/platform-fastify'
 
-import type { AuthResponse, TokenResponse } from '@/module/auth/auth.response'
+import type { AuthResponse } from '@/module/auth/auth.response'
 import type { Token } from '@/module/auth/type/token'
 import type { BreedResponse } from '@/module/breed/breed.response'
 import { Kind } from '@/module/breed/type/kind'
@@ -82,7 +82,7 @@ export class Scenario {
         const { json } = await this.application
           .inject()
           .post(`/user/fav/${post}`)
-          .headers({ Authorization: `Bearer ${hash}` })
+          .cookies({ token: hash })
           .end()
 
         return json<FavResponse>()
@@ -102,7 +102,7 @@ export class Scenario {
         const { json } = await this.application
           .inject()
           .post('/organization')
-          .headers({ Authorization: `Bearer ${hash}` })
+          .cookies({ token: hash })
           .body({
             name: name
           })
@@ -120,7 +120,7 @@ export class Scenario {
         const { json } = await this.application
           .inject()
           .put(`/organization/${id}`)
-          .headers({ Authorization: `Bearer ${hash}` })
+          .cookies({ token: hash })
           .body({
             name: name,
             contact: {
@@ -146,7 +146,7 @@ export class Scenario {
         const { json } = await this.application
           .inject()
           .post('/pet')
-          .headers({ Authorization: `Bearer ${hash}` })
+          .cookies({ token: hash })
           .body({
             name: name,
             kind: Kind.DOG,
@@ -171,7 +171,7 @@ export class Scenario {
         const { json } = await this.application
           .inject()
           .post('/post')
-          .headers({ Authorization: `Bearer ${hash}` })
+          .cookies({ token: hash })
           .body({
             image: ['image.jpg'],
             pet: pet,
@@ -187,11 +187,7 @@ export class Scenario {
       current: async () => {
         const { token: { hash } = { hash: '' } } = this.authorization
 
-        const { json } = await this.application
-          .inject()
-          .get('/user/current')
-          .headers({ Authorization: `Bearer ${hash}` })
-          .end()
+        const { json } = await this.application.inject().get('/user/current').cookies({ token: hash }).end()
 
         return json<UserResponse>()
       },
@@ -201,7 +197,7 @@ export class Scenario {
         const { json } = await this.application
           .inject()
           .get('/user/organization')
-          .headers({ Authorization: `Bearer ${hash}` })
+          .cookies({ token: hash })
           .end()
 
         return json<OrganizationResponse[]>()
@@ -214,7 +210,7 @@ export class Scenario {
         const { json } = await this.application
           .inject()
           .put('/user')
-          .headers({ Authorization: `Bearer ${hash}` })
+          .cookies({ token: hash })
           .body({
             name: name,
             contact: {
@@ -234,7 +230,7 @@ export class Scenario {
   async authenticate() {
     await this.application.inject().post('/auth').body({ phone: '+5599999999999' }).end()
 
-    const { json } = await this.application
+    const { cookies } = await this.application
       .inject()
       .post('/auth/verify')
       .body({
@@ -243,10 +239,11 @@ export class Scenario {
       })
       .end()
 
-    const response = json<TokenResponse>()
+    const token = cookies.find((e) => e.name === 'token')
+    const renew = cookies.find((e) => e.name === 'renew')
 
-    this.authorization.token = response.token
-    this.authorization.renew = response.renew
+    this.authorization.token = token && { hash: token.value, expire: Number(token.maxAge) }
+    this.authorization.renew = renew && { hash: renew.value, expire: Number(renew.maxAge) }
   }
 
   async breed() {
