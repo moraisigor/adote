@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
 
 import { isNil } from 'lodash'
 import { Types } from 'mongoose'
@@ -34,7 +34,7 @@ export class SavePetProvider {
     const pet = await this.repository.find({ _id: id })
 
     if (isNil(pet)) {
-      throw new BadRequestException()
+      throw new NotFoundException()
     }
 
     const { user, organization } = pet
@@ -53,9 +53,9 @@ export class SavePetProvider {
         return new PetResponse(result)
       }
 
-      throw new BadRequestException()
+      throw new NotFoundException()
     }
 
-    throw new BadRequestException()
+    throw new ForbiddenException()
   }
 }

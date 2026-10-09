@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 
 import { isNil } from 'lodash'
 import { Types } from 'mongoose'
@@ -38,7 +38,7 @@ export class CreatePostProvider {
     const result = await this._pet.find({ _id: pet })
 
     if (isNil(result)) {
-      throw new BadRequestException()
+      throw new NotFoundException()
     }
 
     const { organization } = result

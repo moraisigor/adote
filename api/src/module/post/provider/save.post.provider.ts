@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
 
 import { isNil } from 'lodash'
 import { Types } from 'mongoose'
@@ -32,7 +32,7 @@ export class SavePostProvider {
     const post = await this.repository.find({ _id: id })
 
     if (isNil(post)) {
-      throw new BadRequestException()
+      throw new NotFoundException()
     }
 
     const { user, organization } = post
@@ -50,8 +50,10 @@ export class SavePostProvider {
       if (result) {
         return new PostResponse(result)
       }
+
+      throw new NotFoundException()
     }
 
-    throw new BadRequestException()
+    throw new ForbiddenException()
   }
 }
