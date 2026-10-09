@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 
 import { RemoveOrganizationResponse } from '../organization.response'
 import { OrganizationRepository } from '../repository/organization.repository'
@@ -14,6 +14,6 @@ export class RemoveOrganizationProvider {
       return new RemoveOrganizationResponse(id)
     }
 
-    throw new BadRequestException()
+    throw new NotFoundException()
   }
 }

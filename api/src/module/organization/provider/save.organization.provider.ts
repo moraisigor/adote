@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 
 import { Types } from 'mongoose'
 
@@ -27,6 +27,6 @@ export class SaveOrganizationProvider {
       return new OrganizationResponse(organization)
     }
 
-    throw new BadRequestException()
+    throw new NotFoundException()
   }
 }

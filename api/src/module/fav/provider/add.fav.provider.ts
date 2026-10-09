@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 
 import { Types } from 'mongoose'
 
@@ -18,6 +18,6 @@ export class AddFavProvider {
       return new FavResponse(post)
     }
 
-    throw new BadRequestException()
+    throw new NotFoundException()
   }
 }

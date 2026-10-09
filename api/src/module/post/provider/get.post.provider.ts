@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 
 import { PostResponse } from '../post.response'
 import { PostRepository } from '../repository/post.repository'
@@ -14,6 +14,6 @@ export class GetPostProvider {
       return new PostResponse(post)
     }
 
-    throw new BadRequestException()
+    throw new NotFoundException()
   }
 }

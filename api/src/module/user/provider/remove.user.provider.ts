@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 
 import { UserRepository } from '../repository/user.repository'
 import { RemoveUserResponse } from '../user.response'
@@ -14,6 +14,6 @@ export class RemoveUserProvider {
       return new RemoveUserResponse(id)
     }
 
-    throw new BadRequestException()
+    throw new NotFoundException()
   }
 }
