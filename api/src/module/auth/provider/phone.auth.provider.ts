@@ -5,7 +5,7 @@ import * as bcrypt from 'bcrypt'
 import type { Cache } from 'cache-manager'
 import { isNil } from 'lodash'
 
-import { MessageProvider } from '@/module/message/provider'
+import { NotifyProvider } from '@/module/notify/provider'
 import { UserRepository } from '@/module/user/repository/user.repository'
 import type { UserDocument } from '@/module/user/repository/user.schema'
 
@@ -15,7 +15,7 @@ import { AuthResponse } from '../auth.response'
 export class PhoneAuthProvider {
   constructor(
     @Inject(CACHE_MANAGER) private readonly store: Cache,
-    private readonly message: MessageProvider,
+    private readonly notify: NotifyProvider,
     private readonly repository: UserRepository
   ) {}
 
@@ -26,7 +26,7 @@ export class PhoneAuthProvider {
 
     await this.store.set(phone, hash)
 
-    this.message.send.run(phone, '')
+    this.notify.send.run(phone, '')
 
     return new AuthResponse(user)
   }

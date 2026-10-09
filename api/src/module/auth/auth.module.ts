@@ -4,7 +4,7 @@ import { APP_GUARD } from '@nestjs/core'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
 
-import { MessageModule } from '@/module/message/message.module'
+import { NotifyModule } from '@/module/notify/notify.module'
 import { PermissionModule } from '@/module/permission/permission.module'
 import { UserModule } from '@/module/user/user.module'
 
@@ -24,7 +24,7 @@ import { TokenStrategy } from './strategy/token.strategy'
 @Module({
   imports: [
     UserModule,
-    MessageModule,
+    NotifyModule,
     PermissionModule,
     // dependency
     JwtModule,
