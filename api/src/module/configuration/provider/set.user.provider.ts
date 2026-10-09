@@ -13,10 +13,9 @@ export class SetUserProvider {
   async run(): Promise<UserResponse> {
     await this.repository.remove()
 
-    const { key, name, phone } = USER
+    const { name, phone } = USER
 
     const result = await this.repository.create({
-      key,
       name,
       phone,
       role: Role.MANAGER

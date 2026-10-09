@@ -15,7 +15,7 @@ import {
   SaveImageRequest,
   SaveUserRequest
 } from './user.request'
-import { RemoveUserResponse, UserCurrentResponse, UserResponse } from './user.response'
+import { RemoveUserResponse, UserResponse } from './user.response'
 
 import type { OrganizationResponse } from '../organization/organization.response'
 import type { PostResponse } from '../post/post.response'
@@ -31,7 +31,7 @@ export class UserController {
   }
 
   @Get('current')
-  current(@UserCurrent() user: User): Promise<UserCurrentResponse> {
+  current(@UserCurrent() user: User): Promise<UserResponse> {
     const { id: current } = user
 
     return this.provider.current.run(current)

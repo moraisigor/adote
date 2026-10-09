@@ -9,8 +9,6 @@ import { MessageProvider } from '@/module/message/provider'
 import { UserRepository } from '@/module/user/repository/user.repository'
 import type { UserDocument } from '@/module/user/repository/user.schema'
 
-import { unique } from '@/helper/id'
-
 import { AuthResponse } from '../auth.response'
 
 @Injectable()
@@ -37,12 +35,7 @@ export class PhoneAuthProvider {
     const user = await this.repository.find({ phone })
 
     if (isNil(user)) {
-      const create = {
-        key: unique(40),
-        phone
-      }
-
-      return await this.repository.create(create)
+      return await this.repository.create({ phone })
     }
 
     return user

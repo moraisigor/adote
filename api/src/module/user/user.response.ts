@@ -52,16 +52,6 @@ export class UserResponse {
   }
 }
 
-export class UserCurrentResponse extends UserResponse {
-  readonly key: string
-
-  constructor(user: UserDocument) {
-    super(user)
-
-    this.key = user.key
-  }
-}
-
 export class RemoveUserResponse {
   readonly id: string
 

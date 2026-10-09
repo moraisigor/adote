@@ -35,38 +35,6 @@ describe('auth module', async () => {
     })
   })
 
-  // post /auth/key
-  describe('/auth/key', () => {
-    beforeAll(async () => {
-      await spec.scenario.authenticate()
-    })
-
-    test('should auth user with key', async () => {
-      const { key } = await spec.scenario.build.user.current()
-
-      const { statusCode: status, json } = await spec.application
-        .inject()
-        .post('/auth/key')
-        .headers({ Key: key })
-        .end()
-
-      const response = json<TokenResponse>()
-
-      expect(status).toBe(HttpStatus.OK)
-
-      expect(response).toMatchObject({
-        token: {
-          hash: expect.any(String),
-          expire: Number(process.env.TOKEN_EXPIRE)
-        },
-        renew: {
-          hash: expect.any(String),
-          expire: Number(process.env.TOKEN_RENEW_EXPIRE)
-        }
-      })
-    })
-  })
-
   // post /auth/verify
   describe('/auth/verify', () => {
     test('should auth user with code', async () => {

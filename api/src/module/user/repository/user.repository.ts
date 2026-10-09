@@ -39,7 +39,6 @@ export class UserRepository {
 
   // prettier-ignore
   create(user: {
-    key: string
     name?: string
     phone: string
     role?: Role

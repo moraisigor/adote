@@ -1,17 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 
 import { UserRepository } from '../repository/user.repository'
-import { UserCurrentResponse } from '../user.response'
+import { UserResponse } from '../user.response'
 
 @Injectable()
 export class GetCurrentProvider {
   constructor(private readonly repository: UserRepository) {}
 
-  async run(id: string): Promise<UserCurrentResponse> {
+  async run(id: string): Promise<UserResponse> {
     const user = await this.repository.find({ _id: id })
 
     if (user) {
-      return new UserCurrentResponse(user)
+      return new UserResponse(user)
     }
 
     throw new NotFoundException()

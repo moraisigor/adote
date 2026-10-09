@@ -11,7 +11,7 @@ import type { PetResponse } from '@/module/pet/pet.response'
 import { Gender } from '@/module/pet/type/gender'
 import { Size } from '@/module/pet/type/size'
 import type { PostResponse } from '@/module/post/post.response'
-import type { UserCurrentResponse, UserResponse } from '@/module/user/user.response'
+import type { UserResponse } from '@/module/user/user.response'
 
 import { encode } from '@/helper/string'
 
@@ -193,7 +193,7 @@ export class Scenario {
           .headers({ Authorization: `Bearer ${hash}` })
           .end()
 
-        return json<UserCurrentResponse>()
+        return json<UserResponse>()
       },
       organization: async () => {
         const { token: { hash } = { hash: '' } } = this.authorization
