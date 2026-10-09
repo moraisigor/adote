@@ -2,7 +2,7 @@ import { HttpStatus } from '@nestjs/common'
 
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
 
-import { TokenResponse, type AuthResponse } from '@/module/auth/auth.response'
+import type { AuthResponse } from '@/module/auth/auth.response'
 
 import { Spec } from '../spec'
 
@@ -40,7 +40,7 @@ describe('auth module', async () => {
     test('should auth user with code', async () => {
       const { phone } = await spec.scenario.build.auth.auth()
 
-      const { statusCode: status, json } = await spec.application
+      const { statusCode: status, cookies } = await spec.application
         .inject()
         .post('/auth/verify')
         .body({
@@ -49,20 +49,20 @@ describe('auth module', async () => {
         })
         .end()
 
-      const response = json<TokenResponse>()
+      expect(status).toBe(HttpStatus.NO_CONTENT)
 
-      expect(status).toBe(HttpStatus.OK)
-
-      expect(response).toMatchObject({
-        token: {
-          hash: expect.any(String),
-          expire: Number(process.env.TOKEN_EXPIRE)
+      expect(cookies).toMatchObject([
+        {
+          name: 'token',
+          value: expect.any(String),
+          expires: expect.any(Date)
         },
-        renew: {
-          hash: expect.any(String),
-          expire: Number(process.env.TOKEN_RENEW_EXPIRE)
+        {
+          name: 'renew',
+          value: expect.any(String),
+          expires: expect.any(Date)
         }
-      })
+      ])
     })
   })
 
@@ -77,26 +77,40 @@ describe('auth module', async () => {
         authorization: { renew: { hash } = { hash: '' } }
       } = spec.scenario
 
-      const { statusCode: status, json } = await spec.application
+      const { statusCode: status, cookies } = await spec.application
         .inject()
         .post('/auth/renew')
-        .headers({ Authorization: `Bearer ${hash}` })
+        .cookies({ renew: hash })
         .end()
 
-      const response = json<TokenResponse>()
+      expect(status).toBe(HttpStatus.NO_CONTENT)
 
-      expect(status).toBe(HttpStatus.OK)
-
-      expect(response).toMatchObject({
-        token: {
-          hash: expect.any(String),
-          expire: Number(process.env.TOKEN_EXPIRE)
+      expect(cookies).toMatchObject([
+        {
+          name: 'token',
+          value: expect.any(String),
+          expires: expect.any(Date)
         },
-        renew: {
-          hash: expect.any(String),
-          expire: Number(process.env.TOKEN_RENEW_EXPIRE)
+        {
+          name: 'renew',
+          value: expect.any(String),
+          expires: expect.any(Date)
         }
-      })
+      ])
+    })
+  })
+
+  // post /auth/expire
+  describe('/auth/expire', () => {
+    test('should expire auth', async () => {
+      const { statusCode: status, cookies } = await spec.application.inject().post('/auth/expire').end()
+
+      expect(status).toBe(HttpStatus.NO_CONTENT)
+
+      expect(cookies).toMatchObject([
+        { name: 'token', value: '', expires: new Date('1970-01-01') },
+        { name: 'token', value: '', expires: new Date('1970-01-01') }
+      ])
     })
   })
 
