@@ -1,5 +1,5 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
-import { BadRequestException, Inject, Injectable } from '@nestjs/common'
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 
@@ -36,13 +36,13 @@ export class VerifyAuthProvider {
     const value = await bcrypt.compare(code, hash ?? '')
 
     if (value === false) {
-      throw new BadRequestException()
+      throw new UnauthorizedException()
     }
 
     const user = await this.repository.find({ phone })
 
     if (isNil(user)) {
-      throw new BadRequestException()
+      throw new UnauthorizedException()
     }
 
     const param = {

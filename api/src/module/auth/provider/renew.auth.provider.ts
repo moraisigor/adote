@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 
@@ -30,7 +30,7 @@ export class RenewAuthProvider {
     const user = await this.repository.find({ phone })
 
     if (isNil(user)) {
-      throw new BadRequestException()
+      throw new UnauthorizedException()
     }
 
     const param = {

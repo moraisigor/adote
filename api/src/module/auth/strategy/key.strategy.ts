@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 
 import { HeaderAPIKeyStrategy as Strategy } from 'passport-headerapikey'
@@ -20,6 +20,6 @@ export class KeyStrategy extends PassportStrategy(Strategy, 'Key') {
       return next(null, user)
     }
 
-    return next(new BadRequestException(), null)
+    return next(new UnauthorizedException(), null)
   }
 }
