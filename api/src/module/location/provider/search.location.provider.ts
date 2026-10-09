@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 
-import { escape } from '@/helper/string'
+import { escape, normalize } from '@/helper/string'
 
 import { LocationResponse } from '../location.response'
 import { LocationRepository } from '../repository/location.repository'
@@ -12,13 +12,12 @@ export class SearchLocationProvider {
   async run(search: string): Promise<LocationResponse[]> {
     const list = await this.repository.list(
       {
-        city: {
-          $regex: `^${escape(search)}`,
-          $options: 'i'
+        search: {
+          $regex: `^${escape(normalize(search))}`
         }
       },
       {},
-      { limit: 10 }
+      { sort: { term: 1 }, limit: 10 }
     )
 
     return list.map((e) => new LocationResponse(e))

@@ -15,6 +15,11 @@ export class Location {
 
   @Prop({ type: String, required: true })
   state!: string
+
+  @Prop({ type: String, required: true })
+  search!: string
 }
 
 export const LocationSchema = SchemaFactory.createForClass(Location)
+
+LocationSchema.index({ search: 1 })
