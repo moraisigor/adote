@@ -242,8 +242,15 @@ export class Scenario {
     const token = cookies.find((e) => e.name === 'token')
     const renew = cookies.find((e) => e.name === 'renew')
 
-    this.authorization.token = token && { hash: token.value, expire: Number(token.maxAge) }
-    this.authorization.renew = renew && { hash: renew.value, expire: Number(renew.maxAge) }
+    this.authorization.token = token && {
+      hash: token.value,
+      expire: token.expires ?? new Date()
+    }
+
+    this.authorization.renew = renew && {
+      hash: renew.value,
+      expire: renew.expires ?? new Date()
+    }
   }
 
   async breed() {
