@@ -63,7 +63,7 @@ export class RenewAuthProvider {
       'token',
       token.hash,
       Object.assign({}, Option, {
-        maxAge: token.expire
+        expires: new Date(Date.now() + token.expire * 1000)
       })
     )
 
@@ -71,7 +71,7 @@ export class RenewAuthProvider {
       'renew',
       renew.hash,
       Object.assign({}, Option, {
-        maxAge: renew.expire
+        expires: new Date(Date.now() + renew.expire * 1000)
       })
     )
   }
