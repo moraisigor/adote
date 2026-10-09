@@ -15,9 +15,13 @@ export class OrganizationPermissionProvider {
     permission: OrganizationRole[] = [OrganizationRole.MEMBER, OrganizationRole.MANAGER]
   ) {
     return await this.repository.exists({
-      '_id': organization,
-      'member.user': new Types.ObjectId(current),
-      'member.role': { $in: permission }
+      _id: organization,
+      member: {
+        $elemMatch: {
+          user: new Types.ObjectId(current),
+          role: { $in: permission }
+        }
+      }
     })
   }
 }

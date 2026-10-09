@@ -5,9 +5,11 @@ import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
 
 import { MessageModule } from '@/module/message/message.module'
+import { PermissionModule } from '@/module/permission/permission.module'
 import { UserModule } from '@/module/user/user.module'
 
 import { AuthController } from './auth.controller'
+import { OrganizationPermissionGuard } from './guard/organization.permission.guard'
 import { PermissionGuard } from './guard/permission.guard'
 import { TokenGuard } from './guard/token.guard'
 import { AuthProvider } from './provider'
@@ -23,6 +25,7 @@ import { TokenStrategy } from './strategy/token.strategy'
   imports: [
     UserModule,
     MessageModule,
+    PermissionModule,
     // dependency
     JwtModule,
     PassportModule,
@@ -40,7 +43,8 @@ import { TokenStrategy } from './strategy/token.strategy'
     TokenStrategy,
     TokenRenewStrategy,
     { provide: APP_GUARD, useClass: TokenGuard },
-    { provide: APP_GUARD, useClass: PermissionGuard }
+    { provide: APP_GUARD, useClass: PermissionGuard },
+    { provide: APP_GUARD, useClass: OrganizationPermissionGuard }
   ],
   controllers: [AuthController]
 })
