@@ -109,7 +109,7 @@ describe('auth module', async () => {
 
       expect(cookies).toMatchObject([
         { name: 'token', value: '', expires: new Date('1970-01-01') },
-        { name: 'token', value: '', expires: new Date('1970-01-01') }
+        { name: 'renew', value: '', expires: new Date('1970-01-01') }
       ])
     })
   })
