@@ -20,3 +20,5 @@ export class Breed {
 }
 
 export const BreedSchema = SchemaFactory.createForClass(Breed)
+
+BreedSchema.index({ kind: 1 })
