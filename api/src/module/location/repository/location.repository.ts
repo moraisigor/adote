@@ -26,8 +26,8 @@ export class LocationRepository {
   }
 
   async remove(query?: QueryFilter<Location>): Promise<boolean> {
-    const { acknowledged: result } = await this.model.deleteMany(query).exec()
+    const { deletedCount: count } = await this.model.deleteMany(query).exec()
 
-    return result
+    return count >= 1
   }
 }

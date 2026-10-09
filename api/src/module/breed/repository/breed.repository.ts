@@ -28,8 +28,8 @@ export class BreedRepository {
   }
 
   async remove(query?: QueryFilter<Breed>): Promise<boolean> {
-    const { acknowledged: result } = await this.model.deleteMany(query).exec()
+    const { deletedCount: count } = await this.model.deleteMany(query).exec()
 
-    return result
+    return count >= 1
   }
 }

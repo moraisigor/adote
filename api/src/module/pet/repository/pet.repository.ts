@@ -69,8 +69,8 @@ export class PetRepository {
   }
 
   async remove(query?: QueryFilter<Pet>): Promise<boolean> {
-    const { acknowledged: result } = await this.model.deleteOne(query).exec()
+    const { deletedCount: count } = await this.model.deleteOne(query).exec()
 
-    return result
+    return count >= 1
   }
 }
