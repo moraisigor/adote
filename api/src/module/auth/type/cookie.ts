@@ -6,3 +6,7 @@ export const Option: CookieSerializeOptions = {
   httpOnly: true,
   sameSite: 'strict'
 }
+
+export const RenewOption: CookieSerializeOptions = Object.assign({}, Option, {
+  path: '/api/auth/renew'
+})

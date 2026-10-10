@@ -59,6 +59,7 @@ describe('auth module', async () => {
         },
         {
           name: 'renew',
+          path: '/api/auth/renew',
           value: expect.any(String),
           expires: expect.any(Date)
         }
@@ -93,6 +94,7 @@ describe('auth module', async () => {
         },
         {
           name: 'renew',
+          path: '/api/auth/renew',
           value: expect.any(String),
           expires: expect.any(Date)
         }
@@ -108,8 +110,17 @@ describe('auth module', async () => {
       expect(status).toBe(HttpStatus.NO_CONTENT)
 
       expect(cookies).toMatchObject([
-        { name: 'token', value: '', expires: new Date('1970-01-01') },
-        { name: 'renew', value: '', expires: new Date('1970-01-01') }
+        {
+          name: 'token',
+          value: '',
+          expires: new Date('1970-01-01')
+        },
+        {
+          name: 'renew',
+          path: '/api/auth/renew',
+          value: '',
+          expires: new Date('1970-01-01')
+        }
       ])
     })
   })

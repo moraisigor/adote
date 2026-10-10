@@ -10,7 +10,7 @@ import { isNil } from 'lodash'
 
 import { UserRepository } from '@/module/user/repository/user.repository'
 
-import { Option } from '../type/cookie'
+import { Option, RenewOption } from '../type/cookie'
 
 @Injectable()
 export class VerifyAuthProvider {
@@ -82,7 +82,7 @@ export class VerifyAuthProvider {
     reply.setCookie(
       'renew',
       renew.hash,
-      Object.assign({}, Option, {
+      Object.assign({}, RenewOption, {
         expires: new Date(Date.now() + renew.expire * 1000)
       })
     )
