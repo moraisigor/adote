@@ -35,4 +35,4 @@ const application = async () => {
   await application.listen(process.env.PORT ?? 9000, '0.0.0.0')
 }
 
-application()
+application().catch((e) => console.error(e))
