@@ -13,7 +13,7 @@ import { FavModule } from '@/module/fav/fav.module'
 import { HealthModule } from '@/module/health/health.module'
 import { ImageModule } from '@/module/image/image.module'
 import { LocationModule } from '@/module/location/location.module'
-import { MessageModule } from '@/module/message/message.module'
+import { NotifyModule } from '@/module/notify/notify.module'
 import { OrganizationModule } from '@/module/organization/organization.module'
 import { PermissionModule } from '@/module/permission/permission.module'
 import { PetModule } from '@/module/pet/pet.module'
@@ -35,7 +35,7 @@ import { RouteConfig } from './router.config.factory'
     HealthModule,
     ImageModule,
     LocationModule,
-    MessageModule,
+    NotifyModule,
     OrganizationModule,
     PermissionModule,
     PetModule,
