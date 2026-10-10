@@ -7,6 +7,7 @@ import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fa
 import compress from '@fastify/compress'
 import cookie from '@fastify/cookie'
 import helmet from '@fastify/helmet'
+import { split } from 'lodash'
 
 import { AppModule } from './app.module'
 
@@ -14,7 +15,13 @@ const application = async () => {
   const application = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter({ logger: true }),
-    { cors: true }
+    {
+      cors: {
+        origin: split(process.env.APP_ORIGIN, ','),
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        credentials: true
+      }
+    }
   )
 
   await application.register(cookie)
