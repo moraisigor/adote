@@ -1,8 +1,8 @@
 import { Controller, Delete, HttpCode, HttpStatus, Param, Post } from '@nestjs/common'
 
-import type { User } from '@/type/token'
+import type { Session } from '@/type/token'
 
-import { UserCurrent } from '@/decorator/user.current.decorator'
+import { Current } from '@/decorator/current.decorator'
 
 import { AddFavParam, RemoveFavParam } from './fav.request'
 import type { FavResponse } from './fav.response'
@@ -14,18 +14,22 @@ export class FavController {
 
   @Post(':post')
   @HttpCode(HttpStatus.OK)
-  add(@Param() param: AddFavParam, @UserCurrent() user: User): Promise<FavResponse> {
+  add(@Param() param: AddFavParam, @Current() session: Session): Promise<FavResponse> {
     const { post } = param
-    const { id: current } = user
+    const {
+      user: { id }
+    } = session
 
-    return this.provider.add.run(post, current)
+    return this.provider.add.run(post, id)
   }
 
   @Delete(':post')
-  remove(@Param() param: RemoveFavParam, @UserCurrent() user: User): Promise<FavResponse> {
+  remove(@Param() param: RemoveFavParam, @Current() session: Session): Promise<FavResponse> {
     const { post } = param
-    const { id: current } = user
+    const {
+      user: { id }
+    } = session
 
-    return this.provider.remove.run(post, current)
+    return this.provider.remove.run(post, id)
   }
 }

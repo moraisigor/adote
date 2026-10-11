@@ -1,11 +1,11 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query } from '@nestjs/common'
 
-import type { User } from '@/type/token'
+import type { Session } from '@/type/token'
 
+import { Current } from '@/decorator/current.decorator'
 import { OrganizationPermission } from '@/decorator/organization.permission.decorator'
 import { Permission } from '@/decorator/permission.decorator'
 import { Public } from '@/decorator/public.decorator'
-import { UserCurrent } from '@/decorator/user.current.decorator'
 
 import { Role } from '@/module/user/type/role'
 
@@ -42,11 +42,13 @@ export class OrganizationController {
   @Post()
   create(
     @Body() request: CreateOrganizationRequest,
-    @UserCurrent() user: User
+    @Current() session: Session
   ): Promise<OrganizationResponse> {
-    const { id: current } = user
+    const {
+      user: { id }
+    } = session
 
-    return this.provider.create.run(request, current)
+    return this.provider.create.run(request, id)
   }
 
   @Put(':id')

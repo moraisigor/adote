@@ -5,7 +5,7 @@ import { PassportStrategy } from '@nestjs/passport'
 import type { FastifyRequest } from 'fastify'
 import { Strategy } from 'passport-jwt'
 
-import type { Token, User } from '@/type/token'
+import type { Session, Token } from '@/type/token'
 
 @Injectable()
 export class TokenStrategy extends PassportStrategy(Strategy, 'Token') {
@@ -16,9 +16,9 @@ export class TokenStrategy extends PassportStrategy(Strategy, 'Token') {
     })
   }
 
-  validate(token: Token): User {
-    const { user } = token
+  validate(token: Token): Session {
+    const { user, session } = token
 
-    return user
+    return { user, session }
   }
 }

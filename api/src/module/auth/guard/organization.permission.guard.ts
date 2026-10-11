@@ -3,7 +3,7 @@ import { Reflector } from '@nestjs/core'
 
 import { isNil } from 'lodash'
 
-import type { User } from '@/type/token'
+import type { Session } from '@/type/token'
 
 import type { OrganizationRole } from '@/module/organization/type/organization.role'
 import { PermissionProvider } from '@/module/permission/provider'
@@ -26,10 +26,12 @@ export class OrganizationPermissionGuard implements CanActivate {
     }
 
     const {
-      user: { id: user },
+      user: {
+        user: { id: user }
+      },
       params: { id: organization }
     } = context.switchToHttp().getRequest<{
-      user: User
+      user: Session
       params: { id: string }
     }>()
 

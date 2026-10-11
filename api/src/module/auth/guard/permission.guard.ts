@@ -3,6 +3,8 @@ import { Reflector } from '@nestjs/core'
 
 import { isNil } from 'lodash'
 
+import type { Session } from '@/type/token'
+
 import type { Role } from '@/module/user/type/role'
 
 @Injectable()
@@ -20,8 +22,10 @@ export class PermissionGuard implements CanActivate {
     }
 
     const {
-      user: { role }
-    } = context.switchToHttp().getRequest()
+      user: {
+        user: { role }
+      }
+    } = context.switchToHttp().getRequest<{ user: Session }>()
 
     return permission.includes(role)
   }

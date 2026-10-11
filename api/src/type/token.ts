@@ -11,4 +11,10 @@ export type Token = {
   readonly iat: number
   readonly exp: number
   readonly user: User
+  readonly session: string
+}
+
+export type Session = {
+  readonly user: User
+  readonly session: string
 }

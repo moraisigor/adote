@@ -1,10 +1,10 @@
 import { Body, Controller, Delete, Get, Param, Put, Query } from '@nestjs/common'
 
-import type { User } from '@/type/token'
+import type { Session } from '@/type/token'
 
+import { Current } from '@/decorator/current.decorator'
 import { Permission } from '@/decorator/permission.decorator'
 import { Public } from '@/decorator/public.decorator'
-import { UserCurrent } from '@/decorator/user.current.decorator'
 
 import { UserProvider } from './provider'
 import { Role } from './type/role'
@@ -31,24 +31,30 @@ export class UserController {
   }
 
   @Get('current')
-  current(@UserCurrent() user: User): Promise<UserResponse> {
-    const { id: current } = user
+  current(@Current() session: Session): Promise<UserResponse> {
+    const {
+      user: { id }
+    } = session
 
-    return this.provider.current.run(current)
+    return this.provider.current.run(id)
   }
 
   @Get('post')
-  post(@Query() request: ListPostRequest, @UserCurrent() user: User): Promise<PostResponse[]> {
-    const { id: current } = user
+  post(@Query() request: ListPostRequest, @Current() session: Session): Promise<PostResponse[]> {
+    const {
+      user: { id }
+    } = session
 
-    return this.provider.post.run(request, current)
+    return this.provider.post.run(request, id)
   }
 
   @Get('organization')
-  organization(@UserCurrent() user: User): Promise<OrganizationResponse[]> {
-    const { id: current } = user
+  organization(@Current() session: Session): Promise<OrganizationResponse[]> {
+    const {
+      user: { id }
+    } = session
 
-    return this.provider.organization.run(current)
+    return this.provider.organization.run(id)
   }
 
   @Get(':id')
@@ -60,24 +66,30 @@ export class UserController {
   }
 
   @Put()
-  save(@Body() request: SaveUserRequest, @UserCurrent() user: User): Promise<UserResponse> {
-    const { id: current } = user
+  save(@Body() request: SaveUserRequest, @Current() session: Session): Promise<UserResponse> {
+    const {
+      user: { id }
+    } = session
 
-    return this.provider.save.run(current, request)
+    return this.provider.save.run(id, request)
   }
 
   @Put('image')
-  image(@Body() request: SaveImageRequest, @UserCurrent() user: User): Promise<UserResponse> {
+  image(@Body() request: SaveImageRequest, @Current() session: Session): Promise<UserResponse> {
     const { image } = request
-    const { id: current } = user
+    const {
+      user: { id }
+    } = session
 
-    return this.provider.image.run(current, image)
+    return this.provider.image.run(id, image)
   }
 
   @Delete()
-  remove(@UserCurrent() user: User): Promise<RemoveUserResponse> {
-    const { id: current } = user
+  remove(@Current() session: Session): Promise<RemoveUserResponse> {
+    const {
+      user: { id }
+    } = session
 
-    return this.provider.remove.run(current)
+    return this.provider.remove.run(id)
   }
 }

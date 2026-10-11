@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common'
 
-import type { User } from '@/type/token'
+import type { Session } from '@/type/token'
 
+import { Current } from '@/decorator/current.decorator'
 import { Public } from '@/decorator/public.decorator'
-import { UserCurrent } from '@/decorator/user.current.decorator'
 
 import {
   CreatePostRequest,
@@ -37,42 +37,50 @@ export class PostController {
   }
 
   @Post()
-  create(@Body() request: CreatePostRequest, @UserCurrent() user: User): Promise<PostResponse> {
-    const { id: current } = user
+  create(@Body() request: CreatePostRequest, @Current() session: Session): Promise<PostResponse> {
+    const {
+      user: { id }
+    } = session
 
-    return this.provider.create.run(request, current)
+    return this.provider.create.run(request, id)
   }
 
   @Put(':id')
   save(
     @Param() param: SavePostParam,
     @Body() request: SavePostRequest,
-    @UserCurrent() user: User
+    @Current() session: Session
   ): Promise<PostResponse> {
     const { id } = param
-    const { id: current } = user
+    const {
+      user: { id: user }
+    } = session
 
-    return this.provider.save.run(id, request, current)
+    return this.provider.save.run(id, request, user)
   }
 
   @Put(':id/publish')
   publish(
     @Param() param: PublishPostParam,
     @Body() request: PublishPostRequest,
-    @UserCurrent() user: User
+    @Current() session: Session
   ): Promise<PublishPostResponse> {
     const { id } = param
     const { publish } = request
-    const { id: current } = user
+    const {
+      user: { id: user }
+    } = session
 
-    return this.provider.publish.run(id, publish, current)
+    return this.provider.publish.run(id, publish, user)
   }
 
   @Delete(':id')
-  remove(@Param() param: RemovePostParam, @UserCurrent() user: User): Promise<RemovePostResponse> {
+  remove(@Param() param: RemovePostParam, @Current() session: Session): Promise<RemovePostResponse> {
     const { id } = param
-    const { id: current } = user
+    const {
+      user: { id: user }
+    } = session
 
-    return this.provider.remove.run(id, current)
+    return this.provider.remove.run(id, user)
   }
 }

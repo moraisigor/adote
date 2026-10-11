@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common'
 
-import type { User } from '@/type/token'
+import type { Session } from '@/type/token'
 
-import { UserCurrent } from '@/decorator/user.current.decorator'
+import { Current } from '@/decorator/current.decorator'
 
 import {
   CreatePetRequest,
@@ -20,44 +20,54 @@ export class PetController {
   constructor(private readonly provider: PetProvider) {}
 
   @Get()
-  list(@Query() request: ListPetRequest, @UserCurrent() user: User): Promise<PetResponse[]> {
-    const { id: current } = user
+  list(@Query() request: ListPetRequest, @Current() session: Session): Promise<PetResponse[]> {
+    const {
+      user: { id }
+    } = session
 
-    return this.provider.list.run(request, current)
+    return this.provider.list.run(request, id)
   }
 
   @Get(':id')
-  get(@Param() param: GetPetParam, @UserCurrent() user: User): Promise<PetResponse> {
+  get(@Param() param: GetPetParam, @Current() session: Session): Promise<PetResponse> {
     const { id } = param
-    const { id: current } = user
+    const {
+      user: { id: user }
+    } = session
 
-    return this.provider.get.run(id, current)
+    return this.provider.get.run(id, user)
   }
 
   @Post()
-  create(@Body() request: CreatePetRequest, @UserCurrent() user: User): Promise<PetResponse> {
-    const { id: current } = user
+  create(@Body() request: CreatePetRequest, @Current() session: Session): Promise<PetResponse> {
+    const {
+      user: { id }
+    } = session
 
-    return this.provider.create.run(request, current)
+    return this.provider.create.run(request, id)
   }
 
   @Put(':id')
   save(
     @Param() param: SavePetParam,
     @Body() request: SavePetRequest,
-    @UserCurrent() user: User
+    @Current() session: Session
   ): Promise<PetResponse> {
     const { id } = param
-    const { id: current } = user
+    const {
+      user: { id: user }
+    } = session
 
-    return this.provider.save.run(id, request, current)
+    return this.provider.save.run(id, request, user)
   }
 
   @Delete(':id')
-  remove(@Param() param: RemovePetParam, @UserCurrent() user: User): Promise<RemovePetResponse> {
+  remove(@Param() param: RemovePetParam, @Current() session: Session): Promise<RemovePetResponse> {
     const { id } = param
-    const { id: current } = user
+    const {
+      user: { id: user }
+    } = session
 
-    return this.provider.remove.run(id, current)
+    return this.provider.remove.run(id, user)
   }
 }
