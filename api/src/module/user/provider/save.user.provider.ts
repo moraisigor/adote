@@ -18,7 +18,7 @@ export class SaveUserProvider {
       'contact.mail': contact.mail,
       'contact.phone': contact.phone,
       'contact.social': contact.social,
-      'location': new Types.ObjectId(location)
+      'location': location && new Types.ObjectId(location)
     }
 
     const user = await this.repository.save(new Types.ObjectId(id), map, { returnDocument: 'after' })
