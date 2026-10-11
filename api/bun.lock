@@ -30,7 +30,6 @@
         "nanoid": "^5.1.7",
         "passport": "^0.7.0",
         "passport-headerapikey": "^1.2.2",
-        "passport-http": "^0.3.0",
         "passport-jwt": "^4.0.1",
         "reflect-metadata": "^0.2.2",
         "resend": "^6.24.0",
@@ -45,7 +44,6 @@
         "@types/bcrypt": "^6.0.0",
         "@types/bun": "^1.1.14",
         "@types/lodash": "^4.14.200",
-        "@types/passport-http": "^0.3.11",
         "@types/passport-jwt": "^4.0.1",
         "@typescript-eslint/eslint-plugin": "^8.57.1",
         "@typescript-eslint/parser": "^8.57.1",
@@ -527,8 +525,6 @@
     "@types/node": ["@types/node@25.5.0", "", { "dependencies": { "undici-types": "~7.18.0" } }, "sha512-jp2P3tQMSxWugkCUKLRPVUpGaL5MVFwF8RDuSRztfwgN1wmqJeMSbKlnEtQqU8UrhTmzEmZdu2I6v2dpp7XIxw=="],
 
     "@types/passport": ["@types/passport@1.0.17", "", { "dependencies": { "@types/express": "*" } }, "sha512-aciLyx+wDwT2t2/kJGJR2AEeBz0nJU4WuRX04Wu9Dqc5lSUtwu0WERPHYsLhF9PtseiAMPBGNUOtFjxZ56prsg=="],
-
-    "@types/passport-http": ["@types/passport-http@0.3.11", "", { "dependencies": { "@types/express": "*", "@types/passport": "*" } }, "sha512-FO0rDRYtuha9m2ZgRx5+jrgrrkAnUzgzdItFI0dwKBC6k9pArK677Gtan67u6+Qah2nXVP3M1uZ5p90SpBT5Zg=="],
 
     "@types/passport-jwt": ["@types/passport-jwt@4.0.1", "", { "dependencies": { "@types/jsonwebtoken": "*", "@types/passport-strategy": "*" } }, "sha512-Y0Ykz6nWP4jpxgEUYq8NoVZeCQPo1ZndJLfapI249g1jHChvRfZRO/LS3tqu26YgAS/laI1qx98sYGz0IalRXQ=="],
 
@@ -1065,8 +1061,6 @@
     "passport": ["passport@0.7.0", "", { "dependencies": { "passport-strategy": "1.x.x", "pause": "0.0.1", "utils-merge": "^1.0.1" } }, "sha512-cPLl+qZpSc+ireUvt+IzqbED1cHHkDoVYMo30jbJIdOOjQ1MQYZBPiNvmi8UM6lJuOpTPXJGZQk0DtC4y61MYQ=="],
 
     "passport-headerapikey": ["passport-headerapikey@1.2.2", "", { "dependencies": { "lodash": "^4.17.15", "passport-strategy": "^1.0.0" } }, "sha512-4BvVJRrWsNJPrd3UoZfcnnl4zvUWYKEtfYkoDsaOKBsrWHYmzTApCjs7qUbncOLexE9ul0IRiYBFfBG0y9IVQA=="],
-
-    "passport-http": ["passport-http@0.3.0", "", { "dependencies": { "passport-strategy": "1.x.x" } }, "sha512-OwK9DkqGVlJfO8oD0Bz1VDIo+ijD3c1ZbGGozIZw+joIP0U60pXY7goB+8wiDWtNqHpkTaQiJ9Ux1jE3Ykmpuw=="],
 
     "passport-jwt": ["passport-jwt@4.0.1", "", { "dependencies": { "jsonwebtoken": "^9.0.0", "passport-strategy": "^1.0.0" } }, "sha512-UCKMDYhNuGOBE9/9Ycuoyh7vP6jpeTp/+sfMJl7nLff/t6dps+iaeE0hhNkKN8/HZHcJ7lCdOyDxHdDoxoSvdQ=="],
 

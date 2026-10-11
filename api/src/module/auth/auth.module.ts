@@ -17,7 +17,6 @@ import { ExpireAuthProvider } from './provider/expire.auth.provider'
 import { PhoneAuthProvider } from './provider/phone.auth.provider'
 import { RenewAuthProvider } from './provider/renew.auth.provider'
 import { VerifyAuthProvider } from './provider/verify.auth.provider'
-import { BasicStrategy } from './strategy/basic.strategy'
 import { TokenRenewStrategy } from './strategy/token.renew.strategy'
 import { TokenStrategy } from './strategy/token.strategy'
 
@@ -39,7 +38,6 @@ import { TokenStrategy } from './strategy/token.strategy'
     RenewAuthProvider,
     VerifyAuthProvider,
     ExpireAuthProvider,
-    BasicStrategy,
     TokenStrategy,
     TokenRenewStrategy,
     { provide: APP_GUARD, useClass: TokenGuard },
