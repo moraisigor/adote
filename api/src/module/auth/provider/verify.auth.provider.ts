@@ -52,7 +52,8 @@ export class VerifyAuthProvider {
         id: user.id,
         phone: user.phone,
         role: user.role
-      }
+      },
+      session: user.session
     }
 
     const token = {

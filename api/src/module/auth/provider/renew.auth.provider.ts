@@ -27,8 +27,8 @@ export class RenewAuthProvider {
     this.TokenRenewExpire = Number(this.config.getOrThrow<string>('TOKEN_RENEW_EXPIRE'))
   }
 
-  async run(phone: string, reply: FastifyReply): Promise<void> {
-    const user = await this.repository.find({ phone, enable: true })
+  async run(phone: string, session: string, reply: FastifyReply): Promise<void> {
+    const user = await this.repository.find({ phone, session, enable: true })
 
     if (isNil(user)) {
       throw new UnauthorizedException()
@@ -40,7 +40,8 @@ export class RenewAuthProvider {
         id: user.id,
         phone: user.phone,
         role: user.role
-      }
+      },
+      session
     }
 
     const token = {

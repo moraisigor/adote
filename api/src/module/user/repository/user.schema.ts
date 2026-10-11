@@ -5,6 +5,8 @@ import { Types, type HydratedDocument } from 'mongoose'
 import type { LocationDocument } from '@/module/location/repository/location.schema'
 import { Post } from '@/module/post/repository/post.schema'
 
+import { unique } from '@/helper/id'
+
 import { Role } from '../type/role'
 
 export type UserDocument = HydratedDocument<User>
@@ -40,16 +42,19 @@ export class User {
   contact?: Contact
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Post' }], default: [] })
-  fav?: Post[] = []
+  fav!: Post[]
 
   @Prop({ type: Types.ObjectId, ref: 'Location' })
   location?: LocationDocument
 
   @Prop({ type: String, enum: Role, required: true, default: Role.MEMBER })
-  role: Role = Role.MEMBER
+  role!: Role
 
   @Prop({ type: Boolean, required: true, default: true })
-  enable: boolean = true
+  enable!: boolean
+
+  @Prop({ type: String, required: true, default: () => unique(40) })
+  session!: string
 }
 
 export const UserSchema = SchemaFactory.createForClass(User)

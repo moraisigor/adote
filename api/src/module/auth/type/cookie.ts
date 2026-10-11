@@ -8,5 +8,5 @@ export const Option: CookieSerializeOptions = {
 }
 
 export const RenewOption: CookieSerializeOptions = Object.assign({}, Option, {
-  path: '/api/auth/renew'
+  path: '/api/auth'
 })

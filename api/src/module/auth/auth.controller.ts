@@ -1,11 +1,11 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Res, UseGuards } from '@nestjs/common'
+import { Body, Controller, HttpCode, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common'
 
-import type { FastifyReply } from 'fastify'
+import type { FastifyReply, FastifyRequest } from 'fastify'
 
-import type { User } from '@/type/token'
+import type { Session } from '@/type/token'
 
+import { Current } from '@/decorator/current.decorator'
 import { Public } from '@/decorator/public.decorator'
-import { UserCurrent } from '@/decorator/user.current.decorator'
 
 import { AuthRequest, VerifyRequest } from './auth.request'
 import { AuthResponse } from './auth.response'
@@ -38,16 +38,21 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.NO_CONTENT)
   @UseGuards(TokenRenewGuard)
-  renew(@UserCurrent() user: User, @Res({ passthrough: true }) reply: FastifyReply): Promise<void> {
-    const { phone } = user
+  renew(@Current() current: Session, @Res({ passthrough: true }) reply: FastifyReply): Promise<void> {
+    const {
+      user: { phone },
+      session
+    } = current
 
-    return this.provider.renew.run(phone, reply)
+    return this.provider.renew.run(phone, session, reply)
   }
 
   @Post('expire')
   @Public()
   @HttpCode(HttpStatus.NO_CONTENT)
-  expire(@Res({ passthrough: true }) reply: FastifyReply) {
-    return this.provider.expire.run(reply)
+  expire(@Req() request: FastifyRequest, @Res({ passthrough: true }) reply: FastifyReply): Promise<void> {
+    const { cookies } = request
+
+    return this.provider.expire.run(cookies['renew'], reply)
   }
 }
