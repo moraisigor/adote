@@ -28,7 +28,7 @@ export class RenewAuthProvider {
   }
 
   async run(phone: string, reply: FastifyReply): Promise<void> {
-    const user = await this.repository.find({ phone })
+    const user = await this.repository.find({ phone, enable: true })
 
     if (isNil(user)) {
       throw new UnauthorizedException()

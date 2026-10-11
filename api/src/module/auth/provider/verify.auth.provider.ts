@@ -40,7 +40,7 @@ export class VerifyAuthProvider {
       throw new UnauthorizedException()
     }
 
-    const user = await this.repository.find({ phone })
+    const user = await this.repository.find({ phone, enable: true })
 
     if (isNil(user)) {
       throw new UnauthorizedException()
