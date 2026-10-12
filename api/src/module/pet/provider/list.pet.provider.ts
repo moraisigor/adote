@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { ForbiddenException, Injectable } from '@nestjs/common'
 
 import { Types, type QueryFilter } from 'mongoose'
 
@@ -37,6 +37,8 @@ export class ListPetProvider {
           organization: new Types.ObjectId(organization)
         })
       }
+
+      throw new ForbiddenException()
     }
 
     return await this.list(request, {
