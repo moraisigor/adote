@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import type { Model, ProjectionType, QueryFilter, QueryOptions, Types } from 'mongoose'
+import type { Model, ProjectionType, QueryFilter, QueryOptions, Types, UpdateQuery } from 'mongoose'
 
 import { User, type UserDocument } from './user.schema'
 
@@ -44,6 +44,14 @@ export class UserRepository {
     role?: Role
   }): Promise<UserDocument> {
     return this.model.create(user)
+  }
+
+  update(
+    query?: QueryFilter<User>,
+    update?: UpdateQuery<User>,
+    options?: QueryOptions<User>
+  ): Promise<UserDocument | null> {
+    return this.model.findOneAndUpdate(query, update, options).exec()
   }
 
   save(

@@ -1,26 +1,32 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 
 import { UserRepository } from '@/module/user/repository/user.repository'
 import { Role } from '@/module/user/type/role'
-import { UserResponse } from '@/module/user/user.response'
-
-import USER from '../user.json'
 
 @Injectable()
 export class SetUserProvider {
-  constructor(private readonly repository: UserRepository) {}
+  private readonly logger = new Logger(SetUserProvider.name)
 
-  async run(): Promise<UserResponse> {
-    await this.repository.remove()
+  constructor(
+    private readonly config: ConfigService,
+    private readonly repository: UserRepository
+  ) {}
 
-    const { name, phone } = USER
+  async run() {
+    const phone = this.config.getOrThrow<string>('MANAGER_ACCOUNT')
 
-    const result = await this.repository.create({
-      name,
-      phone,
-      role: Role.MANAGER
-    })
+    const result = await this.repository.update(
+      { phone },
+      {
+        $set: { role: Role.MANAGER }
+      },
+      {
+        upsert: true,
+        returnDocument: 'after'
+      }
+    )
 
-    return new UserResponse(result)
+    this.logger.log(result)
   }
 }
