@@ -5,8 +5,8 @@ import { UserRepository } from '@/module/user/repository/user.repository'
 import { Role } from '@/module/user/type/role'
 
 @Injectable()
-export class SetUserProvider {
-  private readonly logger = new Logger(SetUserProvider.name)
+export class SetManagerProvider {
+  private readonly logger = new Logger(SetManagerProvider.name)
 
   constructor(
     private readonly config: ConfigService,

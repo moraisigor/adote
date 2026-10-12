@@ -7,11 +7,11 @@ import { UserModule } from '@/module/user/user.module'
 import { ConfigurationProvider } from './provider'
 import { SetBreedProvider } from './provider/set.breed.provider'
 import { SetLocationProvider } from './provider/set.location.provider'
-import { SetUserProvider } from './provider/set.user.provider'
+import { SetManagerProvider } from './provider/set.manager.provider'
 
 @Module({
   imports: [UserModule, BreedModule, LocationModule],
   exports: [ConfigurationProvider],
-  providers: [ConfigurationProvider, SetBreedProvider, SetLocationProvider, SetUserProvider]
+  providers: [ConfigurationProvider, SetBreedProvider, SetLocationProvider, SetManagerProvider]
 })
 export class ConfigurationModule {}

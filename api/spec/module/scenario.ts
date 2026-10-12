@@ -42,7 +42,7 @@ export class Scenario {
     configuration: {
       breed: () => this.application.get(ConfigurationProvider).breed.run(),
       location: () => this.application.get(ConfigurationProvider).location.run(),
-      manager: () => this.application.get(ConfigurationProvider).user.run()
+      manager: () => this.application.get(ConfigurationProvider).manager.run()
     },
     fav: {
       add: async () => {
