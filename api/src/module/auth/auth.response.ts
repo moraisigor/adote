@@ -6,7 +6,7 @@ export class AuthResponse {
   readonly id: string
   readonly phone: string
 
-  constructor(user: UserDocument) {
+  constructor(user: Pick<UserDocument, 'id' | 'phone'>) {
     this.id = user.id
     this.phone = user.phone
   }

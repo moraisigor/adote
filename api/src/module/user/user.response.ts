@@ -1,6 +1,4 @@
-import type { Contact, UserDocument } from './repository/user.schema'
-
-import type { LocationDocument } from '../location/repository/location.schema'
+import type { Contact, UserView } from './repository/user.schema'
 
 class ContactResponse {
   readonly mail?: string
@@ -19,7 +17,7 @@ class LocationResponse {
   readonly city: string
   readonly state: string
 
-  constructor(location: LocationDocument) {
+  constructor(location: NonNullable<UserView['location']>) {
     this.id = location.id
     this.city = location.city
     this.state = location.state
@@ -34,7 +32,7 @@ export class UserResponse {
   readonly contact?: ContactResponse
   readonly location?: LocationResponse
 
-  constructor(user: UserDocument) {
+  constructor(user: UserView) {
     const { contact, location } = user
 
     this.id = user.id
