@@ -1,12 +1,13 @@
-name: Test App
+name: Test
 
 on:
   pull_request:
-    branches: main
+    branches:
+      - main
 
 defaults:
   run:
-    working-directory: ./app
+    working-directory: ./api
 
 jobs:
   build:
