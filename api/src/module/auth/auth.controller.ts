@@ -53,6 +53,6 @@ export class AuthController {
   expire(@Req() request: FastifyRequest, @Res({ passthrough: true }) reply: FastifyReply): Promise<void> {
     const { cookies } = request
 
-    return this.provider.expire.run(cookies['renew'], reply)
+    return this.provider.expire.run(reply, cookies['renew'])
   }
 }

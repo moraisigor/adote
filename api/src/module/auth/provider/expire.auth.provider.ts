@@ -23,7 +23,7 @@ export class ExpireAuthProvider {
     this.TokenRenewSecret = this.config.getOrThrow<string>('TOKEN_RENEW_SECRET')
   }
 
-  async run(renew?: string, reply: FastifyReply): Promise<void> {
+  async run(reply: FastifyReply, renew?: string): Promise<void> {
     reply.clearCookie('token', Option)
     reply.clearCookie('renew', RenewOption)
 
