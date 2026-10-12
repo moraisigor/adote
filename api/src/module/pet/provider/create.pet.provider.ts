@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { ForbiddenException, Injectable } from '@nestjs/common'
 
 import { Types } from 'mongoose'
 
@@ -43,6 +43,8 @@ export class CreatePetProvider {
 
         return new PetResponse(pet)
       }
+
+      throw new ForbiddenException()
     }
 
     const pet = await this.repository.create(this.build(request, { user: new Types.ObjectId(current) }))
