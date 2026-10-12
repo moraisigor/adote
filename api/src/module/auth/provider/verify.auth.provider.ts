@@ -16,6 +16,8 @@ import { Option, RenewOption } from '../type/cookie'
 
 const ATTEMPT = 5
 
+const INTERVAL = 0
+
 @Injectable()
 export class VerifyAuthProvider {
   private readonly CodeSecret: string
@@ -42,15 +44,21 @@ export class VerifyAuthProvider {
   }
 
   async run(phone: string, code: string, reply: FastifyReply): Promise<void> {
-    const value = await this.store.get<Code>(phone)
+    const find = await this.store.get<Code>(phone)
 
-    if (isNil(value)) {
+    if (isNil(find)) {
       throw new UnauthorizedException()
     }
 
-    const { hash, expire, attempt } = value
+    const { hash, expire, attempt } = find
+
+    const interval = expire - Date.now()
 
     if (attempt >= ATTEMPT) {
+      throw new UnauthorizedException()
+    }
+
+    if (interval <= INTERVAL) {
       throw new UnauthorizedException()
     }
 
@@ -62,7 +70,7 @@ export class VerifyAuthProvider {
           expire,
           attempt: attempt + 1
         },
-        expire - Date.now()
+        interval
       )
 
       throw new UnauthorizedException()
