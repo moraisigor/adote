@@ -9,6 +9,7 @@
     "lint:check": "eslint \"{src,spec}/**/*.ts\"",
     "format": "prettier --write \"src/**/*.ts\" \"spec/**/*.ts\"",
     "format:check": "prettier --check \"src/**/*.ts\" \"spec/**/*.ts\"",
+    "load": "bun ./src/load.ts",
     "start": "bun --watch ./src/main.ts",
     "test": "bun test",
     "test:watch": "bun test --watch",
