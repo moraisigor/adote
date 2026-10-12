@@ -6,8 +6,6 @@ import { Types } from 'mongoose'
 import { PermissionProvider } from '@/module/permission/provider'
 import { PetRepository } from '@/module/pet/repository/pet.repository'
 
-import { Permission } from '@/helper/permission'
-
 import { CreatePostRequest } from '../post.request'
 import { PostResponse } from '../post.response'
 import { PostRepository } from '../repository/post.repository'
@@ -43,12 +41,9 @@ export class CreatePostProvider {
       throw new NotFoundException()
     }
 
-    const { user, organization } = find
+    const { organization } = find
 
-    const permission = await new Permission(current, this.provider).run(
-      user as Types.ObjectId,
-      organization as Types.ObjectId
-    )
+    const permission = await this.provider.resource.run(current, find)
 
     if (permission) {
       const post = await this._post.create(

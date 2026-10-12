@@ -5,8 +5,6 @@ import { Types } from 'mongoose'
 
 import { PermissionProvider } from '@/module/permission/provider'
 
-import { Permission } from '@/helper/permission'
-
 import { SavePetRequest } from '../pet.request'
 import { PetResponse } from '../pet.response'
 import { PetRepository } from '../repository/pet.repository'
@@ -37,12 +35,7 @@ export class SavePetProvider {
       throw new NotFoundException()
     }
 
-    const { user, organization } = pet
-
-    const permission = await new Permission(current, this.provider).run(
-      user as Types.ObjectId,
-      organization as Types.ObjectId
-    )
+    const permission = await this.provider.resource.run(current, pet)
 
     if (permission) {
       const result = await this.repository.save(new Types.ObjectId(id), this.build(request), {

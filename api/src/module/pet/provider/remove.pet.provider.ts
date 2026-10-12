@@ -1,11 +1,8 @@
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
 
 import { isNil } from 'lodash'
-import type { Types } from 'mongoose'
 
 import { PermissionProvider } from '@/module/permission/provider'
-
-import { Permission } from '@/helper/permission'
 
 import { RemovePetResponse } from '../pet.response'
 import { PetRepository } from '../repository/pet.repository'
@@ -24,12 +21,7 @@ export class RemovePetProvider {
       throw new NotFoundException()
     }
 
-    const { user, organization } = pet
-
-    const permission = await new Permission(current, this.provider).run(
-      user as Types.ObjectId,
-      organization as Types.ObjectId
-    )
+    const permission = await this.provider.resource.run(current, pet)
 
     if (permission) {
       const result = await this.repository.remove({ _id: id })

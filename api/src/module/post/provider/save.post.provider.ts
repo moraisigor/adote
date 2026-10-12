@@ -5,8 +5,6 @@ import { Types } from 'mongoose'
 
 import { PermissionProvider } from '@/module/permission/provider'
 
-import { Permission } from '@/helper/permission'
-
 import { SavePostRequest } from '../post.request'
 import { PostResponse } from '../post.response'
 import { PostRepository } from '../repository/post.repository'
@@ -35,12 +33,7 @@ export class SavePostProvider {
       throw new NotFoundException()
     }
 
-    const { user, organization } = post
-
-    const permission = await new Permission(current, this.provider).run(
-      user as Types.ObjectId,
-      organization as Types.ObjectId
-    )
+    const permission = await this.provider.resource.run(current, post)
 
     if (permission) {
       const result = await this.repository.save(new Types.ObjectId(id), this.build(request), {
