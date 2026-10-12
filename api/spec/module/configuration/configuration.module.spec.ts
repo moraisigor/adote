@@ -1,10 +1,11 @@
-import { HttpStatus } from '@nestjs/common'
+import { getModelToken } from '@nestjs/mongoose'
 
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
+import type { Model } from 'mongoose'
 
-import type { BreedResponse } from '@/module/breed/breed.response'
-import type { LocationResponse } from '@/module/location/location.response'
-import type { UserResponse } from '@/module/user/user.response'
+import { Breed } from '@/module/breed/repository/breed.schema'
+import { Location } from '@/module/location/repository/location.schema'
+import { User } from '@/module/user/repository/user.schema'
 
 import { Spec } from '../spec'
 
@@ -15,60 +16,42 @@ describe('configuration module', async () => {
     await spec.start()
   })
 
-  // post /configuration/breed
-  describe('/configuration/breed', () => {
+  // set breed provider
+  describe('set breed provider', () => {
     test('should load breed list', async () => {
-      const { BASIC_AUTHORIZATION } = spec.scenario
+      const model = spec.application.get<Model<Breed>>(getModelToken(Breed.name))
 
-      const { statusCode: status, json } = await spec.application
-        .inject()
-        .post('/configuration/breed')
-        .headers({ Authorization: `Basic ${BASIC_AUTHORIZATION}` })
-        .end()
+      await spec.scenario.build.configuration.breed()
 
-      const response = json<BreedResponse[]>()
+      const result = await model.find()
 
-      expect(status).toBe(HttpStatus.CREATED)
-
-      expect(response).toHaveLength(67)
+      expect(result).toHaveLength(67)
     })
   })
 
-  // post /configuration/location
-  describe('/configuration/location', () => {
+  // set location provider
+  describe('set location provider', () => {
     test('should load location list', async () => {
-      const { BASIC_AUTHORIZATION } = spec.scenario
+      const model = spec.application.get<Model<Location>>(getModelToken(Location.name))
 
-      const { statusCode: status, json } = await spec.application
-        .inject()
-        .post('/configuration/location')
-        .headers({ Authorization: `Basic ${BASIC_AUTHORIZATION}` })
-        .end()
+      await spec.scenario.build.configuration.location()
 
-      const response = json<LocationResponse[]>()
+      const result = await model.find()
 
-      expect(status).toBe(HttpStatus.CREATED)
-
-      expect(response).toHaveLength(5694)
+      expect(result).toHaveLength(5694)
     })
   })
 
-  // post /configuration/user
-  describe('/configuration/user', () => {
-    test('should load user', async () => {
-      const { BASIC_AUTHORIZATION } = spec.scenario
+  // set manager provider
+  describe('set manager provider', () => {
+    test('should load manager', async () => {
+      const model = spec.application.get<Model<User>>(getModelToken(User.name))
 
-      const { statusCode: status, json } = await spec.application
-        .inject()
-        .post('/configuration/user')
-        .headers({ Authorization: `Basic ${BASIC_AUTHORIZATION}` })
-        .end()
+      await spec.scenario.build.configuration.manager()
 
-      const response = json<UserResponse>()
+      const result = await model.find({ phone: '+5599999999999' })
 
-      expect(status).toBe(HttpStatus.CREATED)
-
-      expect(response).toMatchObject({
+      expect(result).toMatchObject({
         id: expect.any(String),
         name: 'Dev',
         phone: '+5599999999999'
