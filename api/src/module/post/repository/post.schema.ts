@@ -1,13 +1,23 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
-import { Types, type HydratedDocument } from 'mongoose'
+import { Types, type HydratedDocument, type MergeType } from 'mongoose'
 
 import type { LocationDocument } from '@/module/location/repository/location.schema'
 import type { OrganizationDocument } from '@/module/organization/repository/organization.schema'
-import type { PetDocument } from '@/module/pet/repository/pet.schema'
+import type { PetView } from '@/module/pet/repository/pet.schema'
 import type { UserDocument } from '@/module/user/repository/user.schema'
 
 export type PostDocument = HydratedDocument<Post>
+
+export type PostView = MergeType<
+  PostDocument,
+  {
+    pet: Pick<PetView, 'id' | 'name' | 'size' | 'gender' | 'breed'>
+    location: Pick<LocationDocument, 'id' | 'city' | 'state'>
+    user?: Pick<UserDocument, 'id' | 'name' | 'image' | 'contact'>
+    organization?: Pick<OrganizationDocument, 'id' | 'name' | 'image' | 'contact'>
+  }
+>
 
 @Schema({
   id: true,
@@ -19,16 +29,16 @@ export class Post {
   image!: string[]
 
   @Prop({ type: Types.ObjectId, ref: 'Pet', required: true })
-  pet!: Types.ObjectId | PetDocument
+  pet!: Types.ObjectId
 
   @Prop({ type: Types.ObjectId, ref: 'Location' })
-  location!: Types.ObjectId | LocationDocument
+  location!: Types.ObjectId
 
   @Prop({ type: Types.ObjectId, ref: 'User' })
-  user?: Types.ObjectId | UserDocument
+  user?: Types.ObjectId
 
   @Prop({ type: Types.ObjectId, ref: 'Organization' })
-  organization?: Types.ObjectId | OrganizationDocument
+  organization?: Types.ObjectId
 
   @Prop({ type: Boolean, required: true })
   publish!: boolean
