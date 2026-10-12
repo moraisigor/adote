@@ -1,15 +1,21 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
-import { Types, type HydratedDocument } from 'mongoose'
+import { Types, type HydratedDocument, type MergeType } from 'mongoose'
 
 import type { LocationDocument } from '@/module/location/repository/location.schema'
-import { Post } from '@/module/post/repository/post.schema'
 
 import { unique } from '@/helper/id'
 
 import { Role } from '../type/role'
 
 export type UserDocument = HydratedDocument<User>
+
+export type UserView = MergeType<
+  UserDocument,
+  {
+    location?: Pick<LocationDocument, 'id' | 'city' | 'state'>
+  }
+>
 
 @Schema({ _id: false })
 export class Contact {
@@ -42,10 +48,10 @@ export class User {
   contact?: Contact
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'Post' }], default: [] })
-  fav!: Post[]
+  fav!: Types.ObjectId[]
 
   @Prop({ type: Types.ObjectId, ref: 'Location' })
-  location?: LocationDocument
+  location?: Types.ObjectId
 
   @Prop({ type: String, enum: Role, required: true, default: Role.MEMBER })
   role!: Role
