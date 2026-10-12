@@ -27,7 +27,7 @@ import { PostModule } from '../post/post.module'
     PermissionModule,
     PostModule
   ],
-  exports: [UserRepository],
+  exports: [UserRepository, MongooseModule],
   providers: [
     UserProvider,
     GetUserProvider,
