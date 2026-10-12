@@ -6,6 +6,8 @@ import { Current } from '@/decorator/current.decorator'
 import { Permission } from '@/decorator/permission.decorator'
 import { Public } from '@/decorator/public.decorator'
 
+import { PageRequest } from '@/helper/page'
+
 import { UserProvider } from './provider'
 import { Role } from './type/role'
 import {
@@ -49,12 +51,12 @@ export class UserController {
   }
 
   @Get('organization')
-  organization(@Current() session: Session): Promise<OrganizationResponse[]> {
+  organization(@Query() request: PageRequest, @Current() session: Session): Promise<OrganizationResponse[]> {
     const {
       user: { id }
     } = session
 
-    return this.provider.organization.run(id)
+    return this.provider.organization.run(request, id)
   }
 
   @Get(':id')
