@@ -1,14 +1,21 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import type { Model, ProjectionType, QueryFilter, QueryOptions, Types } from 'mongoose'
+import type { Model, PopulateOptions, ProjectionType, QueryFilter, QueryOptions, Types } from 'mongoose'
 
 import type { Kind } from '@/module/breed/type/kind'
 
-import { Pet, type PetDocument } from './pet.schema'
+import { Pet, type PetView } from './pet.schema'
 
 import type { Gender } from '../type/gender'
 import type { Size } from '../type/size'
+
+const POPULATE: PopulateOptions[] = [
+  {
+    path: 'breed',
+    select: 'name'
+  }
+]
 
 @Injectable()
 export class PetRepository {
@@ -20,12 +27,12 @@ export class PetRepository {
     query?: QueryFilter<Pet>,
     projection?: ProjectionType<Pet>,
     options?: QueryOptions<Pet>
-  ): Promise<PetDocument[]> {
+  ): Promise<PetView[]> {
     return this.model
       .find(query, projection, options)
       .skip(skip)
       .limit(limit)
-      .populate([{ path: 'breed' }])
+      .populate<PetView>(POPULATE)
       .exec()
   }
 
@@ -33,11 +40,8 @@ export class PetRepository {
     query: QueryFilter<Pet>,
     projection?: ProjectionType<Pet>,
     options?: QueryOptions<Pet>
-  ): Promise<PetDocument | null> {
-    return this.model
-      .findOne(query, projection, options)
-      .populate([{ path: 'breed' }])
-      .exec()
+  ): Promise<PetView | null> {
+    return this.model.findOne(query, projection, options).populate<PetView>(POPULATE).exec()
   }
 
   // prettier-ignore
@@ -49,23 +53,18 @@ export class PetRepository {
     breed: Types.ObjectId,
     user?: Types.ObjectId,
     organization?: Types.ObjectId
-  }): Promise<PetDocument> {
-    const model = await this.model.create(pet)
-
-    return model.populate([
-      { path: 'breed' },
-    ])
+  }): Promise<PetView> {
+    return this.model
+      .create(pet)
+      .then((model) => model.populate<PetView>(POPULATE))
   }
 
   save(
     id: Types.ObjectId,
     pet: { [key: string]: unknown },
     options?: QueryOptions<Pet>
-  ): Promise<PetDocument | null> {
-    return this.model
-      .findByIdAndUpdate(id, pet, options)
-      .populate([{ path: 'breed' }])
-      .exec()
+  ): Promise<PetView | null> {
+    return this.model.findByIdAndUpdate(id, pet, options).populate<PetView>(POPULATE).exec()
   }
 
   async remove(query?: QueryFilter<Pet>): Promise<boolean> {
