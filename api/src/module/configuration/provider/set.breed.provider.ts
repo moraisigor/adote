@@ -1,6 +1,5 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 
-import { BreedResponse } from '@/module/breed/breed.response'
 import { BreedRepository } from '@/module/breed/repository/breed.repository'
 import { Kind } from '@/module/breed/type/kind'
 
@@ -9,30 +8,20 @@ import DOG from '../dog.json'
 
 @Injectable()
 export class SetBreedProvider {
+  private readonly logger = new Logger(SetBreedProvider.name)
+
   constructor(private readonly repository: BreedRepository) {}
 
-  async run(): Promise<BreedResponse[]> {
-    await this.repository.remove()
-
-    const list = await Promise.all([
-      this.repository.create(
-        CAT.map((name) => {
-          return {
-            name,
-            kind: Kind.CAT
-          }
-        })
-      ),
-      this.repository.create(
-        DOG.map((name) => {
-          return {
-            name,
-            kind: Kind.DOG
-          }
-        })
-      )
+  async run() {
+    const {
+      insertedCount: insert,
+      upsertedCount: upsert,
+      deletedCount: remove
+    } = await this.repository.upsert([
+      ...CAT.map((name) => ({ name, kind: Kind.CAT })),
+      ...DOG.map((name) => ({ name, kind: Kind.CAT }))
     ])
 
-    return list.flat().map((e) => new BreedResponse(e))
+    this.logger.log(`insert: ${insert}, upsert: ${upsert}, remove: ${remove}`)
   }
 }
