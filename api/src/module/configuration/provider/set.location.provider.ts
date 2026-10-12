@@ -17,7 +17,7 @@ export class SetLocationProvider {
       insertedCount: insert,
       upsertedCount: upsert,
       deletedCount: remove
-    } = await this.repository.upsert(
+    } = await this.repository.create(
       LOCATION.map((e) => ({
         city: e.city,
         state: e.state,

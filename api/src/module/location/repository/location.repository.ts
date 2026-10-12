@@ -17,7 +17,7 @@ export class LocationRepository {
     return this.model.find(query, projection, options).exec()
   }
 
-  upsert(
+  create(
     list: {
       city: string
       state: string
