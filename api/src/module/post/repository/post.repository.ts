@@ -1,9 +1,23 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import type { Model, ProjectionType, QueryFilter, QueryOptions, Types } from 'mongoose'
+import type { Model, PopulateOptions, ProjectionType, QueryFilter, QueryOptions, Types } from 'mongoose'
 
-import { Post, type PostDocument } from './post.schema'
+import { Post, type PostView } from './post.schema'
+
+const POPULATE: PopulateOptions[] = [
+  {
+    path: 'pet',
+    select: 'name size gender breed',
+    populate: {
+      path: 'breed',
+      select: 'name'
+    }
+  },
+  { path: 'location', select: 'city state' },
+  { path: 'user', select: 'name image contact' },
+  { path: 'organization', select: 'name image contact' }
+]
 
 @Injectable()
 export class PostRepository {
@@ -15,17 +29,12 @@ export class PostRepository {
     query?: QueryFilter<Post>,
     projection?: ProjectionType<Post>,
     options?: QueryOptions<Post>
-  ): Promise<PostDocument[]> {
+  ): Promise<PostView[]> {
     return this.model
       .find(query, projection, options)
       .skip(skip)
       .limit(limit)
-      .populate([
-        { path: 'pet', populate: { path: 'breed' } },
-        { path: 'location' },
-        { path: 'user', populate: { path: 'contact' } },
-        { path: 'organization', populate: { path: 'contact' } }
-      ])
+      .populate<PostView>(POPULATE)
       .exec()
   }
 
@@ -33,16 +42,8 @@ export class PostRepository {
     query: QueryFilter<Post>,
     projection?: ProjectionType<Post>,
     options?: QueryOptions<Post>
-  ): Promise<PostDocument | null> {
-    return this.model
-      .findOne(query, projection, options)
-      .populate([
-        { path: 'pet', populate: { path: 'breed' } },
-        { path: 'location' },
-        { path: 'user', populate: { path: 'contact' } },
-        { path: 'organization', populate: { path: 'contact' } }
-      ])
-      .exec()
+  ): Promise<PostView | null> {
+    return this.model.findOne(query, projection, options).populate<PostView>(POPULATE).exec()
   }
 
   // prettier-ignore
@@ -52,33 +53,18 @@ export class PostRepository {
     user?: Types.ObjectId
     organization?: Types.ObjectId
     publish: boolean
-  }): Promise<PostDocument> {
+  }): Promise<PostView> {
     return this.model
       .create(post)
-      .then((model) =>
-        model.populate([
-          { path: 'pet', populate: { path: 'breed' } },
-          { path: 'location' },
-          { path: 'user', populate: { path: 'contact' } },
-          { path: 'organization', populate: { path: 'contact' } }
-        ])
-      )
+      .then((model) => model.populate<PostView>(POPULATE))
   }
 
   save(
     id: Types.ObjectId,
     post: { [key: string]: unknown },
     options?: QueryOptions<Post>
-  ): Promise<PostDocument | null> {
-    return this.model
-      .findByIdAndUpdate(id, post, options)
-      .populate([
-        { path: 'pet', populate: { path: 'breed' } },
-        { path: 'location' },
-        { path: 'user', populate: { path: 'contact' } },
-        { path: 'organization', populate: { path: 'contact' } }
-      ])
-      .exec()
+  ): Promise<PostView | null> {
+    return this.model.findByIdAndUpdate(id, post, options).populate<PostView>(POPULATE).exec()
   }
 
   async remove(query?: QueryFilter<Post>): Promise<boolean> {
