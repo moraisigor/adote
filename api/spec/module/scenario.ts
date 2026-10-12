@@ -4,6 +4,7 @@ import type { AuthResponse } from '@/module/auth/auth.response'
 import type { Token } from '@/module/auth/type/token'
 import type { BreedResponse } from '@/module/breed/breed.response'
 import { Kind } from '@/module/breed/type/kind'
+import { ConfigurationProvider } from '@/module/configuration/provider'
 import type { FavResponse } from '@/module/fav/fav.response'
 import type { LocationResponse } from '@/module/location/location.response'
 import type { OrganizationResponse } from '@/module/organization/organization.response'
@@ -13,18 +14,12 @@ import { Size } from '@/module/pet/type/size'
 import type { PostResponse } from '@/module/post/post.response'
 import type { UserResponse } from '@/module/user/user.response'
 
-import { encode } from '@/helper/string'
-
 export type Authorization = {
   token?: Token
   renew?: Token
 }
 
 export class Scenario {
-  public readonly BASIC_AUTHORIZATION = encode(
-    `${process.env.AUTHENTICATION_BASIC_USER}:${process.env.AUTHENTICATION_BASIC_PASS}`
-  )
-
   public readonly authorization: Authorization = {}
 
   constructor(private readonly application: NestFastifyApplication) {}
@@ -45,33 +40,9 @@ export class Scenario {
       }
     },
     configuration: {
-      breed: async () => {
-        const { json } = await this.application
-          .inject()
-          .post('/configuration/breed')
-          .headers({ Authorization: `Basic ${this.BASIC_AUTHORIZATION}` })
-          .end()
-
-        return json<BreedResponse[]>()
-      },
-      location: async () => {
-        const { json } = await this.application
-          .inject()
-          .post('/configuration/location')
-          .headers({ Authorization: `Basic ${this.BASIC_AUTHORIZATION}` })
-          .end()
-
-        return json<LocationResponse[]>()
-      },
-      manager: async () => {
-        const { json } = await this.application
-          .inject()
-          .post('/configuration/user')
-          .headers({ Authorization: `Basic ${this.BASIC_AUTHORIZATION}` })
-          .end()
-
-        return json<UserResponse>()
-      }
+      breed: () => this.application.get(ConfigurationProvider).breed.run(),
+      location: () => this.application.get(ConfigurationProvider).location.run(),
+      manager: () => this.application.get(ConfigurationProvider).user.run()
     },
     fav: {
       add: async () => {
