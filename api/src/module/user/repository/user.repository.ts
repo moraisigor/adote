@@ -1,11 +1,26 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import type { Model, ProjectionType, QueryFilter, QueryOptions, Types, UpdateQuery } from 'mongoose'
+import type {
+  Model,
+  PopulateOptions,
+  ProjectionType,
+  QueryFilter,
+  QueryOptions,
+  Types,
+  UpdateQuery
+} from 'mongoose'
 
-import { User, type UserDocument } from './user.schema'
+import { User, type UserDocument, type UserView } from './user.schema'
 
 import type { Role } from '../type/role'
+
+const POPULATE: PopulateOptions[] = [
+  {
+    path: 'location',
+    select: 'city state'
+  }
+]
 
 @Injectable()
 export class UserRepository {
@@ -17,12 +32,12 @@ export class UserRepository {
     query?: QueryFilter<User>,
     projection?: ProjectionType<User>,
     options?: QueryOptions<User>
-  ): Promise<UserDocument[]> {
+  ): Promise<UserView[]> {
     return this.model
       .find(query, projection, options)
       .skip(skip)
       .limit(limit)
-      .populate([{ path: 'contact' }, { path: 'location' }])
+      .populate<UserView>(POPULATE)
       .exec()
   }
 
@@ -30,11 +45,8 @@ export class UserRepository {
     query: QueryFilter<User>,
     projection?: ProjectionType<User>,
     options?: QueryOptions<User>
-  ): Promise<UserDocument | null> {
-    return this.model
-      .findOne(query, projection, options)
-      .populate([{ path: 'contact' }, { path: 'location' }])
-      .exec()
+  ): Promise<UserView | null> {
+    return this.model.findOne(query, projection, options).populate<UserView>(POPULATE).exec()
   }
 
   // prettier-ignore
@@ -58,11 +70,8 @@ export class UserRepository {
     id: Types.ObjectId,
     user: { [key: string]: unknown },
     options?: QueryOptions<User>
-  ): Promise<UserDocument | null> {
-    return this.model
-      .findByIdAndUpdate(id, user, options)
-      .populate([{ path: 'contact' }, { path: 'location' }])
-      .exec()
+  ): Promise<UserView | null> {
+    return this.model.findByIdAndUpdate(id, user, options).populate<UserView>(POPULATE).exec()
   }
 
   async remove(query?: QueryFilter<User>): Promise<boolean> {
