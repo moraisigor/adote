@@ -1,1 +1,3 @@
-export const generate = (): number => Math.floor(Math.random() * 900000 + 100000)
+import { randomInt } from 'crypto'
+
+export const generate = (): string => String(randomInt(100000, 1000000))

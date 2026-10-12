@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common'
 
 import { NotifyProvider } from './provider'
+import { CodeNotifyProvider } from './provider/code.notify.provider'
 import { MailNotifyProvider } from './provider/mail.notify.provider'
-import { SendNotifyProvider } from './provider/send.notify.provider'
 
 @Module({
   exports: [NotifyProvider],
-  providers: [NotifyProvider, MailNotifyProvider, SendNotifyProvider]
+  providers: [NotifyProvider, CodeNotifyProvider, MailNotifyProvider]
 })
 export class NotifyModule {}

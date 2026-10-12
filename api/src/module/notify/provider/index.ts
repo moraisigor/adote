@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common'
 
+import { CodeNotifyProvider } from './code.notify.provider'
 import { MailNotifyProvider } from './mail.notify.provider'
-import { SendNotifyProvider } from './send.notify.provider'
 
 @Injectable()
 export class NotifyProvider {
   constructor(
-    readonly mail: MailNotifyProvider,
-    readonly send: SendNotifyProvider
+    readonly code: CodeNotifyProvider,
+    readonly mail: MailNotifyProvider
   ) {}
 }

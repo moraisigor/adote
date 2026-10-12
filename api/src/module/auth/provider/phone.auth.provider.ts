@@ -9,6 +9,8 @@ import { NotifyProvider } from '@/module/notify/provider'
 import { UserRepository } from '@/module/user/repository/user.repository'
 import type { UserDocument } from '@/module/user/repository/user.schema'
 
+import { generate } from '@/helper/code'
+
 import { AuthResponse } from '../auth.response'
 
 @Injectable()
@@ -22,11 +24,13 @@ export class PhoneAuthProvider {
   async run(phone: string): Promise<AuthResponse> {
     const user = await this.save(phone)
 
-    const hash = await bcrypt.hash('999999', 11)
+    const code = generate()
+
+    const hash = await bcrypt.hash(code, 11)
 
     await this.store.set(phone, hash)
 
-    this.notify.send.run(phone, '')
+    await this.notify.code.run(phone, code)
 
     return new AuthResponse(user)
   }
