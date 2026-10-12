@@ -7,7 +7,7 @@ import { isNil } from 'lodash'
 
 import { NotifyProvider } from '@/module/notify/provider'
 import { UserRepository } from '@/module/user/repository/user.repository'
-import type { UserDocument } from '@/module/user/repository/user.schema'
+import type { UserDocument, UserView } from '@/module/user/repository/user.schema'
 
 import { generate, sign } from '@/helper/code'
 
@@ -51,7 +51,7 @@ export class PhoneAuthProvider {
     return new AuthResponse(user)
   }
 
-  private async save(phone: string): Promise<UserDocument> {
+  private async save(phone: string): Promise<UserView | UserDocument> {
     const user = await this.repository.find({ phone })
 
     if (isNil(user)) {
