@@ -19,7 +19,7 @@ export class SetBreedProvider {
       deletedCount: remove
     } = await this.repository.create([
       ...CAT.map((name) => ({ name, kind: Kind.CAT })),
-      ...DOG.map((name) => ({ name, kind: Kind.CAT }))
+      ...DOG.map((name) => ({ name, kind: Kind.DOG }))
     ])
 
     this.logger.log(`insert: ${insert}, upsert: ${upsert}, remove: ${remove}`)
