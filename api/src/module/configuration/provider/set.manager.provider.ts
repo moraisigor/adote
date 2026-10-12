@@ -19,7 +19,10 @@ export class SetManagerProvider {
     const result = await this.repository.update(
       { phone },
       {
-        $set: { role: Role.MANAGER }
+        $set: {
+          name: 'Oreo',
+          role: Role.MANAGER
+        }
       },
       {
         upsert: true,

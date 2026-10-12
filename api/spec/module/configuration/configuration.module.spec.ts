@@ -49,11 +49,11 @@ describe('configuration module', async () => {
 
       await spec.scenario.build.configuration.manager()
 
-      const result = await model.find({ phone: '+5599999999999' })
+      const result = await model.findOne({ phone: '+5599999999999' })
 
       expect(result).toMatchObject({
         id: expect.any(String),
-        name: 'Dev',
+        name: 'Oreo',
         phone: '+5599999999999'
       })
     })
