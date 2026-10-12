@@ -20,7 +20,7 @@ jobs:
         with:
           bun-version: 1.4.0
       - name: install dependency
-        run: bun install
+        run: bun install --frozen-lockfile
       - name: lint check
         run: bun lint:check
       - name: format check
