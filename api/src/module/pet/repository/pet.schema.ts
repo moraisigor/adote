@@ -1,16 +1,21 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
-import { Types, type HydratedDocument } from 'mongoose'
+import { Types, type HydratedDocument, type MergeType } from 'mongoose'
 
 import type { BreedDocument } from '@/module/breed/repository/breed.schema'
 import { Kind } from '@/module/breed/type/kind'
-import type { OrganizationDocument } from '@/module/organization/repository/organization.schema'
-import type { UserDocument } from '@/module/user/repository/user.schema'
 
 import { Gender } from '../type/gender'
 import { Size } from '../type/size'
 
 export type PetDocument = HydratedDocument<Pet>
+
+export type PetView = MergeType<
+  PetDocument,
+  {
+    breed: Pick<BreedDocument, 'id' | 'name'>
+  }
+>
 
 @Schema({
   id: true,
@@ -31,13 +36,13 @@ export class Pet {
   gender!: Gender
 
   @Prop({ type: Types.ObjectId, ref: 'Breed', required: true })
-  breed!: Types.ObjectId | BreedDocument
+  breed!: Types.ObjectId
 
   @Prop({ type: Types.ObjectId, ref: 'User' })
-  user?: Types.ObjectId | UserDocument
+  user?: Types.ObjectId
 
   @Prop({ type: Types.ObjectId, ref: 'Organization' })
-  organization?: Types.ObjectId | OrganizationDocument
+  organization?: Types.ObjectId
 }
 
 export const PetSchema = SchemaFactory.createForClass(Pet)
