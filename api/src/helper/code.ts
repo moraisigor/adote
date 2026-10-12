@@ -1,3 +1,8 @@
-import { randomInt } from 'crypto'
+import { createHmac, randomInt } from 'crypto'
 
-export const generate = (): string => String(randomInt(100000, 1000000))
+const ALGORITHM = 'sha256'
+
+export const sign = (code: string, phone: string, secret: string): string =>
+  createHmac(ALGORITHM, secret).update(`${phone}:${code}`).digest('hex')
+
+export const generate = (): string => randomInt(100000, 1000000).toString()

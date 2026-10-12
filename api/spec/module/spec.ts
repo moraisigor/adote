@@ -1,4 +1,3 @@
-import { CacheModule } from '@nestjs/cache-manager'
 import { ValidationPipe } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { RouterModule } from '@nestjs/core'
@@ -55,9 +54,6 @@ export class Spec {
         // dependency
         JwtModule,
         PassportModule,
-        CacheModule.register({
-          ttl: 2 * 60 * 1000
-        }),
         ConfigModule.forRoot({
           isGlobal: true,
           envFilePath: '.env.test'

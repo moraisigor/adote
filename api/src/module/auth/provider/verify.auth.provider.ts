@@ -3,17 +3,22 @@ import { Inject, Injectable, UnauthorizedException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 
-import * as bcrypt from 'bcrypt'
 import type { Cache } from 'cache-manager'
 import type { FastifyReply } from 'fastify'
 import { isNil } from 'lodash'
 
 import { UserRepository } from '@/module/user/repository/user.repository'
 
+import { sign } from '@/helper/code'
+
+import type { Code } from '../type/code'
 import { Option, RenewOption } from '../type/cookie'
+
+const ATTEMPT = 5
 
 @Injectable()
 export class VerifyAuthProvider {
+  private readonly CodeSecret: string
   private readonly TokenSecret: string
   private readonly TokenExpire: number
   private readonly TokenRenewSecret: string
@@ -25,20 +30,45 @@ export class VerifyAuthProvider {
     private readonly config: ConfigService,
     private readonly repository: UserRepository
   ) {
+    this.CodeSecret = this.config.getOrThrow<string>('CODE_SECRET')
     this.TokenSecret = this.config.getOrThrow<string>('TOKEN_SECRET')
     this.TokenExpire = Number(this.config.getOrThrow<string>('TOKEN_EXPIRE'))
     this.TokenRenewSecret = this.config.getOrThrow<string>('TOKEN_RENEW_SECRET')
     this.TokenRenewExpire = Number(this.config.getOrThrow<string>('TOKEN_RENEW_EXPIRE'))
   }
 
+  private equals(hash: string, code: string, phone: string) {
+    return hash === sign(code, phone, this.CodeSecret)
+  }
+
   async run(phone: string, code: string, reply: FastifyReply): Promise<void> {
-    const hash = await this.store.get<string>(phone)
+    const value = await this.store.get<Code>(phone)
 
-    const value = await bcrypt.compare(code, hash ?? '')
-
-    if (value === false) {
+    if (isNil(value)) {
       throw new UnauthorizedException()
     }
+
+    const { hash, expire, attempt } = value
+
+    if (attempt >= ATTEMPT) {
+      throw new UnauthorizedException()
+    }
+
+    if (!this.equals(hash, code, phone)) {
+      await this.store.set<Code>(
+        phone,
+        {
+          hash,
+          expire,
+          attempt: attempt + 1
+        },
+        expire - Date.now()
+      )
+
+      throw new UnauthorizedException()
+    }
+
+    await this.store.del(phone)
 
     const user = await this.repository.find({ phone, enable: true })
 
