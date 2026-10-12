@@ -23,6 +23,12 @@ const POPULATE: PopulateOptions[] = [
 export class PostRepository {
   constructor(@InjectModel(Post.name) private readonly model: Model<Post>) {}
 
+  async exists(query: QueryFilter<Post>) {
+    const result = await this.model.exists(query).exec()
+
+    return Boolean(result)
+  }
+
   list(
     skip: number,
     limit: number,

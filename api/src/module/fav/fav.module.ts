@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common'
-import { MongooseModule } from '@nestjs/mongoose'
 
-import { User, UserSchema } from '@/module/user/repository/user.schema'
+import { PostModule } from '@/module/post/post.module'
 
 import { FavController } from './fav.controller'
 import { FavProvider } from './provider'
@@ -10,7 +9,7 @@ import { RemoveFavProvider } from './provider/remove.fav.provider'
 import { FavRepository } from './repository/fav.repository'
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema }])],
+  imports: [PostModule],
   providers: [FavProvider, AddFavProvider, RemoveFavProvider, FavRepository],
   controllers: [FavController]
 })
