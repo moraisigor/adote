@@ -17,7 +17,7 @@ export class SetBreedProvider {
       insertedCount: insert,
       upsertedCount: upsert,
       deletedCount: remove
-    } = await this.repository.upsert([
+    } = await this.repository.create([
       ...CAT.map((name) => ({ name, kind: Kind.CAT })),
       ...DOG.map((name) => ({ name, kind: Kind.CAT }))
     ])

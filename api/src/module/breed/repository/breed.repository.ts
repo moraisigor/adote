@@ -19,7 +19,7 @@ export class BreedRepository {
     return this.model.find(query, projection, options).exec()
   }
 
-  upsert(
+  create(
     list: {
       name: string
       kind: Kind
