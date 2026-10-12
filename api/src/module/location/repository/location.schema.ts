@@ -23,3 +23,5 @@ export class Location {
 export const LocationSchema = SchemaFactory.createForClass(Location)
 
 LocationSchema.index({ search: 1 })
+
+LocationSchema.index({ city: 1, state: 1 }, { unique: true })
