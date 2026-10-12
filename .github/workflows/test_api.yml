@@ -13,10 +13,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: setup bun
-        uses: oven-sh/setup-bun@v2
       - name: checkout repository
         uses: actions/checkout@v6
+      - name: setup bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.0
       - name: install dependency
         run: bun install
       - name: lint check
