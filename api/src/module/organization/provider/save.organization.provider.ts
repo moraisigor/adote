@@ -11,14 +11,15 @@ export class SaveOrganizationProvider {
   constructor(private readonly repository: OrganizationRepository) {}
 
   async run(id: string, request: SaveOrganizationRequest): Promise<OrganizationResponse> {
-    const { name, document, contact } = request
+    const { name, document, contact, location } = request
 
     const map: { [key: string]: unknown } = {
       'name': name,
       'document': document,
       'contact.mail': contact?.mail,
       'contact.phone': contact?.phone,
-      'contact.social': contact?.social
+      'contact.social': contact?.social,
+      'location': location && new Types.ObjectId(location)
     }
 
     const organization = await this.repository.save(new Types.ObjectId(id), map, { returnDocument: 'after' })

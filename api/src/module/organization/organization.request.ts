@@ -1,6 +1,5 @@
 import { Transform, Type, type TransformFnParams } from 'class-transformer'
 import {
-  IsArray,
   IsEmail,
   IsMongoId,
   IsNumberString,
@@ -67,4 +66,8 @@ export class SaveOrganizationRequest {
   @Type(() => ContactRequest)
   @ValidateNested()
   readonly contact?: ContactRequest
+
+  @IsMongoId({ message: 'the location is not valid' })
+  @IsOptional()
+  readonly location?: string
 }
