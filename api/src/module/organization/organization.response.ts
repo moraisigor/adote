@@ -1,3 +1,5 @@
+import { url } from '@/helper/image'
+
 import type { Contact, OrganizationDocument } from './repository/organization.schema'
 
 export class ContactResponse {
@@ -24,7 +26,7 @@ export class OrganizationResponse {
 
     this.id = organization.id
     this.name = organization.name
-    this.image = organization.image
+    this.image = url(organization.image)
     this.document = organization.document
 
     if (contact) {

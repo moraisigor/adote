@@ -1,3 +1,5 @@
+import { url } from '@/helper/image'
+
 import type { Contact, UserView } from './repository/user.schema'
 
 class ContactResponse {
@@ -36,7 +38,7 @@ export class UserResponse {
 
     this.id = user.id
     this.name = user.name
-    this.image = user.image
+    this.image = url(user.image)
 
     if (contact) {
       this.contact = new ContactResponse(contact)

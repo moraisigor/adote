@@ -1,3 +1,5 @@
+import { url } from '@/helper/image'
+
 import type { PostView } from './repository/post.schema'
 
 import type { Gender } from '../pet/type/gender'
@@ -54,7 +56,7 @@ class UserResponse {
 
     this.id = user.id
     this.name = user.name
-    this.image = user.image
+    this.image = url(user.image)
 
     if (contact) {
       const { mail, phone, social } = contact
@@ -75,7 +77,7 @@ class OrganizationResponse {
 
     this.id = organization.id
     this.name = organization.name
-    this.image = organization.image
+    this.image = url(organization.image)
 
     if (contact) {
       const { mail, phone, social } = contact
@@ -109,7 +111,7 @@ export class PostResponse {
     const { pet, location, user, organization } = post
 
     this.id = post.id
-    this.image = post.image
+    this.image = post.image.map((e) => url(e) ?? e)
     this.pet = new PetResponse(pet)
     this.location = new LocationResponse(location)
 
