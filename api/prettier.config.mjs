@@ -33,7 +33,7 @@ const configuration = {
   ],
   plugins: [plugin('@ianvs/prettier-plugin-sort-imports')],
   importOrderParserPlugins: ['typescript', 'decorators-legacy'],
-  importOrderTypeScriptVersion: '5.9.3'
+  importOrderTypeScriptVersion: '6.0.3'
 }
 
 export default configuration
