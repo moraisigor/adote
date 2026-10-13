@@ -24,7 +24,6 @@ export default tseslint.config(
   },
   {
     rules: {
-      'prettier/prettier': ['error', { quoteProps: 'preserve' }],
       '@typescript-eslint/no-unsafe-call': 'off',
       '@typescript-eslint/no-unsafe-argument': 'off',
       '@typescript-eslint/no-unsafe-assignment': 'off',
