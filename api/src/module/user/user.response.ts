@@ -26,7 +26,6 @@ class LocationResponse {
 
 export class UserResponse {
   readonly id: string
-  readonly phone: string
   readonly name?: string
   readonly image?: string
   readonly contact?: ContactResponse
@@ -36,7 +35,6 @@ export class UserResponse {
     const { contact, location } = user
 
     this.id = user.id
-    this.phone = user.phone
     this.name = user.name
     this.image = user.image
 
@@ -47,6 +45,16 @@ export class UserResponse {
     if (location) {
       this.location = new LocationResponse(location)
     }
+  }
+}
+
+export class CurrentUserResponse extends UserResponse {
+  readonly phone: string
+
+  constructor(user: UserView) {
+    super(user)
+
+    this.phone = user.phone
   }
 }
 

@@ -17,7 +17,7 @@ import {
   SaveImageRequest,
   SaveUserRequest
 } from './user.request'
-import { RemoveUserResponse, UserResponse } from './user.response'
+import { CurrentUserResponse, RemoveUserResponse, UserResponse } from './user.response'
 
 import type { OrganizationResponse } from '../organization/organization.response'
 import type { PostResponse } from '../post/post.response'
@@ -28,12 +28,12 @@ export class UserController {
 
   @Get()
   @Permission([Role.MANAGER])
-  list(@Query() request: ListUserRequest): Promise<UserResponse[]> {
+  list(@Query() request: ListUserRequest): Promise<CurrentUserResponse[]> {
     return this.provider.list.run(request)
   }
 
   @Get('current')
-  current(@Current() session: Session): Promise<UserResponse> {
+  current(@Current() session: Session): Promise<CurrentUserResponse> {
     const {
       user: { id }
     } = session
@@ -68,7 +68,7 @@ export class UserController {
   }
 
   @Put()
-  save(@Body() request: SaveUserRequest, @Current() session: Session): Promise<UserResponse> {
+  save(@Body() request: SaveUserRequest, @Current() session: Session): Promise<CurrentUserResponse> {
     const {
       user: { id }
     } = session
@@ -77,7 +77,7 @@ export class UserController {
   }
 
   @Put('image')
-  image(@Body() request: SaveImageRequest, @Current() session: Session): Promise<UserResponse> {
+  image(@Body() request: SaveImageRequest, @Current() session: Session): Promise<CurrentUserResponse> {
     const { image } = request
     const {
       user: { id }
