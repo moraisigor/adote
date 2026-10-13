@@ -51,7 +51,6 @@
     "@nestjs/cli": "^11.0.16",
     "@nestjs/schematics": "^11.0.9",
     "@nestjs/testing": "^11.1.17",
-    "@stylistic/eslint-plugin": "^5.10.0",
     "@types/bun": "^1.1.14",
     "@types/lodash": "^4.14.200",
     "@types/passport-jwt": "^4.0.1",
