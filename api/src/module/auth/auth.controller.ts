@@ -1,4 +1,5 @@
 import { Body, Controller, HttpCode, HttpStatus, Post, Req, Res, UseGuards } from '@nestjs/common'
+import { hours, Throttle } from '@nestjs/throttler'
 
 import type { FastifyReply, FastifyRequest } from 'fastify'
 
@@ -8,7 +9,6 @@ import { Current } from '@/decorator/current.decorator'
 import { Public } from '@/decorator/public.decorator'
 
 import { AuthRequest, VerifyRequest } from './auth.request'
-import { AuthResponse } from './auth.response'
 import { TokenRenewGuard } from './guard/token.renew.guard'
 import { AuthProvider } from './provider'
 
@@ -18,8 +18,9 @@ export class AuthController {
 
   @Post()
   @Public()
-  @HttpCode(HttpStatus.OK)
-  phone(@Body() request: AuthRequest): Promise<AuthResponse> {
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Throttle({ default: { ttl: hours(2), limit: 2 } })
+  phone(@Body() request: AuthRequest): Promise<void> {
     const { phone } = request
 
     return this.provider.phone.run(phone)
@@ -28,6 +29,7 @@ export class AuthController {
   @Post('verify')
   @Public()
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Throttle({ default: { ttl: hours(2), limit: 10 } })
   code(@Body() request: VerifyRequest, @Res({ passthrough: true }) reply: FastifyReply): Promise<void> {
     const { phone, code } = request
 
