@@ -4,6 +4,8 @@ import { ConfigService } from '@nestjs/config'
 import { UserRepository } from '@/module/user/repository/user.repository'
 import { Role } from '@/module/user/type/role'
 
+import { format } from '@/helper/phone'
+
 @Injectable()
 export class SetManagerProvider {
   private readonly logger = new Logger(SetManagerProvider.name)
@@ -17,7 +19,7 @@ export class SetManagerProvider {
     const phone = this.config.getOrThrow<string>('MANAGER_ACCOUNT')
 
     const result = await this.repository.update(
-      { phone },
+      { phone: format(phone) },
       {
         $set: {
           name: 'Oreo',
