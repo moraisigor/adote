@@ -16,7 +16,6 @@ export default tseslint.config(
       globals: {
         ...globals.node
       },
-      sourceType: 'commonjs',
       parserOptions: {
         projectService: true,
         tsconfigRootDir: import.meta.dirname
