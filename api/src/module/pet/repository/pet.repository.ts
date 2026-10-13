@@ -46,12 +46,12 @@ export class PetRepository {
 
   // prettier-ignore
   async create(pet: {
-    name: string,
-    kind: Kind,
-    size: Size,
-    gender: Gender,
-    breed: Types.ObjectId,
-    user?: Types.ObjectId,
+    name: string
+    kind: Kind
+    size: Size
+    gender: Gender
+    breed: Types.ObjectId
+    user?: Types.ObjectId
     organization?: Types.ObjectId
   }): Promise<PetView> {
     return this.model
