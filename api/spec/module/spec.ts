@@ -68,7 +68,13 @@ export class Spec {
 
     const application = module.createNestApplication<NestFastifyApplication>(new FastifyAdapter())
 
-    application.useGlobalPipes(new ValidationPipe({ transform: true }))
+    application.useGlobalPipes(
+      new ValidationPipe({
+        transform: true,
+        whitelist: true,
+        forbidNonWhitelisted: true
+      })
+    )
 
     const scenario = new Scenario(application)
 
