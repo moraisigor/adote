@@ -46,22 +46,23 @@
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.3.1",
     "@nestjs/cli": "^11.0.16",
     "@nestjs/schematics": "^11.0.9",
     "@nestjs/testing": "^11.1.17",
-    "@stylistic/eslint-plugin-ts": "^4.4.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
     "@types/bun": "^1.1.14",
     "@types/lodash": "^4.14.200",
     "@types/passport-jwt": "^4.0.1",
-    "@typescript-eslint/eslint-plugin": "^8.57.1",
-    "@typescript-eslint/parser": "^8.57.1",
     "eslint": "^10.1.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.0.1",
+    "globals": "^17.13.0",
     "mongodb-memory-server": "^11.0.1",
     "prettier": "^3.0.3",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.7.2"
+    "typescript": "6.0.3",
+    "typescript-eslint": "^8.71.2"
   }
 }
