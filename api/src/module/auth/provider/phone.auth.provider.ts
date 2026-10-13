@@ -3,15 +3,11 @@ import { Inject, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 
 import type { Cache } from 'cache-manager'
-import { isNil } from 'lodash'
 
 import { NotifyProvider } from '@/module/notify/provider'
-import { UserRepository } from '@/module/user/repository/user.repository'
-import type { UserDocument, UserView } from '@/module/user/repository/user.schema'
 
 import { generate, sign } from '@/helper/code'
 
-import { AuthResponse } from '../auth.response'
 import type { Code } from '../type/code'
 
 const EXPIRE = 5 * 60 * 1000
@@ -25,15 +21,12 @@ export class PhoneAuthProvider {
   constructor(
     @Inject(CACHE_MANAGER) private readonly store: Cache,
     private readonly config: ConfigService,
-    private readonly notify: NotifyProvider,
-    private readonly repository: UserRepository
+    private readonly notify: NotifyProvider
   ) {
     this.CodeSecret = this.config.getOrThrow<string>('CODE_SECRET')
   }
 
-  async run(phone: string): Promise<AuthResponse> {
-    const user = await this.save(phone)
-
+  async run(phone: string): Promise<void> {
     const code = generate()
 
     await this.store.set<Code>(
@@ -47,17 +40,5 @@ export class PhoneAuthProvider {
     )
 
     await this.notify.code.run(phone, code)
-
-    return new AuthResponse(user)
-  }
-
-  private async save(phone: string): Promise<UserView | UserDocument> {
-    const user = await this.repository.find({ phone })
-
-    if (isNil(user)) {
-      return await this.repository.create({ phone })
-    }
-
-    return user
   }
 }

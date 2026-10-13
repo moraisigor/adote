@@ -31,6 +31,17 @@ export class VerifyAuthProvider {
     this.CodeSecret = this.config.getOrThrow<string>('CODE_SECRET')
   }
 
+  private save(phone: string) {
+    return this.repository.update(
+      { phone },
+      { $setOnInsert: { phone } },
+      {
+        upsert: true,
+        returnDocument: 'after'
+      }
+    )
+  }
+
   private equals(hash: string, code: string, phone: string) {
     return hash === sign(code, phone, this.CodeSecret)
   }
@@ -70,12 +81,16 @@ export class VerifyAuthProvider {
 
     await this.store.del(phone)
 
-    const user = await this.repository.find({ phone, enable: true })
+    const user = await this.save(phone)
 
-    if (isNil(user)) {
-      throw new UnauthorizedException()
+    if (user) {
+      const { enable } = user
+
+      if (enable) {
+        this.token.run(user, reply)
+      }
     }
 
-    this.token.run(user, reply)
+    throw new UnauthorizedException()
   }
 }
