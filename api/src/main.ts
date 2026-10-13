@@ -14,7 +14,10 @@ import { AppModule } from './app.module'
 const application = async () => {
   const application = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter({ logger: true }),
+    new FastifyAdapter({
+      logger: true,
+      trustProxy: true
+    }),
     {
       cors: {
         origin: split(process.env.APP_ORIGIN, ','),
@@ -30,7 +33,13 @@ const application = async () => {
 
   application.setGlobalPrefix('/api')
 
-  application.useGlobalPipes(new ValidationPipe({ transform: true }))
+  application.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true
+    })
+  )
 
   await application.listen(process.env.PORT ?? 9000, '0.0.0.0')
 }
