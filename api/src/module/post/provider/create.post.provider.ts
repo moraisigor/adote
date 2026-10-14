@@ -1,8 +1,10 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
 
 import { isNil } from 'lodash'
 import { Types } from 'mongoose'
 
+import { ImageProvider } from '@/module/image/provider'
+import { ImageKind } from '@/module/image/type/image'
 import { PermissionProvider } from '@/module/permission/provider'
 import { PetRepository } from '@/module/pet/repository/pet.repository'
 
@@ -15,7 +17,8 @@ export class CreatePostProvider {
   constructor(
     private readonly _pet: PetRepository,
     private readonly _post: PostRepository,
-    private readonly provider: PermissionProvider
+    private readonly _image: ImageProvider,
+    private readonly permission: PermissionProvider
   ) {}
 
   private build(request: CreatePostRequest, param: { [key: string]: unknown }) {
@@ -43,14 +46,22 @@ export class CreatePostProvider {
 
     const { organization } = find
 
-    const permission = await this.provider.resource.run(current, find)
+    const permission = await this.permission.resource.run(current, find)
 
     if (permission) {
-      const post = await this._post.create(
-        this.build(request, organization ? { organization } : { user: new Types.ObjectId(current) })
-      )
+      const { image } = request
 
-      return new PostResponse(post)
+      const valid = await this._image.validate.run(image, ImageKind.POST, current)
+
+      if (valid) {
+        const post = await this._post.create(
+          this.build(request, organization ? { organization } : { user: new Types.ObjectId(current) })
+        )
+
+        return new PostResponse(post)
+      }
+
+      throw new BadRequestException()
     }
 
     throw new ForbiddenException()
