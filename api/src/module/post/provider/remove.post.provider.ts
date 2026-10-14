@@ -2,6 +2,7 @@ import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/commo
 
 import { isNil } from 'lodash'
 
+import { ImageProvider } from '@/module/image/provider'
 import { PermissionProvider } from '@/module/permission/provider'
 
 import { RemovePostResponse } from '../post.response'
@@ -10,7 +11,8 @@ import { PostRepository } from '../repository/post.repository'
 @Injectable()
 export class RemovePostProvider {
   constructor(
-    private readonly provider: PermissionProvider,
+    private readonly image: ImageProvider,
+    private readonly permission: PermissionProvider,
     private readonly repository: PostRepository
   ) {}
 
@@ -21,12 +23,16 @@ export class RemovePostProvider {
       throw new NotFoundException()
     }
 
-    const permission = await this.provider.resource.run(current, post)
+    const permission = await this.permission.resource.run(current, post)
 
     if (permission) {
       const result = await this.repository.remove({ _id: id })
 
       if (result) {
+        const { image } = post
+
+        await this.image.remove.run(image)
+
         return new RemovePostResponse(id)
       }
 
