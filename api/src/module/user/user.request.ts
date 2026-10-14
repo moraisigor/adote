@@ -2,14 +2,16 @@ import { Transform, Type, type TransformFnParams } from 'class-transformer'
 import {
   IsEmail,
   IsMongoId,
-  IsNotEmpty,
   IsOptional,
   IsPhoneNumber,
   IsString,
   IsUrl,
   Length,
+  Matches,
   ValidateNested
 } from 'class-validator'
+
+import { IMAGE_PATTERN } from '@/module/image/type/image'
 
 import { PageRequest } from '@/helper/page'
 
@@ -43,12 +45,13 @@ class ContactRequest {
 export class SaveUserRequest {
   @IsString()
   @Length(2, 20)
-  @Transform(({ value }: TransformFnParams) => value?.trim())
+  @Transform(({ value }: TransformFnParams) => String(value).trim())
   readonly name!: string
 
+  @IsOptional()
   @Type(() => ContactRequest)
   @ValidateNested()
-  readonly contact!: ContactRequest
+  readonly contact?: ContactRequest
 
   @IsMongoId({ message: 'the id is not valid' })
   @IsOptional()
@@ -57,7 +60,6 @@ export class SaveUserRequest {
 
 export class SaveImageRequest {
   @IsString()
-  @IsNotEmpty()
-  @Transform(({ value }: TransformFnParams) => value?.trim())
+  @Matches(IMAGE_PATTERN)
   readonly image!: string
 }
