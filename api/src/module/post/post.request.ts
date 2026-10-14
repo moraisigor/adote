@@ -1,5 +1,17 @@
 import { Transform, Type, type TransformFnParams } from 'class-transformer'
-import { isArray, IsArray, IsBoolean, IsMongoId, IsNotEmpty, IsOptional, IsString } from 'class-validator'
+import {
+  ArrayMaxSize,
+  ArrayMinSize,
+  isArray,
+  IsArray,
+  IsBoolean,
+  IsMongoId,
+  IsOptional,
+  IsString,
+  Matches
+} from 'class-validator'
+
+import { IMAGE_PATTERN } from '@/module/image/type/image'
 
 import { PageRequest } from '@/helper/page'
 
@@ -29,10 +41,10 @@ export class ListPostRequest extends PageRequest {
   @IsOptional()
   @Transform(({ value }: TransformFnParams) => {
     if (isArray(value)) {
-      return value
+      return value as string[]
     }
 
-    return [value]
+    return [value] as string[]
   })
   readonly location?: string[]
 
@@ -43,8 +55,10 @@ export class ListPostRequest extends PageRequest {
 
 export class CreatePostRequest {
   @IsArray()
+  @ArrayMinSize(1)
+  @ArrayMaxSize(5)
   @IsString({ each: true })
-  @IsNotEmpty({ each: true })
+  @Matches(IMAGE_PATTERN)
   readonly image!: string[]
 
   @IsMongoId({ message: 'the pet is not valid' })
@@ -60,8 +74,10 @@ export class CreatePostRequest {
 
 export class SavePostRequest {
   @IsArray()
+  @ArrayMinSize(1)
+  @ArrayMaxSize(5)
   @IsString({ each: true })
-  @IsNotEmpty({ each: true })
+  @Matches(IMAGE_PATTERN)
   readonly image!: string[]
 
   @IsMongoId({ message: 'the location is not valid' })
