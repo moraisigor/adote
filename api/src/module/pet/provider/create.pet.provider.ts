@@ -11,7 +11,7 @@ import { PetRepository } from '../repository/pet.repository'
 @Injectable()
 export class CreatePetProvider {
   constructor(
-    private readonly provider: PermissionProvider,
+    private readonly permission: PermissionProvider,
     private readonly repository: PetRepository
   ) {}
 
@@ -34,7 +34,7 @@ export class CreatePetProvider {
     const { organization } = request
 
     if (organization) {
-      const permission = await this.provider.organization.run(current, organization)
+      const permission = await this.permission.organization.run(current, organization)
 
       if (permission) {
         const pet = await this.repository.create(
