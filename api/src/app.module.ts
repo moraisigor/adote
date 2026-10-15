@@ -6,6 +6,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
 
 import { SentryGlobalFilter, SentryModule } from '@sentry/nestjs/setup'
 
+import { AdopterModule } from '@/module/adopter/adopter.module'
 import { AuthModule } from '@/module/auth/auth.module'
 import { BreedModule } from '@/module/breed/breed.module'
 import { ConfigurationModule } from '@/module/configuration/configuration.module'
@@ -28,6 +29,7 @@ import { RouteConfig } from './router.config.factory'
 
 @Module({
   imports: [
+    AdopterModule,
     AuthModule,
     BreedModule,
     ConfigurationModule,
