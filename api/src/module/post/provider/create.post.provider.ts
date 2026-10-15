@@ -58,6 +58,10 @@ export class CreatePostProvider {
           this.build(request, organization ? { organization } : { user: new Types.ObjectId(current) })
         )
 
+        if (isNil(post)) {
+          throw new BadRequestException()
+        }
+
         return new PostResponse(post)
       }
 
