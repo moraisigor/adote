@@ -1,10 +1,14 @@
 import { Transform } from 'class-transformer'
-import { IsMongoId, IsPhoneNumber, IsString, Length } from 'class-validator'
+import { IsMongoId, IsOptional, IsPhoneNumber, IsString, Length } from 'class-validator'
 
 import { PageRequest } from '@/helper/page'
 import { format } from '@/helper/phone'
 
-export class ListAdopterRequest extends PageRequest {}
+export class ListAdopterRequest extends PageRequest {
+  @IsMongoId({ message: 'the organization is not valid' })
+  @IsOptional()
+  readonly organization?: string
+}
 
 export class CreateAdopterRequest {
   @IsString()
