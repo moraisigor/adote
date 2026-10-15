@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 
 import { HeadObjectCommand } from '@aws-sdk/client-s3'
+import { isEmpty } from 'lodash'
 
 import { ImageStorage } from '../image.storage'
 import { isKey, type ImageKind } from '../type/image'
@@ -22,6 +23,10 @@ export class ValidateImageProvider {
   }
 
   async run(keys: string[], kind: ImageKind, current: string): Promise<boolean> {
+    if (isEmpty(keys)) {
+      return true
+    }
+
     if (keys.every((key) => isKey(key, kind))) {
       const values = await Promise.all(keys.map((key) => this.exists(key, current)))
 

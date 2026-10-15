@@ -1,18 +1,31 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
 
-import { isNil } from 'lodash'
+import { difference, isNil } from 'lodash'
 import { Types } from 'mongoose'
 
+import { ImageProvider } from '@/module/image/provider'
+import { ImageKind } from '@/module/image/type/image'
 import { PermissionProvider } from '@/module/permission/provider'
 
 import { SavePostRequest } from '../post.request'
 import { PostResponse } from '../post.response'
 import { PostRepository } from '../repository/post.repository'
+import type { PostView } from '../repository/post.schema'
 
 @Injectable()
 export class SavePostProvider {
+  image = {
+    remove: ({ image }: PostView, { image: next }: SavePostRequest) => {
+      return this._image.remove.run(difference(image, next))
+    },
+    validate: ({ image }: PostView, { image: next }: SavePostRequest, current: string) => {
+      return this._image.validate.run(difference(next, image), ImageKind.POST, current)
+    }
+  }
+
   constructor(
-    private readonly provider: PermissionProvider,
+    private readonly _image: ImageProvider,
+    private readonly permission: PermissionProvider,
     private readonly repository: PostRepository
   ) {}
 
@@ -33,18 +46,26 @@ export class SavePostProvider {
       throw new NotFoundException()
     }
 
-    const permission = await this.provider.resource.run(current, post)
+    const permission = await this.permission.resource.run(current, post)
 
     if (permission) {
-      const result = await this.repository.save(new Types.ObjectId(id), this.build(request), {
-        returnDocument: 'after'
-      })
+      const valid = await this.image.validate(post, request, current)
 
-      if (result) {
-        return new PostResponse(result)
+      if (valid) {
+        const result = await this.repository.save(new Types.ObjectId(id), this.build(request), {
+          returnDocument: 'after'
+        })
+
+        if (result) {
+          await this.image.remove(post, request)
+
+          return new PostResponse(result)
+        }
+
+        throw new BadRequestException()
       }
 
-      throw new NotFoundException()
+      throw new BadRequestException()
     }
 
     throw new ForbiddenException()
