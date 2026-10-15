@@ -1,6 +1,4 @@
-import type { Types } from 'mongoose'
-
-export type Ref = { id: string } | Types.ObjectId
+import type { Ref } from '@/helper/repository'
 
 export type Resource = {
   readonly user?: Ref
