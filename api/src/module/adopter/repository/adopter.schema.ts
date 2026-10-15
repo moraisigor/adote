@@ -9,7 +9,7 @@ export type AdopterDocument = HydratedDocument<Adopter>
 export type AdopterView = MergeType<
   AdopterDocument,
   {
-    pet: Pick<PetDocument, 'id' | 'name'> | null
+    pet: Pick<PetDocument, 'id' | 'name'>
   }
 >
 
