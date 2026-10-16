@@ -17,7 +17,7 @@ export class SaveImageProvider {
   constructor(private readonly storage: ImageStorage) {}
 
   async run(request: SaveImageRequest, current: string): Promise<ImageResponse> {
-    const { size, kind, extension } = request
+    const { kind, size, extension } = request
 
     const key = `${kind}/${unique(24)}.${ImageExtension[extension]}`
 
