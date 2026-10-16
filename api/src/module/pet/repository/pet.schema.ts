@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
-import { Types, type HydratedDocument, type MergeType } from 'mongoose'
+import { SchemaTypes, type HydratedDocument, type MergeType, type Types } from 'mongoose'
 
 import type { BreedDocument } from '@/module/breed/repository/breed.schema'
 import { Kind } from '@/module/breed/type/kind'
@@ -35,13 +35,13 @@ export class Pet {
   @Prop({ type: String, enum: Gender, required: true })
   gender!: Gender
 
-  @Prop({ type: Types.ObjectId, ref: 'Breed', required: true })
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'Breed', required: true })
   breed!: Types.ObjectId
 
-  @Prop({ type: Types.ObjectId, ref: 'User' })
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'User' })
   user?: Types.ObjectId
 
-  @Prop({ type: Types.ObjectId, ref: 'Organization' })
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'Organization' })
   organization?: Types.ObjectId
 }
 

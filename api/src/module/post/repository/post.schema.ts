@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
-import { Types, type HydratedDocument, type MergeType } from 'mongoose'
+import { SchemaTypes, type HydratedDocument, type MergeType, type Types } from 'mongoose'
 
 import type { LocationDocument } from '@/module/location/repository/location.schema'
 import type { OrganizationDocument } from '@/module/organization/repository/organization.schema'
@@ -28,16 +28,16 @@ export class Post {
   @Prop({ type: [String], required: true })
   image!: string[]
 
-  @Prop({ type: Types.ObjectId, ref: 'Pet', required: true })
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'Pet', required: true })
   pet!: Types.ObjectId
 
-  @Prop({ type: Types.ObjectId, ref: 'Location' })
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'Location' })
   location!: Types.ObjectId
 
-  @Prop({ type: Types.ObjectId, ref: 'User' })
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'User' })
   user?: Types.ObjectId
 
-  @Prop({ type: Types.ObjectId, ref: 'Organization' })
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'Organization' })
   organization?: Types.ObjectId
 
   @Prop({ type: Boolean, required: true })

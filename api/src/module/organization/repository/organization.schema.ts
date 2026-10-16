@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
-import { Types, type HydratedDocument } from 'mongoose'
+import { SchemaTypes, type HydratedDocument, type Types } from 'mongoose'
 
 import { Member } from './member'
 
@@ -38,13 +38,13 @@ export class Organization {
   @Prop({ type: [Member], required: true })
   member!: Member[]
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'Pet' }], default: [] })
+  @Prop({ type: [{ type: SchemaTypes.ObjectId, ref: 'Pet' }], default: [] })
   pet?: Types.ObjectId[]
 
-  @Prop({ type: [{ type: Types.ObjectId, ref: 'Post' }], default: [] })
+  @Prop({ type: [{ type: SchemaTypes.ObjectId, ref: 'Post' }], default: [] })
   post?: Types.ObjectId[]
 
-  @Prop({ type: Types.ObjectId, ref: 'Location' })
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'Location' })
   location?: Types.ObjectId
 }
 
