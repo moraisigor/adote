@@ -87,7 +87,7 @@ export class VerifyAuthProvider {
       const { enable } = user
 
       if (enable) {
-        this.token.run(user, reply)
+        return this.token.run(user, reply)
       }
     }
 
