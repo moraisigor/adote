@@ -12,7 +12,7 @@ import { PetRepository } from '../repository/pet.repository'
 @Injectable()
 export class SavePetProvider {
   constructor(
-    private readonly provider: PermissionProvider,
+    private readonly permission: PermissionProvider,
     private readonly repository: PetRepository
   ) {}
 
@@ -35,7 +35,7 @@ export class SavePetProvider {
       throw new NotFoundException()
     }
 
-    const permission = await this.provider.resource.run(current, pet)
+    const permission = await this.permission.resource.run(current, pet)
 
     if (permission) {
       const result = await this.repository.save(new Types.ObjectId(id), this.build(request), {

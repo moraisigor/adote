@@ -12,7 +12,7 @@ import { PermissionProvider } from '@/module/permission/provider'
 export class OrganizationPermissionGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
-    private readonly provider: PermissionProvider
+    private readonly permission: PermissionProvider
   ) {}
 
   async canActivate(context: ExecutionContext) {
@@ -35,6 +35,6 @@ export class OrganizationPermissionGuard implements CanActivate {
       params: { id: string }
     }>()
 
-    return await this.provider.organization.run(user, organization, permission)
+    return await this.permission.organization.run(user, organization, permission)
   }
 }

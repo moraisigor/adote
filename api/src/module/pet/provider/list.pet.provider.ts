@@ -12,7 +12,7 @@ import type { Pet } from '../repository/pet.schema'
 @Injectable()
 export class ListPetProvider {
   constructor(
-    private readonly provider: PermissionProvider,
+    private readonly permission: PermissionProvider,
     private readonly repository: PetRepository
   ) {}
 
@@ -30,7 +30,7 @@ export class ListPetProvider {
     const { organization } = request
 
     if (organization) {
-      const permission = await this.provider.organization.run(current, organization)
+      const permission = await this.permission.organization.run(current, organization)
 
       if (permission) {
         return await this.list(request, {

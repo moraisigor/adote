@@ -11,7 +11,7 @@ import { PostRepository } from '../repository/post.repository'
 @Injectable()
 export class PublishPostProvider {
   constructor(
-    private readonly provider: PermissionProvider,
+    private readonly permission: PermissionProvider,
     private readonly repository: PostRepository
   ) {}
 
@@ -22,7 +22,7 @@ export class PublishPostProvider {
       throw new NotFoundException()
     }
 
-    const permission = await this.provider.resource.run(current, post)
+    const permission = await this.permission.resource.run(current, post)
 
     if (permission) {
       const result = await this.repository.save(

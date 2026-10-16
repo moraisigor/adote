@@ -12,7 +12,7 @@ import { ListPostRequest } from '../user.request'
 @Injectable()
 export class ListPostProvider {
   constructor(
-    private readonly provider: PermissionProvider,
+    private readonly permission: PermissionProvider,
     private readonly repository: PostRepository
   ) {}
 
@@ -30,7 +30,7 @@ export class ListPostProvider {
     const { organization } = request
 
     if (organization) {
-      const permission = await this.provider.organization.run(current, organization)
+      const permission = await this.permission.organization.run(current, organization)
 
       if (permission) {
         return await this.list(request, {
