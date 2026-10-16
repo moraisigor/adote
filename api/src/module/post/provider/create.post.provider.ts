@@ -38,7 +38,7 @@ export class CreatePostProvider {
   }
 
   async run(request: CreatePostRequest, current: string): Promise<PostResponse> {
-    const { pet } = request
+    const { pet, image, location } = request
 
     const find = await this._pet.find({ _id: pet })
 
@@ -51,8 +51,6 @@ export class CreatePostProvider {
     if (!permission) {
       throw new ForbiddenException()
     }
-
-    const { image, location } = request
 
     const exists = await this._location.exists({ _id: location })
 
