@@ -51,7 +51,7 @@ export class AdopterRepository {
   }
 
   async remove(query: QueryFilter<Adopter>): Promise<boolean> {
-    xMany(query).exec()
+    const { deletedCount: count } = await this.model.deleteMany(query).exec()
 
     return count >= 1
   }
