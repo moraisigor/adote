@@ -9,14 +9,15 @@ import { AdopterRepository } from './repository/adopter.repository'
 import { Adopter, AdopterSchema } from './repository/adopter.schema'
 
 import { PermissionModule } from '../permission/permission.module'
-import { PetModule } from '../pet/pet.module'
+import { PostModule } from '../post/post.module'
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Adopter.name, schema: AdopterSchema }]),
     PermissionModule,
-    PetModule
+    PostModule
   ],
+  exports: [AdopterRepository],
   providers: [AdopterProvider, ListAdopterProvider, CreateAdopterProvider, AdopterRepository],
   controllers: [AdopterController]
 })
