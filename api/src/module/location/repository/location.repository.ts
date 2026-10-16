@@ -9,6 +9,12 @@ import { Location, type LocationDocument } from './location.schema'
 export class LocationRepository {
   constructor(@InjectModel(Location.name) private readonly model: Model<Location>) {}
 
+  async exists(query: QueryFilter<Location>) {
+    const result = await this.model.exists(query).exec()
+
+    return Boolean(result)
+  }
+
   list(
     query?: QueryFilter<Location>,
     projection?: ProjectionType<Location>,

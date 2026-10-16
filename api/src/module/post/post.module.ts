@@ -13,6 +13,7 @@ import { PostRepository } from './repository/post.repository'
 import { Post, PostSchema } from './repository/post.schema'
 
 import { ImageModule } from '../image/image.module'
+import { LocationModule } from '../location/location.module'
 import { PermissionModule } from '../permission/permission.module'
 import { PetModule } from '../pet/pet.module'
 
@@ -20,6 +21,7 @@ import { PetModule } from '../pet/pet.module'
   imports: [
     MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
     ImageModule,
+    LocationModule,
     PermissionModule,
     PetModule
   ],

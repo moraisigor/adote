@@ -5,6 +5,7 @@ import { Types } from 'mongoose'
 
 import { ImageProvider } from '@/module/image/provider'
 import { ImageKind } from '@/module/image/type/image'
+import { LocationRepository } from '@/module/location/repository/location.repository'
 import { PermissionProvider } from '@/module/permission/provider'
 import { PetRepository } from '@/module/pet/repository/pet.repository'
 
@@ -16,9 +17,10 @@ import { PostRepository } from '../repository/post.repository'
 export class CreatePostProvider {
   constructor(
     private readonly _pet: PetRepository,
-    private readonly _post: PostRepository,
+    private readonly _location: LocationRepository,
     private readonly _image: ImageProvider,
-    private readonly permission: PermissionProvider
+    private readonly permission: PermissionProvider,
+    private readonly repository: PostRepository
   ) {}
 
   private build(request: CreatePostRequest, param: { [key: string]: unknown }) {
@@ -44,30 +46,36 @@ export class CreatePostProvider {
       throw new NotFoundException()
     }
 
-    const { organization } = find
-
     const permission = await this.permission.resource.run(current, find)
 
-    if (permission) {
-      const { image } = request
+    if (!permission) {
+      throw new ForbiddenException()
+    }
 
-      const valid = await this._image.validate.run(image, ImageKind.POST, current)
+    const { image, location } = request
 
-      if (valid) {
-        const post = await this._post.create(
-          this.build(request, organization ? { organization } : { user: new Types.ObjectId(current) })
-        )
+    const exists = await this._location.exists({ _id: location })
 
-        if (isNil(post)) {
-          throw new BadRequestException()
-        }
-
-        return new PostResponse(post)
-      }
-
+    if (!exists) {
       throw new BadRequestException()
     }
 
-    throw new ForbiddenException()
+    const valid = await this._image.validate.run(image, ImageKind.POST, current)
+
+    if (!valid) {
+      throw new BadRequestException()
+    }
+
+    const { organization } = find
+
+    const post = await this.repository.create(
+      this.build(request, organization ? { organization } : { user: new Types.ObjectId(current) })
+    )
+
+    if (isNil(post)) {
+      throw new BadRequestException()
+    }
+
+    return new PostResponse(post)
   }
 }
