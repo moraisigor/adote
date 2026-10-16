@@ -49,4 +49,10 @@ export class AdopterRepository {
       { upsert: true }
     )
   }
+
+  async remove(query: QueryFilter<Adopter>): Promise<boolean> {
+    xMany(query).exec()
+
+    return count >= 1
+  }
 }

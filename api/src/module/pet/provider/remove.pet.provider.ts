@@ -2,6 +2,7 @@ import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/commo
 
 import { isNil } from 'lodash'
 
+import { AdopterRepository } from '@/module/adopter/repository/adopter.repository'
 import { PermissionProvider } from '@/module/permission/provider'
 
 import { RemovePetResponse } from '../pet.response'
@@ -10,7 +11,8 @@ import { PetRepository } from '../repository/pet.repository'
 @Injectable()
 export class RemovePetProvider {
   constructor(
-    private readonly provider: PermissionProvider,
+    private readonly _adopter: AdopterRepository,
+    private readonly permission: PermissionProvider,
     private readonly repository: PetRepository
   ) {}
 
@@ -21,12 +23,14 @@ export class RemovePetProvider {
       throw new NotFoundException()
     }
 
-    const permission = await this.provider.resource.run(current, pet)
+    const permission = await this.permission.resource.run(current, pet)
 
     if (permission) {
       const result = await this.repository.remove({ _id: id })
 
       if (result) {
+        await this._adopter.remove({ pet: id })
+
         return new RemovePetResponse(id)
       }
 
