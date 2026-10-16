@@ -29,12 +29,6 @@ export class Organization {
   @Prop({ type: [Member], required: true })
   member!: Member[]
 
-  @Prop({ type: [{ type: SchemaTypes.ObjectId, ref: 'Pet' }], default: [] })
-  pet?: Types.ObjectId[]
-
-  @Prop({ type: [{ type: SchemaTypes.ObjectId, ref: 'Post' }], default: [] })
-  post?: Types.ObjectId[]
-
   @Prop({ type: SchemaTypes.ObjectId, ref: 'Location' })
   location?: Types.ObjectId
 }
