@@ -1,9 +1,3 @@
-export enum Env {
-  TEST = 'test',
-  DEVELOPMENT = 'development',
-  PRODUCTION = 'production'
-}
-
 const get = (env?: string) => {
   const list: string[] = Object.values(Env)
 
@@ -15,6 +9,14 @@ const get = (env?: string) => {
 
   throw new Error(`env is not valid: ${env}`)
 }
+
+export const Env = {
+  TEST: 'test',
+  DEVELOPMENT: 'development',
+  PRODUCTION: 'production'
+} as const
+
+export type Env = (typeof Env)[keyof typeof Env]
 
 export const env = get(process.env.ENV)
 
