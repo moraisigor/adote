@@ -17,7 +17,7 @@ export class SearchLocationProvider {
         }
       },
       {},
-      { sort: { term: 1 }, limit: 10 }
+      { sort: { search: 1 }, limit: 10 }
     )
 
     return list.map((e) => new LocationResponse(e))
