@@ -15,13 +15,13 @@ import { Organization, OrganizationSchema } from './repository/organization.sche
   imports: [MongooseModule.forFeature([{ name: Organization.name, schema: OrganizationSchema }])],
   exports: [OrganizationRepository],
   providers: [
-    OrganizationProvider,
+    CreateOrganizationProvider,
     GetOrganizationProvider,
     ListOrganizationProvider,
-    CreateOrganizationProvider,
-    SaveOrganizationProvider,
+    OrganizationProvider,
+    OrganizationRepository,
     RemoveOrganizationProvider,
-    OrganizationRepository
+    SaveOrganizationProvider
   ],
   controllers: [OrganizationController]
 })

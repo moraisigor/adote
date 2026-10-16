@@ -11,7 +11,7 @@ import { FavRepository } from './repository/fav.repository'
 
 @Module({
   imports: [PostModule, UserModule],
-  providers: [FavProvider, AddFavProvider, RemoveFavProvider, FavRepository],
+  providers: [AddFavProvider, FavProvider, FavRepository, RemoveFavProvider],
   controllers: [FavController]
 })
 export class FavModule {}

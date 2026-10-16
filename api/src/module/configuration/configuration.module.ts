@@ -10,7 +10,7 @@ import { SetLocationProvider } from './provider/set.location.provider'
 import { SetManagerProvider } from './provider/set.manager.provider'
 
 @Module({
-  imports: [UserModule, BreedModule, LocationModule],
+  imports: [BreedModule, LocationModule, UserModule],
   exports: [ConfigurationProvider],
   providers: [ConfigurationProvider, SetBreedProvider, SetLocationProvider, SetManagerProvider]
 })

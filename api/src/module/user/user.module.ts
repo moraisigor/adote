@@ -29,15 +29,15 @@ import { PostModule } from '../post/post.module'
   ],
   exports: [UserRepository, MongooseModule],
   providers: [
-    UserProvider,
-    GetUserProvider,
     GetCurrentProvider,
-    ListUserProvider,
-    ListPostProvider,
+    GetUserProvider,
     ListOrganizationProvider,
-    SaveUserProvider,
-    SaveImageProvider,
+    ListPostProvider,
+    ListUserProvider,
     RemoveUserProvider,
+    SaveImageProvider,
+    SaveUserProvider,
+    UserProvider,
     UserRepository
   ],
   controllers: [UserController]

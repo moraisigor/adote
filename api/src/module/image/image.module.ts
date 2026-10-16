@@ -9,7 +9,7 @@ import { ValidateImageProvider } from './provider/validate.image.provider'
 
 @Module({
   exports: [ImageProvider],
-  providers: [ImageProvider, ImageStorage, SaveImageProvider, RemoveImageProvider, ValidateImageProvider],
+  providers: [ImageProvider, ImageStorage, RemoveImageProvider, SaveImageProvider, ValidateImageProvider],
   controllers: [ImageController]
 })
 export class ImageModule {}

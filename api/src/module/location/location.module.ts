@@ -10,7 +10,7 @@ import { Location, LocationSchema } from './repository/location.schema'
 @Module({
   imports: [MongooseModule.forFeature([{ name: Location.name, schema: LocationSchema }])],
   exports: [LocationRepository],
-  providers: [LocationProvider, SearchLocationProvider, LocationRepository],
+  providers: [LocationProvider, LocationRepository, SearchLocationProvider],
   controllers: [LocationController]
 })
 export class LocationModule {}

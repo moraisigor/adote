@@ -9,6 +9,6 @@ import { OrganizationModule } from '../organization/organization.module'
 @Module({
   imports: [OrganizationModule],
   exports: [PermissionProvider],
-  providers: [PermissionProvider, ResourcePermissionProvider, OrganizationPermissionProvider]
+  providers: [OrganizationPermissionProvider, PermissionProvider, ResourcePermissionProvider]
 })
 export class PermissionModule {}

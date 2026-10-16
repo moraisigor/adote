@@ -22,13 +22,13 @@ import { PermissionModule } from '../permission/permission.module'
   ],
   exports: [PetRepository],
   providers: [
-    PetProvider,
+    CreatePetProvider,
     GetPetProvider,
     ListPetProvider,
-    CreatePetProvider,
-    SavePetProvider,
+    PetProvider,
+    PetRepository,
     RemovePetProvider,
-    PetRepository
+    SavePetProvider
   ],
   controllers: [PetController]
 })

@@ -18,7 +18,7 @@ import { PostModule } from '../post/post.module'
     PostModule
   ],
   exports: [AdopterRepository],
-  providers: [AdopterProvider, ListAdopterProvider, CreateAdopterProvider, AdopterRepository],
+  providers: [AdopterProvider, AdopterRepository, CreateAdopterProvider, ListAdopterProvider],
   controllers: [AdopterController]
 })
 export class AdopterModule {}

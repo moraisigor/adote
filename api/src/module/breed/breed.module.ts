@@ -10,7 +10,7 @@ import { Breed, BreedSchema } from './repository/breed.schema'
 @Module({
   imports: [MongooseModule.forFeature([{ name: Breed.name, schema: BreedSchema }])],
   exports: [BreedRepository],
-  providers: [BreedProvider, ListBreedProvider, BreedRepository],
+  providers: [BreedProvider, BreedRepository, ListBreedProvider],
   controllers: [BreedController]
 })
 export class BreedModule {}

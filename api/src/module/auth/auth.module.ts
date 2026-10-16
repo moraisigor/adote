@@ -23,9 +23,9 @@ import { TokenStrategy } from './strategy/token.strategy'
 
 @Module({
   imports: [
-    UserModule,
     NotifyModule,
     PermissionModule,
+    UserModule,
     // dependency
     JwtModule,
     PassportModule,
@@ -35,13 +35,13 @@ import { TokenStrategy } from './strategy/token.strategy'
   ],
   providers: [
     AuthProvider,
+    ExpireAuthProvider,
     PhoneAuthProvider,
     RenewAuthProvider,
-    VerifyAuthProvider,
     TokenAuthProvider,
-    ExpireAuthProvider,
-    TokenStrategy,
     TokenRenewStrategy,
+    TokenStrategy,
+    VerifyAuthProvider,
     { provide: APP_GUARD, useClass: TokenGuard },
     { provide: APP_GUARD, useClass: PermissionGuard },
     { provide: APP_GUARD, useClass: OrganizationPermissionGuard }

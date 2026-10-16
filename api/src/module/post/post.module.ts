@@ -25,14 +25,14 @@ import { PetModule } from '../pet/pet.module'
   ],
   exports: [PostRepository],
   providers: [
-    PostProvider,
+    CreatePostProvider,
     GetPostProvider,
     ListPostProvider,
-    CreatePostProvider,
-    SavePostProvider,
+    PostProvider,
+    PostRepository,
     PublishPostProvider,
     RemovePostProvider,
-    PostRepository
+    SavePostProvider
   ],
   controllers: [PostController]
 })

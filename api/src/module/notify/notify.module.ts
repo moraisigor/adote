@@ -6,6 +6,6 @@ import { MailNotifyProvider } from './provider/mail.notify.provider'
 
 @Module({
   exports: [NotifyProvider],
-  providers: [NotifyProvider, CodeNotifyProvider, MailNotifyProvider]
+  providers: [CodeNotifyProvider, MailNotifyProvider, NotifyProvider]
 })
 export class NotifyModule {}
