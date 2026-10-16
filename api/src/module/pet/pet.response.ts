@@ -1,18 +1,10 @@
+import { BreedResponse } from '@/module/breed/breed.response'
+
 import type { PetView } from './repository/pet.schema'
 import type { Gender } from './type/gender'
 import type { Size } from './type/size'
 
 import type { Kind } from '../breed/type/kind'
-
-class BreedResponse {
-  readonly id: string
-  readonly name: string
-
-  constructor(breed: PetView['breed']) {
-    this.id = breed.id
-    this.name = breed.name
-  }
-}
 
 export class PetResponse {
   readonly id: string
