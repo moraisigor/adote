@@ -41,6 +41,8 @@ const application = async () => {
     })
   )
 
+  application.enableShutdownHooks()
+
   await application.listen(process.env.PORT ?? 9000, '0.0.0.0')
 }
 
