@@ -2,8 +2,6 @@ import { HttpStatus } from '@nestjs/common'
 
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
 
-import type { AuthResponse } from '@/module/auth/auth.response'
-
 import { Spec } from '../spec'
 
 describe('auth module', async () => {
@@ -16,7 +14,7 @@ describe('auth module', async () => {
   // post /auth
   describe('/auth', () => {
     test('should start auth', async () => {
-      const { statusCode: status, json } = await spec.application
+      const { statusCode: status } = await spec.application
         .inject()
         .post('/auth')
         .body({
@@ -24,28 +22,21 @@ describe('auth module', async () => {
         })
         .end()
 
-      const response = json<AuthResponse>()
-
-      expect(status).toBe(HttpStatus.OK)
-
-      expect(response).toMatchObject({
-        id: expect.any(String),
-        phone: '+5599999999999'
-      })
+      expect(status).toBe(HttpStatus.NO_CONTENT)
     })
   })
 
   // post /auth/verify
   describe('/auth/verify', () => {
     test('should auth user with code', async () => {
-      const { phone } = await spec.scenario.build.auth.auth()
+      const { phone, code } = await spec.scenario.build.auth.auth()
 
       const { statusCode: status, cookies } = await spec.application
         .inject()
         .post('/auth/verify')
         .body({
           phone,
-          code: '999999'
+          code
         })
         .end()
 
@@ -59,7 +50,7 @@ describe('auth module', async () => {
         },
         {
           name: 'renew',
-          path: '/api/auth/renew',
+          path: '/api/auth',
           value: expect.any(String),
           expires: expect.any(Date)
         }
@@ -94,7 +85,7 @@ describe('auth module', async () => {
         },
         {
           name: 'renew',
-          path: '/api/auth/renew',
+          path: '/api/auth',
           value: expect.any(String),
           expires: expect.any(Date)
         }
@@ -117,7 +108,7 @@ describe('auth module', async () => {
         },
         {
           name: 'renew',
-          path: '/api/auth/renew',
+          path: '/api/auth',
           value: '',
           expires: new Date('1970-01-01')
         }
