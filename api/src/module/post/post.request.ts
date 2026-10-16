@@ -57,8 +57,7 @@ export class CreatePostRequest {
   @IsArray()
   @ArrayMinSize(1)
   @ArrayMaxSize(5)
-  @IsString({ each: true })
-  @Matches(IMAGE_PATTERN)
+  @Matches(IMAGE_PATTERN, { each: true })
   readonly image!: string[]
 
   @IsMongoId({ message: 'the pet is not valid' })
@@ -76,8 +75,7 @@ export class SavePostRequest {
   @IsArray()
   @ArrayMinSize(1)
   @ArrayMaxSize(5)
-  @IsString({ each: true })
-  @Matches(IMAGE_PATTERN)
+  @Matches(IMAGE_PATTERN, { each: true })
   readonly image!: string[]
 
   @IsMongoId({ message: 'the location is not valid' })
