@@ -2,12 +2,12 @@ import { Transform, type TransformFnParams } from 'class-transformer'
 import { IsEnum, IsMongoId, IsOptional, IsString, Length } from 'class-validator'
 import { trim } from 'lodash'
 
+import { Kind } from '@/module/breed/type/kind'
+
 import { PageRequest } from '@/helper/page'
 
 import { Gender } from './type/gender'
 import { Size } from './type/size'
-
-import { Kind } from '../breed/type/kind'
 
 export class GetPetParam {
   @IsMongoId({ message: 'the id is not valid' })

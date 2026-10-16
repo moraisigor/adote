@@ -1,6 +1,11 @@
 import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
+import { ImageModule } from '@/module/image/image.module'
+import { OrganizationModule } from '@/module/organization/organization.module'
+import { PermissionModule } from '@/module/permission/permission.module'
+import { PostModule } from '@/module/post/post.module'
+
 import { UserProvider } from './provider'
 import { GetCurrentProvider } from './provider/get.current.provider'
 import { GetUserProvider } from './provider/get.user.provider'
@@ -13,11 +18,6 @@ import { SaveUserProvider } from './provider/save.user.provider'
 import { UserRepository } from './repository/user.repository'
 import { User, UserSchema } from './repository/user.schema'
 import { UserController } from './user.controller'
-
-import { ImageModule } from '../image/image.module'
-import { OrganizationModule } from '../organization/organization.module'
-import { PermissionModule } from '../permission/permission.module'
-import { PostModule } from '../post/post.module'
 
 @Module({
   imports: [

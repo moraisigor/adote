@@ -1,6 +1,11 @@
 import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
+import { ImageModule } from '@/module/image/image.module'
+import { LocationModule } from '@/module/location/location.module'
+import { PermissionModule } from '@/module/permission/permission.module'
+import { PetModule } from '@/module/pet/pet.module'
+
 import { PostController } from './post.controller'
 import { PostProvider } from './provider'
 import { CreatePostProvider } from './provider/create.post.provider'
@@ -11,11 +16,6 @@ import { RemovePostProvider } from './provider/remove.post.provider'
 import { SavePostProvider } from './provider/save.post.provider'
 import { PostRepository } from './repository/post.repository'
 import { Post, PostSchema } from './repository/post.schema'
-
-import { ImageModule } from '../image/image.module'
-import { LocationModule } from '../location/location.module'
-import { PermissionModule } from '../permission/permission.module'
-import { PetModule } from '../pet/pet.module'
 
 @Module({
   imports: [

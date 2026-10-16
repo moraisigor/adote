@@ -6,6 +6,9 @@ import { Current } from '@/decorator/current.decorator'
 import { Permission } from '@/decorator/permission.decorator'
 import { Public } from '@/decorator/public.decorator'
 
+import type { OrganizationResponse } from '@/module/organization/organization.response'
+import type { PostResponse } from '@/module/post/post.response'
+
 import { PageRequest } from '@/helper/page'
 
 import { UserProvider } from './provider'
@@ -18,9 +21,6 @@ import {
   SaveUserRequest
 } from './user.request'
 import { CurrentUserResponse, RemoveUserResponse, UserResponse } from './user.response'
-
-import type { OrganizationResponse } from '../organization/organization.response'
-import type { PostResponse } from '../post/post.response'
 
 @Controller()
 export class UserController {

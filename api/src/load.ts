@@ -1,7 +1,8 @@
 import { NestFactory } from '@nestjs/core'
 
+import { ConfigurationProvider } from '@/module/configuration/provider'
+
 import { AppModule } from './app.module'
-import { ConfigurationProvider } from './module/configuration/provider'
 
 const load = async () => {
   const application = await NestFactory.createApplicationContext(AppModule)

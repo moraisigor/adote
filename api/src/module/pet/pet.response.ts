@@ -1,10 +1,9 @@
 import { BreedResponse } from '@/module/breed/breed.response'
+import type { Kind } from '@/module/breed/type/kind'
 
 import type { PetView } from './repository/pet.schema'
 import type { Gender } from './type/gender'
 import type { Size } from './type/size'
-
-import type { Kind } from '../breed/type/kind'
 
 export class PetResponse {
   readonly id: string
