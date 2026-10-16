@@ -1,12 +1,17 @@
+import { JwtService } from '@nestjs/jwt'
 import type { NestFastifyApplication } from '@nestjs/platform-fastify'
 
-import type { AuthResponse } from '@/module/auth/auth.response'
+import { spyOn } from 'bun:test'
+
 import type { Token } from '@/module/auth/type/token'
 import type { BreedResponse } from '@/module/breed/breed.response'
 import { Kind } from '@/module/breed/type/kind'
 import { ConfigurationProvider } from '@/module/configuration/provider'
 import type { FavResponse } from '@/module/fav/fav.response'
+import type { ImageResponse } from '@/module/image/image.response'
+import { ImageKind } from '@/module/image/type/image'
 import type { LocationResponse } from '@/module/location/location.response'
+import { CodeNotifyProvider } from '@/module/notify/provider/code.notify.provider'
 import type { OrganizationResponse } from '@/module/organization/organization.response'
 import type { PetResponse } from '@/module/pet/pet.response'
 import { Gender } from '@/module/pet/type/gender'
@@ -14,12 +19,17 @@ import { Size } from '@/module/pet/type/size'
 import type { PostResponse } from '@/module/post/post.response'
 import type { UserResponse } from '@/module/user/user.response'
 
+import { Bucket } from './bucket'
+
 export type Authorization = {
+  user?: string
   token?: Token
   renew?: Token
 }
 
 export class Scenario {
+  public readonly bucket = new Bucket()
+
   public readonly authorization: Authorization = {}
 
   constructor(private readonly application: NestFastifyApplication) {}
@@ -27,9 +37,44 @@ export class Scenario {
   build = {
     auth: {
       auth: async () => {
-        const { json } = await this.application.inject().post('/auth').body({ phone: '+5599999999999' }).end()
+        const provider = spyOn(
+          this.application.get(CodeNotifyProvider, {
+            strict: false
+          }),
+          'run'
+        )
 
-        return json<AuthResponse>()
+        try {
+          await this.application.inject().post('/auth').body({ phone: '+5599999999999' }).end()
+
+          const [phone, code] = provider.mock.calls.pop() ?? []
+
+          return { phone, code }
+        } finally {
+          provider.mockRestore()
+        }
+      }
+    },
+    image: {
+      save: async (kind: ImageKind) => {
+        const { user = '', token: { hash } = { hash: '' } } = this.authorization
+
+        const { json } = await this.application
+          .inject()
+          .post('/image')
+          .cookies({ token: hash })
+          .body({
+            kind,
+            size: 1024,
+            extension: 'image/webp'
+          })
+          .end()
+
+        const { key } = json<ImageResponse>()
+
+        this.bucket.set(key, user)
+
+        return key
       }
     },
     breed: {
@@ -135,6 +180,8 @@ export class Scenario {
       create: async (name: string = 'Oreo', organization?: string) => {
         const { token: { hash } = { hash: '' } } = this.authorization
 
+        const image = this.build.image.save(ImageKind.POST)
+
         const { id: pet } = await this.build.pet.create(name, organization)
 
         const [{ id: location }] = await this.build.location.search()
@@ -144,7 +191,7 @@ export class Scenario {
           .post('/post')
           .cookies({ token: hash })
           .body({
-            image: ['image.jpg'],
+            image: [image],
             pet: pet,
             location: location,
             publish: true
@@ -199,28 +246,38 @@ export class Scenario {
   }
 
   async authenticate() {
-    await this.application.inject().post('/auth').body({ phone: '+5599999999999' }).end()
+    const { phone, code } = await this.build.auth.auth()
 
     const { cookies } = await this.application
       .inject()
       .post('/auth/verify')
       .body({
-        phone: '+5599999999999',
-        code: '999999'
+        phone,
+        code
       })
       .end()
 
     const token = cookies.find((e) => e.name === 'token')
     const renew = cookies.find((e) => e.name === 'renew')
 
-    this.authorization.token = token && {
-      hash: token.value,
-      expire: token.expires ?? new Date()
+    if (token) {
+      const { sub: user } = this.application
+        .get(JwtService, { strict: false })
+        .decode<{ sub: string }>(token.value)
+
+      this.authorization.user = user
+
+      this.authorization.token = {
+        hash: token.value,
+        expire: token.expires ?? new Date()
+      }
     }
 
-    this.authorization.renew = renew && {
-      hash: renew.value,
-      expire: renew.expires ?? new Date()
+    if (renew) {
+      this.authorization.renew = {
+        hash: renew.value,
+        expire: renew.expires ?? new Date()
+      }
     }
   }
 
