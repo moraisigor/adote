@@ -1,5 +1,6 @@
 import { Transform, type TransformFnParams } from 'class-transformer'
 import { IsEnum, IsMongoId, IsOptional, IsString, Length } from 'class-validator'
+import { trim } from 'lodash'
 
 import { PageRequest } from '@/helper/page'
 
@@ -32,7 +33,7 @@ export class ListPetRequest extends PageRequest {
 export class CreatePetRequest {
   @IsString()
   @Length(2, 20)
-  @Transform(({ value }: TransformFnParams) => value?.trim())
+  @Transform(({ value }: TransformFnParams) => trim(value))
   readonly name!: string
 
   @IsEnum(Kind)
@@ -55,7 +56,7 @@ export class CreatePetRequest {
 export class SavePetRequest {
   @IsString()
   @Length(2, 20)
-  @Transform(({ value }: TransformFnParams) => value?.trim())
+  @Transform(({ value }: TransformFnParams) => trim(value))
   readonly name!: string
 
   @IsEnum(Kind)

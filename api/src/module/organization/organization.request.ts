@@ -10,6 +10,7 @@ import {
   Length,
   ValidateNested
 } from 'class-validator'
+import { trim } from 'lodash'
 
 import { PageRequest } from '@/helper/page'
 
@@ -47,14 +48,14 @@ export class ContactRequest {
 export class CreateOrganizationRequest {
   @IsString()
   @Length(4, 40)
-  @Transform(({ value }: TransformFnParams) => value?.trim())
+  @Transform(({ value }: TransformFnParams) => trim(value))
   readonly name!: string
 }
 
 export class SaveOrganizationRequest {
   @IsString()
   @Length(4, 40)
-  @Transform(({ value }: TransformFnParams) => value?.trim())
+  @Transform(({ value }: TransformFnParams) => trim(value))
   readonly name!: string
 
   @IsNumberString({ no_symbols: true })
