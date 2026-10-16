@@ -1,19 +1,12 @@
+import { BreedResponse } from '@/module/breed/breed.response'
+import { ContactResponse } from '@/module/contact/contact.response'
+import { LocationResponse } from '@/module/location/location.response'
+import type { Gender } from '@/module/pet/type/gender'
+import type { Size } from '@/module/pet/type/size'
+
 import { url } from '@/helper/image'
 
 import type { PostView } from './repository/post.schema'
-
-import type { Gender } from '../pet/type/gender'
-import type { Size } from '../pet/type/size'
-
-class BreedResponse {
-  readonly id: string
-  readonly name: string
-
-  constructor(breed: PostView['pet']['breed']) {
-    this.id = breed.id
-    this.name = breed.name
-  }
-}
 
 export class PetResponse {
   readonly id: string
@@ -33,18 +26,6 @@ export class PetResponse {
   }
 }
 
-class LocationResponse {
-  readonly id: string
-  readonly city: string
-  readonly state: string
-
-  constructor(location: PostView['location']) {
-    this.id = location.id
-    this.city = location.city
-    this.state = location.state
-  }
-}
-
 class UserResponse {
   readonly id: string
   readonly name?: string
@@ -59,9 +40,7 @@ class UserResponse {
     this.image = url(user.image)
 
     if (contact) {
-      const { mail, phone, social } = contact
-
-      this.contact = new ContactResponse(mail, phone, social)
+      this.contact = new ContactResponse(contact)
     }
   }
 }
@@ -80,22 +59,8 @@ class OrganizationResponse {
     this.image = url(organization.image)
 
     if (contact) {
-      const { mail, phone, social } = contact
-
-      this.contact = new ContactResponse(mail, phone, social)
+      this.contact = new ContactResponse(contact)
     }
-  }
-}
-
-class ContactResponse {
-  readonly mail?: string
-  readonly phone?: string
-  readonly social?: string
-
-  constructor(mail?: string, phone?: string, social?: string) {
-    this.mail = mail
-    this.phone = phone
-    this.social = social
   }
 }
 

@@ -1,18 +1,8 @@
+import { ContactResponse } from '@/module/contact/contact.response'
+
 import { url } from '@/helper/image'
 
-import type { Contact, OrganizationDocument } from './repository/organization.schema'
-
-export class ContactResponse {
-  readonly mail?: string
-  readonly phone?: string
-  readonly social?: string
-
-  constructor(contact: Contact) {
-    this.mail = contact.mail
-    this.phone = contact.phone
-    this.social = contact.social
-  }
-}
+import type { OrganizationDocument } from './repository/organization.schema'
 
 export class OrganizationResponse {
   readonly id: string

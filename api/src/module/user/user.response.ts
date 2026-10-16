@@ -1,30 +1,9 @@
+import { ContactResponse } from '@/module/contact/contact.response'
+import { LocationResponse } from '@/module/location/location.response'
+
 import { url } from '@/helper/image'
 
-import type { Contact, UserView } from './repository/user.schema'
-
-class ContactResponse {
-  readonly mail?: string
-  readonly phone?: string
-  readonly social?: string
-
-  constructor(contact: Contact) {
-    this.mail = contact.mail
-    this.phone = contact.phone
-    this.social = contact.social
-  }
-}
-
-class LocationResponse {
-  readonly id: string
-  readonly city: string
-  readonly state: string
-
-  constructor(location: NonNullable<UserView['location']>) {
-    this.id = location.id
-    this.city = location.city
-    this.state = location.state
-  }
-}
+import type { UserView } from './repository/user.schema'
 
 export class UserResponse {
   readonly id: string
