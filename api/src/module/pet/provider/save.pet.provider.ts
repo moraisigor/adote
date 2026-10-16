@@ -1,8 +1,9 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
 
 import { isNil } from 'lodash'
 import { Types } from 'mongoose'
 
+import { BreedRepository } from '@/module/breed/repository/breed.repository'
 import { PermissionProvider } from '@/module/permission/provider'
 
 import { SavePetRequest } from '../pet.request'
@@ -12,6 +13,7 @@ import { PetRepository } from '../repository/pet.repository'
 @Injectable()
 export class SavePetProvider {
   constructor(
+    private readonly _breed: BreedRepository,
     private readonly permission: PermissionProvider,
     private readonly repository: PetRepository
   ) {}
@@ -29,6 +31,8 @@ export class SavePetProvider {
   }
 
   async run(id: string, request: SavePetRequest, current: string): Promise<PetResponse> {
+    const { kind, breed } = request
+
     const pet = await this.repository.find({ _id: id })
 
     if (isNil(pet)) {
@@ -37,18 +41,24 @@ export class SavePetProvider {
 
     const permission = await this.permission.resource.run(current, pet)
 
-    if (permission) {
-      const result = await this.repository.save(new Types.ObjectId(id), this.build(request), {
-        returnDocument: 'after'
-      })
-
-      if (result) {
-        return new PetResponse(result)
-      }
-
-      throw new NotFoundException()
+    if (!permission) {
+      throw new ForbiddenException()
     }
 
-    throw new ForbiddenException()
+    const exists = await this._breed.exists({ _id: breed, kind })
+
+    if (!exists) {
+      throw new BadRequestException()
+    }
+
+    const result = await this.repository.save(new Types.ObjectId(id), this.build(request), {
+      returnDocument: 'after'
+    })
+
+    if (result) {
+      return new PetResponse(result)
+    }
+
+    throw new BadRequestException()
   }
 }

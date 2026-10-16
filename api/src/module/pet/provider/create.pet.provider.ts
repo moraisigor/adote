@@ -1,7 +1,9 @@
-import { ForbiddenException, Injectable } from '@nestjs/common'
+import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common'
 
+import { isNil } from 'lodash'
 import { Types } from 'mongoose'
 
+import { BreedRepository } from '@/module/breed/repository/breed.repository'
 import { PermissionProvider } from '@/module/permission/provider'
 
 import { CreatePetRequest } from '../pet.request'
@@ -11,6 +13,7 @@ import { PetRepository } from '../repository/pet.repository'
 @Injectable()
 export class CreatePetProvider {
   constructor(
+    private readonly _breed: BreedRepository,
     private readonly permission: PermissionProvider,
     private readonly repository: PetRepository
   ) {}
@@ -31,23 +34,43 @@ export class CreatePetProvider {
   }
 
   async run(request: CreatePetRequest, current: string): Promise<PetResponse> {
-    const { organization } = request
+    const { kind, breed, organization } = request
 
     if (organization) {
       const permission = await this.permission.organization.run(current, organization)
 
-      if (permission) {
-        const pet = await this.repository.create(
-          this.build(request, { organization: new Types.ObjectId(organization) })
-        )
-
-        return new PetResponse(pet)
+      if (!permission) {
+        throw new ForbiddenException()
       }
 
-      throw new ForbiddenException()
+      const exists = await this._breed.exists({ _id: breed, kind })
+
+      if (!exists) {
+        throw new BadRequestException()
+      }
+
+      const pet = await this.repository.create(
+        this.build(request, { organization: new Types.ObjectId(organization) })
+      )
+
+      if (isNil(pet)) {
+        throw new BadRequestException()
+      }
+
+      return new PetResponse(pet)
+    }
+
+    const exists = await this._breed.exists({ _id: breed, kind })
+
+    if (!exists) {
+      throw new BadRequestException()
     }
 
     const pet = await this.repository.create(this.build(request, { user: new Types.ObjectId(current) }))
+
+    if (isNil(pet)) {
+      throw new BadRequestException()
+    }
 
     return new PetResponse(pet)
   }

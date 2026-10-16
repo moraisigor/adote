@@ -12,11 +12,13 @@ import { PetRepository } from './repository/pet.repository'
 import { Pet, PetSchema } from './repository/pet.schema'
 
 import { AdopterModule } from '../adopter/adopter.module'
+import { BreedModule } from '../breed/breed.module'
 import { PermissionModule } from '../permission/permission.module'
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Pet.name, schema: PetSchema }]),
+    BreedModule,
     PermissionModule,
     forwardRef(() => AdopterModule)
   ],

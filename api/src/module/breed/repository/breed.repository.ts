@@ -11,6 +11,12 @@ import type { Kind } from '../type/kind'
 export class BreedRepository {
   constructor(@InjectModel(Breed.name) private readonly model: Model<Breed>) {}
 
+  async exists(query: QueryFilter<Breed>) {
+    const result = await this.model.exists(query).exec()
+
+    return Boolean(result)
+  }
+
   list(
     query?: QueryFilter<Breed>,
     projection?: ProjectionType<Breed>,
