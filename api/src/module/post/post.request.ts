@@ -1,4 +1,4 @@
-import { Transform, Type, type TransformFnParams } from 'class-transformer'
+import { Transform, type TransformFnParams } from 'class-transformer'
 import {
   ArrayMaxSize,
   ArrayMinSize,
@@ -7,7 +7,6 @@ import {
   IsBoolean,
   IsMongoId,
   IsOptional,
-  IsString,
   Matches
 } from 'class-validator'
 
@@ -67,7 +66,6 @@ export class CreatePostRequest {
   readonly location!: string
 
   @IsBoolean()
-  @Type(() => Boolean)
   readonly publish!: boolean
 }
 
@@ -82,12 +80,10 @@ export class SavePostRequest {
   readonly location!: string
 
   @IsBoolean()
-  @Type(() => Boolean)
   readonly publish!: boolean
 }
 
 export class PublishPostRequest {
   @IsBoolean()
-  @Type(() => Boolean)
   readonly publish!: boolean
 }
