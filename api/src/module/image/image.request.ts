@@ -12,6 +12,6 @@ export class SaveImageRequest {
   @IsIn(Object.values(ImageKind), { message: 'the kind is not valid' })
   readonly kind!: ImageKind
 
-  @IsIn(Object.values(ImageExtension), { message: 'the extension is not valid' })
+  @IsIn(Object.keys(ImageExtension), { message: 'the extension is not valid' })
   readonly extension!: ImageExtension
 }
