@@ -5,7 +5,7 @@ export class LocationResponse {
   readonly city: string
   readonly state: string
 
-  constructor(location: LocationDocument) {
+  constructor(location: Pick<LocationDocument, 'id' | 'city' | 'state'>) {
     this.id = location.id
     this.city = location.city
     this.state = location.state
