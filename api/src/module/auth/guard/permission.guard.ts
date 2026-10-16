@@ -11,7 +11,7 @@ import type { Role } from '@/module/user/type/role'
 export class PermissionGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
 
-  async canActivate(context: ExecutionContext) {
+  canActivate(context: ExecutionContext) {
     const permission = this.reflector.getAllAndOverride<Role[]>('permission', [
       context.getClass(),
       context.getHandler()

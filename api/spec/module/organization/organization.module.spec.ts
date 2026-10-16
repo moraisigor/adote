@@ -130,7 +130,7 @@ describe('organization module', async () => {
   })
 })
 
-describe('organization module', async () => {
+describe('organization module', () => {
   describe('as manager', async () => {
     const spec = await Spec.build()
 

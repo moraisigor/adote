@@ -5,7 +5,7 @@ import type { Session } from '@/type/token'
 
 import { Current } from '@/decorator/current.decorator'
 
-import { CreateImageRequest } from './image.request'
+import { SaveImageRequest } from './image.request'
 import type { ImageResponse } from './image.response'
 import { ImageProvider } from './provider'
 
