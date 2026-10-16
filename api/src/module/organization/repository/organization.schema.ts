@@ -2,20 +2,11 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
 import { SchemaTypes, type HydratedDocument, type Types } from 'mongoose'
 
+import { Contact } from '@/module/contact/contact.schema'
+
 import { Member } from './member'
 
 export type OrganizationDocument = HydratedDocument<Organization>
-
-export class Contact {
-  @Prop({ type: String })
-  mail?: string
-
-  @Prop({ type: String })
-  phone?: string
-
-  @Prop({ type: String })
-  social?: string
-}
 
 @Schema({
   id: true,

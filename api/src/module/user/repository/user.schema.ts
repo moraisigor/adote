@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
 import { SchemaTypes, type HydratedDocument, type MergeType, type Types } from 'mongoose'
 
+import { Contact } from '@/module/contact/contact.schema'
 import type { LocationDocument } from '@/module/location/repository/location.schema'
 
 import { unique } from '@/helper/id'
@@ -16,18 +17,6 @@ export type UserView = MergeType<
     location?: Pick<LocationDocument, 'id' | 'city' | 'state'>
   }
 >
-
-@Schema({ _id: false })
-export class Contact {
-  @Prop({ type: String })
-  mail?: string
-
-  @Prop({ type: String })
-  phone?: string
-
-  @Prop({ type: String })
-  social?: string
-}
 
 @Schema({
   id: true,
