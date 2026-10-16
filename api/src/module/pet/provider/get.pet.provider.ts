@@ -23,10 +23,10 @@ export class GetPetProvider {
 
     const permission = await this.permission.resource.run(current, pet)
 
-    if (permission) {
-      return new PetResponse(pet)
+    if (!permission) {
+      throw new ForbiddenException()
     }
 
-    throw new ForbiddenException()
+    return new PetResponse(pet)
   }
 }

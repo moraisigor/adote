@@ -24,20 +24,20 @@ export class PublishPostProvider {
 
     const permission = await this.permission.resource.run(current, post)
 
-    if (permission) {
-      const result = await this.repository.save(
-        new Types.ObjectId(id),
-        { publish },
-        { returnDocument: 'after' }
-      )
+    if (!permission) {
+      throw new ForbiddenException()
+    }
 
-      if (result) {
-        return new PublishPostResponse(result)
-      }
+    const result = await this.repository.save(
+      new Types.ObjectId(id),
+      { publish },
+      { returnDocument: 'after' }
+    )
 
+    if (isNil(result)) {
       throw new NotFoundException()
     }
 
-    throw new ForbiddenException()
+    return new PublishPostResponse(result)
   }
 }

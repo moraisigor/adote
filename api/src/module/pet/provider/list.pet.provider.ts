@@ -32,13 +32,13 @@ export class ListPetProvider {
     if (organization) {
       const permission = await this.permission.organization.run(current, organization)
 
-      if (permission) {
-        return await this.list(request, {
-          organization: new Types.ObjectId(organization)
-        })
+      if (!permission) {
+        throw new ForbiddenException()
       }
 
-      throw new ForbiddenException()
+      return await this.list(request, {
+        organization: new Types.ObjectId(organization)
+      })
     }
 
     return await this.list(request, {

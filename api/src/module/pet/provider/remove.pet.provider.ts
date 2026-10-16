@@ -25,18 +25,18 @@ export class RemovePetProvider {
 
     const permission = await this.permission.resource.run(current, pet)
 
-    if (permission) {
-      const result = await this.repository.remove({ _id: id })
+    if (!permission) {
+      throw new ForbiddenException()
+    }
 
-      if (result) {
-        await this._adopter.remove({ pet: id })
+    const result = await this.repository.remove({ _id: id })
 
-        return new RemovePetResponse(id)
-      }
-
+    if (isNil(result)) {
       throw new NotFoundException()
     }
 
-    throw new ForbiddenException()
+    await this._adopter.remove({ pet: id })
+
+    return new RemovePetResponse(id)
   }
 }

@@ -25,20 +25,20 @@ export class RemovePostProvider {
 
     const permission = await this.permission.resource.run(current, post)
 
-    if (permission) {
-      const result = await this.repository.remove({ _id: id })
+    if (!permission) {
+      throw new ForbiddenException()
+    }
 
-      if (result) {
-        const { image } = post
+    const result = await this.repository.remove({ _id: id })
 
-        await this.image.remove.run(image)
-
-        return new RemovePostResponse(id)
-      }
-
+    if (isNil(result)) {
       throw new NotFoundException()
     }
 
-    throw new ForbiddenException()
+    const { image } = post
+
+    await this.image.remove.run(image)
+
+    return new RemovePostResponse(id)
   }
 }
