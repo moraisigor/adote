@@ -7,8 +7,8 @@ export class RequestConfigFactory implements ThrottlerOptionsFactory {
   constructor(private readonly config: ConfigService) {}
 
   createThrottlerOptions(): ThrottlerModuleOptions {
-    const time = Number(this.config.get<number>('REQUEST_TIME', 60))
-    const limit = Number(this.config.get<number>('REQUEST_LIMIT', 100))
+    const time = this.config.get<number>('REQUEST_TIME', 60)
+    const limit = this.config.get<number>('REQUEST_LIMIT', 100)
 
     return [
       {

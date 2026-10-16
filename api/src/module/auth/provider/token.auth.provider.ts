@@ -20,9 +20,9 @@ export class TokenAuthProvider {
     private readonly config: ConfigService
   ) {
     this.TokenSecret = this.config.getOrThrow<string>('TOKEN_SECRET')
-    this.TokenExpire = Number(this.config.getOrThrow<string>('TOKEN_EXPIRE'))
+    this.TokenExpire = this.config.getOrThrow<number>('TOKEN_EXPIRE')
     this.TokenRenewSecret = this.config.getOrThrow<string>('TOKEN_RENEW_SECRET')
-    this.TokenRenewExpire = Number(this.config.getOrThrow<string>('TOKEN_RENEW_EXPIRE'))
+    this.TokenRenewExpire = this.config.getOrThrow<number>('TOKEN_RENEW_EXPIRE')
   }
 
   run(user: Pick<UserDocument, 'id' | 'phone' | 'role' | 'session'>, reply: FastifyReply) {
