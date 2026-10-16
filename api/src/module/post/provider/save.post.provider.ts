@@ -70,12 +70,12 @@ export class SavePostProvider {
       returnDocument: 'after'
     })
 
-    if (result) {
-      await this.image.remove(post, request)
-
-      return new PostResponse(result)
+    if (isNil(result)) {
+      throw new BadRequestException()
     }
 
-    throw new BadRequestException()
+    await this.image.remove(post, request)
+
+    return new PostResponse(result)
   }
 }
