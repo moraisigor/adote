@@ -15,6 +15,7 @@ import { BreedModule } from '@/module/breed/breed.module'
 import { ConfigurationModule } from '@/module/configuration/configuration.module'
 import { FavModule } from '@/module/fav/fav.module'
 import { HealthModule } from '@/module/health/health.module'
+import { ImageStorage } from '@/module/image/image.storage'
 import { LocationModule } from '@/module/location/location.module'
 import { NotifyModule } from '@/module/notify/notify.module'
 import { OrganizationModule } from '@/module/organization/organization.module'
@@ -24,6 +25,7 @@ import { PostModule } from '@/module/post/post.module'
 import { UserModule } from '@/module/user/user.module'
 
 import { Scenario } from './scenario'
+import { validate } from '@/env.configuration'
 import { RouteConfig } from '@/router.config.factory'
 
 export class Spec {
@@ -55,6 +57,7 @@ export class Spec {
         JwtModule,
         PassportModule,
         ConfigModule.forRoot({
+          validate,
           isGlobal: true,
           envFilePath: '.env.test'
         }),
@@ -86,6 +89,10 @@ export class Spec {
 
     await this.application.init()
     await this.application.getHttpAdapter().getInstance().ready()
+
+    const { client } = this.application.get(ImageStorage, { strict: false })
+
+    this.scenario.bucket.attach(client)
   }
 
   async stop() {
