@@ -40,6 +40,11 @@ export class EnvConfiguration {
   @IsOptional()
   @IsInt()
   @Transform(transform)
+  readonly PROXY_HOP?: number
+
+  @IsOptional()
+  @IsInt()
+  @Transform(transform)
   readonly REQUEST_TIME?: number
 
   @IsOptional()
