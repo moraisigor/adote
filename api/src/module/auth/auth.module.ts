@@ -5,6 +5,7 @@ import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
 
 import { NotifyModule } from '@/module/notify/notify.module'
+import { OrganizationModule } from '@/module/organization/organization.module'
 import { PermissionModule } from '@/module/permission/permission.module'
 import { UserModule } from '@/module/user/user.module'
 
@@ -24,6 +25,7 @@ import { TokenStrategy } from './strategy/token.strategy'
 @Module({
   imports: [
     NotifyModule,
+    OrganizationModule,
     PermissionModule,
     UserModule,
     // dependency
