@@ -42,10 +42,7 @@ export class AdopterRepository {
 
     return this.model.updateOne(
       { phone, pet },
-      {
-        $set: { name },
-        $setOnInsert: { user, organization }
-      },
+      { $setOnInsert: { name, user, organization } },
       { upsert: true }
     )
   }
