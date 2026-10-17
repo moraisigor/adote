@@ -21,8 +21,9 @@ import { PetModule } from '@/module/pet/pet.module'
 import { PostModule } from '@/module/post/post.module'
 import { UserModule } from '@/module/user/user.module'
 
-import { isProduction } from '@/helper/env'
+import { env, isProduction } from '@/helper/env'
 
+import { validate } from './env.configuration'
 import { RepositoryConfigFactory } from './repository.config.factory'
 import { RequestConfigFactory } from './request.config.factory'
 import { RouteConfig } from './router.config.factory'
@@ -47,8 +48,9 @@ import { RouteConfig } from './router.config.factory'
     // dependency
     SentryModule.forRoot(),
     ConfigModule.forRoot({
+      validate,
       isGlobal: true,
-      envFilePath: `.env.${process.env.ENV}`,
+      envFilePath: `.env.${env}`,
       ignoreEnvFile: isProduction
     }),
     ThrottlerModule.forRootAsync({
