@@ -10,6 +10,7 @@ import { Test } from '@nestjs/testing'
 import cookie from '@fastify/cookie'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 
+import { AdopterModule } from '@/module/adopter/adopter.module'
 import { AuthModule } from '@/module/auth/auth.module'
 import { BreedModule } from '@/module/breed/breed.module'
 import { ConfigurationModule } from '@/module/configuration/configuration.module'
@@ -40,6 +41,7 @@ export class Spec {
 
     const module = await Test.createTestingModule({
       imports: [
+        AdopterModule,
         AuthModule,
         BreedModule,
         ConfigurationModule,
