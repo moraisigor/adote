@@ -11,10 +11,10 @@ import helmet from '@fastify/helmet'
 import { split } from 'lodash'
 
 import { AppModule } from './app.module'
-import { validate } from './env.configuration'
+import { configuration } from './env.configuration'
 
 const application = async () => {
-  const { PROXY_HOP = 1 } = validate(process.env)
+  const { PROXY_HOP = 1 } = configuration
 
   const application = await NestFactory.create<NestFastifyApplication>(
     AppModule,
