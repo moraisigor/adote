@@ -23,6 +23,21 @@ describe('user module', async () => {
     await spec.scenario.user()
   })
 
+  // get /user
+  describe('/user', () => {
+    test('should not list user as user', async () => {
+      const { hash } = spec.scenario
+
+      const { statusCode: status } = await spec.application
+        .inject()
+        .get('/user')
+        .cookies({ token: hash })
+        .end()
+
+      expect(status).toBe(HttpStatus.FORBIDDEN)
+    })
+  })
+
   // get /user/current
   describe('/user/current', () => {
     test('should get current user', async () => {
