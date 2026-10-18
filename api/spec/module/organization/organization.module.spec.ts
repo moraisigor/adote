@@ -48,9 +48,7 @@ describe('organization module', async () => {
   // post /organization
   describe('/organization', () => {
     test('should create organization', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       const { statusCode: status, json } = await spec.application
         .inject()
@@ -75,9 +73,7 @@ describe('organization module', async () => {
   // put /organization/id
   describe('/organization/id', () => {
     test('should save organization', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       const { id } = await spec.scenario.build.organization.create('Save')
 
@@ -112,9 +108,7 @@ describe('organization module', async () => {
   // delete /organization/id
   describe('/organization/id', () => {
     test('should remove organization', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       const { id } = await spec.scenario.build.organization.create('Remove')
 
@@ -152,9 +146,7 @@ describe('organization module', () => {
     // get /organization
     describe('/organization', () => {
       test('should list organization', async () => {
-        const {
-          authorization: { token: { hash } = { hash: '' } }
-        } = spec.scenario
+        const { hash } = spec.scenario
 
         await spec.scenario.build.organization.create()
 

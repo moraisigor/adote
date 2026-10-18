@@ -26,9 +26,7 @@ describe('user module', async () => {
   // get /user/current
   describe('/user/current', () => {
     test('should get current user', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       await spec.scenario.build.user.save()
 
@@ -63,9 +61,7 @@ describe('user module', async () => {
   // get /user/post
   describe('/user/post', () => {
     test('should list post', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       await spec.scenario.build.post.create()
 
@@ -120,9 +116,7 @@ describe('user module', async () => {
   // get /user/organization
   describe('/user/organization', () => {
     test('should list organization', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       await spec.scenario.build.organization.create()
 
@@ -193,9 +187,7 @@ describe('user module', async () => {
   // put /user
   describe('/user', () => {
     test('should save user', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       const [{ id: location }] = await spec.scenario.build.location.search()
 
@@ -239,9 +231,7 @@ describe('user module', async () => {
   // put /user/image
   describe('/user/image', () => {
     test('should save image', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       await spec.scenario.build.user.save()
 
@@ -297,9 +287,7 @@ describe('user module', () => {
     // get /user
     describe('/user', () => {
       test('should list user', async () => {
-        const {
-          authorization: { token: { hash } = { hash: '' } }
-        } = spec.scenario
+        const { hash } = spec.scenario
 
         const { statusCode: status, json } = await spec.application
           .inject()

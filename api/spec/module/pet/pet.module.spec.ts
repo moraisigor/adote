@@ -21,9 +21,7 @@ describe('pet module', async () => {
   // list /pet
   describe('/pet', () => {
     test('should list pet', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       await spec.scenario.build.pet.create()
 
@@ -59,9 +57,7 @@ describe('pet module', async () => {
   // get /pet/id
   describe('/pet/id', () => {
     test('should get pet', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       const { id } = await spec.scenario.build.pet.create()
 
@@ -92,9 +88,7 @@ describe('pet module', async () => {
   // post /pet
   describe('/pet', () => {
     test('should create pet', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       const list = await spec.scenario.build.breed.list()
 
@@ -131,9 +125,7 @@ describe('pet module', async () => {
     })
 
     test('should create pet with organization', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       const list = await spec.scenario.build.breed.list()
 
@@ -176,9 +168,7 @@ describe('pet module', async () => {
   // put /pet/id
   describe('/pet/id', () => {
     test('should save pet', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       const { id } = await spec.scenario.build.pet.create()
 
@@ -219,9 +209,7 @@ describe('pet module', async () => {
   // delete /pet/id
   describe('/pet/id', () => {
     test('should remove pet', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       const { id } = await spec.scenario.build.pet.create()
 

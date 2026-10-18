@@ -19,9 +19,7 @@ describe('fav module', async () => {
   // post /fav/post
   describe('/fav/post', () => {
     test('should add fav', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       const { id: post } = await spec.scenario.build.post.create()
 
@@ -41,9 +39,7 @@ describe('fav module', async () => {
     })
 
     test('should not add unknown fav', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       const id = new Types.ObjectId().toHexString()
 
@@ -60,9 +56,7 @@ describe('fav module', async () => {
   // delete /fav/post
   describe('/fav/post', () => {
     test('should remove fav', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       const { id: post } = await spec.scenario.build.fav.add()
 
@@ -82,9 +76,7 @@ describe('fav module', async () => {
     })
 
     test('should not remove unknown fav', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       const id = new Types.ObjectId().toHexString()
 

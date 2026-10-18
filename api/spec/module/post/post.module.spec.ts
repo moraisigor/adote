@@ -175,9 +175,7 @@ describe('post module', async () => {
   // post /post
   describe('/post', () => {
     test('should create post', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       const { id: pet } = await spec.scenario.build.pet.create()
       const [{ id: location }] = await spec.scenario.build.location.search()
@@ -231,9 +229,7 @@ describe('post module', async () => {
     })
 
     test('should create post with organization', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       const [{ id: location }] = await spec.scenario.build.location.search()
       const [{ id: organization }] = await spec.scenario.build.user.organization()
@@ -292,9 +288,7 @@ describe('post module', async () => {
   // put /post/id
   describe('/post/id', () => {
     test('should save post', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       const { id } = await spec.scenario.build.post.create()
 
@@ -354,9 +348,7 @@ describe('post module', async () => {
   // put /post/id/publish
   describe('/post/id/publish', () => {
     test('should publish post', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       const { id } = await spec.scenario.build.post.create()
 
@@ -381,9 +373,7 @@ describe('post module', async () => {
   // delete /post/id
   describe('/post/id', () => {
     test('should remove post', async () => {
-      const {
-        authorization: { token: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { hash } = spec.scenario
 
       const { id: post } = await spec.scenario.build.post.create()
 

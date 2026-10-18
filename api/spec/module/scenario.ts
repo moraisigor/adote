@@ -33,6 +33,16 @@ export class Scenario {
 
   public readonly authorization: Authorization = {}
 
+  get hash(): string {
+    const { token } = this.authorization
+
+    if (token) {
+      return token.hash
+    }
+
+    throw new Error('the authorization is null')
+  }
+
   constructor(private readonly application: NestFastifyApplication) {}
 
   build = {
@@ -58,12 +68,12 @@ export class Scenario {
     },
     image: {
       save: async (kind: ImageKind) => {
-        const { user = '', token: { hash } = { hash: '' } } = this.authorization
+        const { user = '' } = this.authorization
 
         const { json } = await this.application
           .inject()
           .post('/image')
-          .cookies({ token: hash })
+          .cookies({ token: this.hash })
           .body({
             kind,
             size: 1024,
@@ -92,14 +102,12 @@ export class Scenario {
     },
     fav: {
       add: async () => {
-        const { token: { hash } = { hash: '' } } = this.authorization
-
         const { id: post } = await this.build.post.create()
 
         const { json } = await this.application
           .inject()
           .post(`/user/fav/${post}`)
-          .cookies({ token: hash })
+          .cookies({ token: this.hash })
           .end()
 
         return json<FavResponse>()
@@ -114,12 +122,10 @@ export class Scenario {
     },
     organization: {
       create: async (name: string = 'Name') => {
-        const { token: { hash } = { hash: '' } } = this.authorization
-
         const { json } = await this.application
           .inject()
           .post('/organization')
-          .cookies({ token: hash })
+          .cookies({ token: this.hash })
           .body({
             name: name
           })
@@ -128,8 +134,6 @@ export class Scenario {
         return json<OrganizationResponse>()
       },
       save: async (name: string = 'Name') => {
-        const { token: { hash } = { hash: '' } } = this.authorization
-
         const [{ id }] = await this.build.user.organization()
 
         const [{ id: location }] = await this.build.location.search()
@@ -137,7 +141,7 @@ export class Scenario {
         const { json } = await this.application
           .inject()
           .put(`/organization/${id}`)
-          .cookies({ token: hash })
+          .cookies({ token: this.hash })
           .body({
             name: name,
             contact: {
@@ -154,8 +158,6 @@ export class Scenario {
     },
     pet: {
       create: async (name: string = 'Oreo', organization?: string) => {
-        const { token: { hash } = { hash: '' } } = this.authorization
-
         const list = await this.build.breed.list()
 
         const { id: breed } = list.find((e) => e.name === 'Buldogue Inglês') ?? { id: null }
@@ -163,7 +165,7 @@ export class Scenario {
         const { json } = await this.application
           .inject()
           .post('/pet')
-          .cookies({ token: hash })
+          .cookies({ token: this.hash })
           .body({
             name: name,
             kind: Kind.DOG,
@@ -179,8 +181,6 @@ export class Scenario {
     },
     post: {
       create: async (name: string = 'Oreo', organization?: string) => {
-        const { token: { hash } = { hash: '' } } = this.authorization
-
         const image = await this.build.image.save(ImageKind.POST)
 
         const { id: pet } = await this.build.pet.create(name, organization)
@@ -190,7 +190,7 @@ export class Scenario {
         const { json } = await this.application
           .inject()
           .post('/post')
-          .cookies({ token: hash })
+          .cookies({ token: this.hash })
           .body({
             image: [image],
             pet: pet,
@@ -204,32 +204,30 @@ export class Scenario {
     },
     user: {
       current: async () => {
-        const { token: { hash } = { hash: '' } } = this.authorization
-
-        const { json } = await this.application.inject().get('/user/current').cookies({ token: hash }).end()
+        const { json } = await this.application
+          .inject()
+          .get('/user/current')
+          .cookies({ token: this.hash })
+          .end()
 
         return json<UserResponse>()
       },
       organization: async () => {
-        const { token: { hash } = { hash: '' } } = this.authorization
-
         const { json } = await this.application
           .inject()
           .get('/user/organization')
-          .cookies({ token: hash })
+          .cookies({ token: this.hash })
           .end()
 
         return json<OrganizationResponse[]>()
       },
       save: async (name: string = 'Name') => {
-        const { token: { hash } = { hash: '' } } = this.authorization
-
         const [{ id: location }] = await this.build.location.search()
 
         const { json } = await this.application
           .inject()
           .put('/user')
-          .cookies({ token: hash })
+          .cookies({ token: this.hash })
           .body({
             name: name,
             contact: {
