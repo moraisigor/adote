@@ -1,6 +1,7 @@
 import { HttpStatus } from '@nestjs/common/enums'
 
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
+import { Types } from 'mongoose'
 
 import { ImageKind } from '@/module/image/type/image'
 import type { OrganizationResponse } from '@/module/organization/organization.response'
@@ -178,6 +179,14 @@ describe('user module', async () => {
           state: 'Pernambuco'
         }
       })
+    })
+
+    test('should not get user', async () => {
+      const id = new Types.ObjectId().toHexString()
+
+      const { statusCode: status } = await spec.application.inject().get(`/user/${id}`).end()
+
+      expect(status).toBe(HttpStatus.NOT_FOUND)
     })
   })
 
