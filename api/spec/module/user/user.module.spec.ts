@@ -307,7 +307,7 @@ describe('user module', () => {
         expect(response).toMatchObject([
           {
             id: expect.any(String),
-            phone: '+5599999999999',
+            phone: '+5581999999999',
             name: 'Name',
             contact: {
               mail: 'mail@example.com',
