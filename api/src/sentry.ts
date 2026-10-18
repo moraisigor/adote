@@ -1,7 +1,11 @@
 import * as Sentry from '@sentry/nestjs'
 
+import { configuration } from './env.configuration'
+
+const { ENV, SENTRY_KEY, SENTRY_RATE } = configuration
+
 Sentry.init({
-  dsn: process.env.SENTRY_KEY,
-  environment: process.env.ENV,
-  tracesSampleRate: Number(process.env.SENTRY_RATE)
+  dsn: SENTRY_KEY,
+  environment: ENV,
+  tracesSampleRate: SENTRY_RATE
 })
