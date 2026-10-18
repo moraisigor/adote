@@ -1,6 +1,7 @@
 import { HttpStatus } from '@nestjs/common'
 
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
+import { Types } from 'mongoose'
 
 import { ImageKind } from '@/module/image/type/image'
 import { Gender } from '@/module/pet/type/gender'
@@ -160,6 +161,14 @@ describe('post module', async () => {
           }
         }
       })
+    })
+
+    test('should not get post', async () => {
+      const id = new Types.ObjectId().toHexString()
+
+      const { statusCode: status } = await spec.application.inject().get(`/post/${id}`).end()
+
+      expect(status).toBe(HttpStatus.NOT_FOUND)
     })
   })
 
