@@ -22,6 +22,6 @@ export class FavRepository {
     user: Types.ObjectId,
     options?: QueryOptions<User>
   ): Promise<UserDocument | null> {
-    return this.model.findByIdAndUpdate(user, { $pull: { fav: post } }, options).exec()
+    return this.model.findOneAndUpdate({ _id: user, fav: post }, { $pull: { fav: post } }, options).exec()
   }
 }
