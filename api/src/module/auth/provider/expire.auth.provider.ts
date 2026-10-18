@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 
@@ -13,6 +13,8 @@ import { Option, RenewOption } from '../type/cookie'
 
 @Injectable()
 export class ExpireAuthProvider {
+  private readonly logger = new Logger(ExpireAuthProvider.name)
+
   private readonly TokenRenewSecret: string
 
   constructor(
@@ -30,7 +32,7 @@ export class ExpireAuthProvider {
     if (renew) {
       const token = await this.token
         .verifyAsync(renew, { secret: this.TokenRenewSecret })
-        .catch((e) => console.error(e))
+        .catch((e) => this.logger.error(e))
 
       if (token) {
         const { sub } = token
