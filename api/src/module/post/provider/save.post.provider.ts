@@ -16,8 +16,6 @@ import type { PostView } from '../repository/post.schema'
 @Injectable()
 export class SavePostProvider {
   image = {
-    remove: ({ image }: PostView, { image: next }: SavePostRequest) =>
-      this._image.remove.run(difference(image, next)),
     validate: ({ image }: PostView, { image: next }: SavePostRequest, current: string) =>
       this._image.validate.run(difference(next, image), ImageKind.POST, current)
   }
@@ -73,8 +71,6 @@ export class SavePostProvider {
     if (isNil(result)) {
       throw new BadRequestException()
     }
-
-    await this.image.remove(post, request)
 
     return new PostResponse(result)
   }
