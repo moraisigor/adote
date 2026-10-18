@@ -163,7 +163,7 @@ describe('post module', async () => {
       })
     })
 
-    test('should not get post', async () => {
+    test('should not get unknown post', async () => {
       const id = new Types.ObjectId().toHexString()
 
       const { statusCode: status } = await spec.application.inject().get(`/post/${id}`).end()

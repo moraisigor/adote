@@ -181,7 +181,7 @@ describe('user module', async () => {
       })
     })
 
-    test('should not get user', async () => {
+    test('should not get unknown user', async () => {
       const id = new Types.ObjectId().toHexString()
 
       const { statusCode: status } = await spec.application.inject().get(`/user/${id}`).end()

@@ -36,7 +36,7 @@ describe('organization module', async () => {
       })
     })
 
-    test('should not get organization', async () => {
+    test('should not get unknown organization', async () => {
       const id = new Types.ObjectId().toHexString()
 
       const { statusCode: status } = await spec.application.inject().get(`/organization/${id}`).end()
