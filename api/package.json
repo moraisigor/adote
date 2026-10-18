@@ -17,7 +17,6 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.663.0",
-    "@aws-sdk/client-ses": "^3.662.0",
     "@aws-sdk/s3-request-presigner": "^3.1014.0",
     "@fastify/compress": "^8.3.1",
     "@fastify/cookie": "^11.1.2",
@@ -40,7 +39,6 @@
     "mongoose": "^9.3.1",
     "nanoid": "^5.1.7",
     "passport": "^0.7.0",
-    "passport-headerapikey": "^1.2.2",
     "passport-jwt": "^4.0.1",
     "reflect-metadata": "^0.2.2",
     "resend": "^6.24.0",
@@ -61,7 +59,6 @@
     "globals": "^17.13.0",
     "mongodb-memory-server": "^11.0.1",
     "prettier": "^3.0.3",
-    "tsconfig-paths": "^4.2.0",
     "typescript": "6.0.3",
     "typescript-eslint": "^8.71.2"
   }
