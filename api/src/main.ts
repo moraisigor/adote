@@ -1,6 +1,7 @@
 import './sentry'
 
 import { ValidationPipe } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
 import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fastify'
 
@@ -16,16 +17,17 @@ const application = async () => {
     AppModule,
     new FastifyAdapter({
       logger: true,
-      trustProxy: true
-    }),
-    {
-      cors: {
-        origin: split(process.env.APP_ORIGIN, ','),
-        methods: ['GET', 'POST', 'PUT', 'DELETE'],
-        credentials: true
-      }
-    }
+      trustProxy: process.env.PROXY_HOP ?? 1
+    })
   )
+
+  const config = application.get(ConfigService)
+
+  application.enableCors({
+    origin: split(config.getOrThrow<string>('APP_ORIGIN'), ','),
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+  })
 
   await application.register(cookie)
   await application.register(helmet)
@@ -43,7 +45,7 @@ const application = async () => {
 
   application.enableShutdownHooks()
 
-  await application.listen(process.env.PORT ?? 9000, '0.0.0.0')
+  await application.listen(config.get<number>('PORT', 9999), '0.0.0.0')
 }
 
 application().catch((e) => console.error(e))
