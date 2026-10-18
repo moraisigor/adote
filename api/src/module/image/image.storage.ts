@@ -16,7 +16,8 @@ export class ImageStorage {
       credentials: {
         accessKeyId: this.config.getOrThrow<string>('STORAGE_KEY'),
         secretAccessKey: this.config.getOrThrow<string>('STORAGE_SECRET')
-      }
+      },
+      requestChecksumCalculation: 'WHEN_REQUIRED'
     })
   }
 }
