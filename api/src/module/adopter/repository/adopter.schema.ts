@@ -38,3 +38,7 @@ export class Adopter {
 export const AdopterSchema = SchemaFactory.createForClass(Adopter)
 
 AdopterSchema.index({ pet: 1, phone: 1 }, { unique: true })
+
+AdopterSchema.index({ user: 1, create: 1 })
+
+AdopterSchema.index({ organization: 1, create: 1 })
