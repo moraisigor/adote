@@ -15,6 +15,7 @@ import { PermissionGuard } from './guard/permission.guard'
 import { TokenGuard } from './guard/token.guard'
 import { AuthProvider } from './provider'
 import { ExpireAuthProvider } from './provider/expire.auth.provider'
+import { LockAuthProvider } from './provider/lock.auth.provider'
 import { PhoneAuthProvider } from './provider/phone.auth.provider'
 import { RenewAuthProvider } from './provider/renew.auth.provider'
 import { TokenAuthProvider } from './provider/token.auth.provider'
@@ -38,6 +39,7 @@ import { TokenStrategy } from './strategy/token.strategy'
   providers: [
     AuthProvider,
     ExpireAuthProvider,
+    LockAuthProvider,
     PhoneAuthProvider,
     RenewAuthProvider,
     TokenAuthProvider,

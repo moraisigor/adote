@@ -1,6 +1,7 @@
 import { CACHE_MANAGER } from '@nestjs/cache-manager'
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { ThrottlerException } from '@nestjs/throttler'
 
 import type { Cache } from 'cache-manager'
 import type { FastifyReply } from 'fastify'
@@ -8,8 +9,10 @@ import { isNil } from 'lodash'
 
 import { UserRepository } from '@/module/user/repository/user.repository'
 
-import { sign } from '@/helper/code'
+import { equals } from '@/helper/code'
+import { serialize } from '@/helper/queue'
 
+import { LockAuthProvider } from './lock.auth.provider'
 import { TokenAuthProvider } from './token.auth.provider'
 
 import type { Code } from '../type/code'
@@ -25,6 +28,7 @@ export class VerifyAuthProvider {
   constructor(
     @Inject(CACHE_MANAGER) private readonly store: Cache,
     private readonly config: ConfigService,
+    private readonly lock: LockAuthProvider,
     private readonly token: TokenAuthProvider,
     private readonly repository: UserRepository
   ) {
@@ -42,11 +46,13 @@ export class VerifyAuthProvider {
     )
   }
 
-  private equals(hash: string, code: string, phone: string) {
-    return hash === sign(code, phone, this.CodeSecret)
-  }
+  private async check(phone: string, code: string): Promise<boolean> {
+    const lock = await this.lock.is(phone)
 
-  async run(phone: string, code: string, reply: FastifyReply): Promise<void> {
+    if (lock) {
+      throw new ThrottlerException()
+    }
+
     const find = await this.store.get<Code>(phone)
 
     if (isNil(find)) {
@@ -65,21 +71,43 @@ export class VerifyAuthProvider {
       throw new UnauthorizedException()
     }
 
-    if (!this.equals(hash, code, phone)) {
-      await this.store.set<Code>(
-        phone,
-        {
-          hash,
-          expire,
-          attempt: attempt + 1
-        },
-        interval
-      )
-
-      throw new UnauthorizedException()
+    const verify = {
+      code,
+      phone,
+      secret: this.CodeSecret
     }
 
-    await this.store.del(phone)
+    if (equals(hash, verify)) {
+      // remove from lock
+      await this.lock.reset(phone)
+
+      // remove from store
+      await this.store.del(phone)
+
+      return true
+    }
+
+    await this.store.set<Code>(
+      phone,
+      {
+        hash,
+        expire,
+        attempt: attempt + 1
+      },
+      interval
+    )
+
+    await this.lock.fail(phone)
+
+    return false
+  }
+
+  async run(phone: string, code: string, reply: FastifyReply): Promise<void> {
+    const valid = await serialize(`verify:${phone}`, () => this.check(phone, code))
+
+    if (!valid) {
+      throw new UnauthorizedException()
+    }
 
     const user = await this.save(phone)
 
