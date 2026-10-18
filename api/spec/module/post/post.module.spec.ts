@@ -2,9 +2,12 @@ import { HttpStatus } from '@nestjs/common'
 
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
 
+import { ImageKind } from '@/module/image/type/image'
 import { Gender } from '@/module/pet/type/gender'
 import { Size } from '@/module/pet/type/size'
 import type { PostResponse, RemovePostResponse } from '@/module/post/post.response'
+
+import { url } from '@/helper/image'
 
 import { Spec } from '../spec'
 
@@ -39,7 +42,7 @@ describe('post module', async () => {
       expect(response).toMatchObject([
         {
           id: expect.any(String),
-          image: ['image.jpg'],
+          image: [expect.any(String)],
           pet: {
             id: expect.any(String),
             name: 'Oreo',
@@ -88,7 +91,7 @@ describe('post module', async () => {
       expect(response).toMatchObject([
         {
           id: expect.any(String),
-          image: ['image.jpg'],
+          image: [expect.any(String)],
           pet: {
             id: expect.any(String),
             name: 'Oreo',
@@ -131,7 +134,7 @@ describe('post module', async () => {
 
       expect(response).toMatchObject({
         id: post,
-        image: ['image.jpg'],
+        image: [expect.any(String)],
         pet: {
           id: expect.any(String),
           name: 'Oreo',
@@ -170,12 +173,14 @@ describe('post module', async () => {
       const { id: pet } = await spec.scenario.build.pet.create()
       const [{ id: location }] = await spec.scenario.build.location.search()
 
+      const image = await spec.scenario.build.image.save(ImageKind.POST)
+
       const { statusCode: status, json } = await spec.application
         .inject()
         .post('/post')
         .cookies({ token: hash })
         .body({
-          image: ['image.jpg'],
+          image: [image],
           pet: pet,
           location: location,
           publish: true
@@ -188,7 +193,7 @@ describe('post module', async () => {
 
       expect(response).toMatchObject({
         id: expect.any(String),
-        image: ['image.jpg'],
+        image: [url(image)],
         pet: {
           id: expect.any(String),
           name: 'Oreo',
@@ -226,12 +231,14 @@ describe('post module', async () => {
 
       const { id: pet } = await spec.scenario.build.pet.create('Oreo', organization)
 
+      const image = await spec.scenario.build.image.save(ImageKind.POST)
+
       const { statusCode: status, json } = await spec.application
         .inject()
         .post('/post')
         .cookies({ token: hash })
         .body({
-          image: ['image.jpg'],
+          image: [image],
           pet: pet,
           location: location,
           publish: true
@@ -244,7 +251,7 @@ describe('post module', async () => {
 
       expect(response).toMatchObject({
         id: expect.any(String),
-        image: ['image.jpg'],
+        image: [url(image)],
         pet: {
           id: expect.any(String),
           name: 'Oreo',
@@ -284,12 +291,17 @@ describe('post module', async () => {
 
       const [{ id: location }] = await spec.scenario.build.location.search()
 
+      const [x, y] = await Promise.all([
+        spec.scenario.build.image.save(ImageKind.POST),
+        spec.scenario.build.image.save(ImageKind.POST)
+      ])
+
       const { statusCode: status, json } = await spec.application
         .inject()
         .put(`/post/${id}`)
         .cookies({ token: hash })
         .body({
-          image: ['image.jpg', 'image.jpg'],
+          image: [x, y],
           location: location,
           publish: true
         })
@@ -301,7 +313,7 @@ describe('post module', async () => {
 
       expect(response).toMatchObject({
         id: expect.any(String),
-        image: ['image.jpg', 'image.jpg'],
+        image: [url(x), url(y)],
         pet: {
           id: expect.any(String),
           name: 'Oreo',
