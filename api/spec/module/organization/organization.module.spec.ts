@@ -1,6 +1,7 @@
 import { HttpStatus } from '@nestjs/common'
 
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
+import { Types } from 'mongoose'
 
 import type {
   OrganizationResponse,
@@ -33,6 +34,14 @@ describe('organization module', async () => {
         id,
         name: 'Name'
       })
+    })
+
+    test('should not get organization', async () => {
+      const id = new Types.ObjectId().toHexString()
+
+      const { statusCode: status } = await spec.application.inject().get(`/organization/${id}`).end()
+
+      expect(status).toBe(HttpStatus.NOT_FOUND)
     })
   })
 
