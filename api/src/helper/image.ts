@@ -1,5 +1,7 @@
+import { configuration } from '@/env.configuration'
+
 export const url = (image?: string) => {
   if (image) {
-    return `${process.env.STORAGE_PUBLIC}/${image}`
+    return `${configuration.STORAGE_PUBLIC}/${image}`
   }
 }

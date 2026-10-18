@@ -135,3 +135,5 @@ export const validate = (configuration: Record<string, unknown>): EnvConfigurati
 
   return environment
 }
+
+export const configuration = validate(process.env)
