@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 
 import { ConfigurationProvider } from '@/module/configuration/provider'
@@ -16,4 +17,10 @@ const load = async () => {
   await application.close()
 }
 
-load().catch((e) => console.error(e))
+load().catch((e) => {
+  const logger = new Logger('Load')
+
+  logger.error(e)
+
+  process.exit(1)
+})

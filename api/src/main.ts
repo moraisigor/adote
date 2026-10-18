@@ -1,6 +1,6 @@
 import './sentry'
 
-import { ValidationPipe } from '@nestjs/common'
+import { Logger, ValidationPipe } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
 import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fastify'
@@ -51,4 +51,10 @@ const application = async () => {
   await application.listen(config.get<number>('PORT', 9999), '0.0.0.0')
 }
 
-application().catch((e) => console.error(e))
+application().catch((e) => {
+  const logger = new Logger('Application')
+
+  logger.error(e)
+
+  return process.exit(1)
+})
