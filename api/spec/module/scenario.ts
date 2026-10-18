@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import type { NestFastifyApplication } from '@nestjs/platform-fastify'
 
@@ -36,7 +37,7 @@ export class Scenario {
 
   build = {
     auth: {
-      auth: async () => {
+      auth: async (phone: string = '+5599999999999') => {
         const provider = spyOn(
           this.application.get(CodeNotifyProvider, {
             strict: false
@@ -45,9 +46,9 @@ export class Scenario {
         )
 
         try {
-          await this.application.inject().post('/auth').body({ phone: '+5599999999999' }).end()
+          await this.application.inject().post('/auth').body({ phone }).end()
 
-          const [phone, code] = provider.mock.calls.pop() ?? []
+          const [, code] = provider.mock.calls.pop() ?? []
 
           return { phone, code }
         } finally {
@@ -180,7 +181,7 @@ export class Scenario {
       create: async (name: string = 'Oreo', organization?: string) => {
         const { token: { hash } = { hash: '' } } = this.authorization
 
-        const image = this.build.image.save(ImageKind.POST)
+        const image = await this.build.image.save(ImageKind.POST)
 
         const { id: pet } = await this.build.pet.create(name, organization)
 
@@ -245,8 +246,8 @@ export class Scenario {
     }
   }
 
-  async authenticate() {
-    const { phone, code } = await this.build.auth.auth()
+  async authenticate(account?: string) {
+    const { phone, code } = await this.build.auth.auth(account)
 
     const { cookies } = await this.application
       .inject()
@@ -337,7 +338,9 @@ export class Scenario {
     await this.build.configuration.location()
     await this.build.configuration.manager()
 
-    await this.authenticate()
+    const account = this.application.get(ConfigService).getOrThrow<string>('MANAGER_ACCOUNT')
+
+    await this.authenticate(account)
 
     await this.build.user.save()
   }
