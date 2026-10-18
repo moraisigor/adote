@@ -14,6 +14,7 @@ import {
 import { IMAGE_PATTERN } from '@/module/image/type/image'
 
 import { PageRequest } from '@/helper/page'
+import { trim } from '@/helper/string'
 
 export class GetUserParam {
   @IsMongoId({ message: 'the id is not valid' })
@@ -45,7 +46,7 @@ class ContactRequest {
 export class SaveUserRequest {
   @IsString()
   @Length(2, 20)
-  @Transform(({ value }: TransformFnParams) => String(value).trim())
+  @Transform(({ value }: TransformFnParams) => trim(value))
   readonly name!: string
 
   @IsOptional()

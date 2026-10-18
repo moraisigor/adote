@@ -1,6 +1,7 @@
 import { Transform, type TransformFnParams } from 'class-transformer'
 import { IsString, MaxLength, MinLength } from 'class-validator'
-import { trim } from 'lodash'
+
+import { trim } from '@/helper/string'
 
 export class SearchLocationRequest {
   @IsString()

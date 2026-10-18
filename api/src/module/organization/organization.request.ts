@@ -10,9 +10,9 @@ import {
   Length,
   ValidateNested
 } from 'class-validator'
-import { trim } from 'lodash'
 
 import { PageRequest } from '@/helper/page'
+import { trim } from '@/helper/string'
 
 export class ListOrganizationRequest extends PageRequest {}
 

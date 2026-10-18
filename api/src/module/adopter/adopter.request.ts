@@ -3,6 +3,7 @@ import { IsMongoId, IsOptional, IsPhoneNumber, IsString, Length } from 'class-va
 
 import { PageRequest } from '@/helper/page'
 import { format } from '@/helper/phone'
+import { trim } from '@/helper/string'
 
 export class ListAdopterRequest extends PageRequest {
   @IsMongoId({ message: 'the organization is not valid' })
@@ -13,7 +14,7 @@ export class ListAdopterRequest extends PageRequest {
 export class CreateAdopterRequest {
   @IsString()
   @Length(2, 40)
-  @Transform(({ value }) => String(value).trim())
+  @Transform(({ value }) => trim(value))
   readonly name!: string
 
   @IsPhoneNumber('BR')

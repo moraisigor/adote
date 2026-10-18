@@ -1,3 +1,13 @@
+import { isString } from 'lodash'
+
+export const trim = (value: unknown): unknown => {
+  if (isString(value)) {
+    return value.trim()
+  }
+
+  return value
+}
+
 export const encode = (value: string): string => btoa(value)
 
 export const decode = (value: string): string => atob(value)
