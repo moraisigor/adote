@@ -24,6 +24,18 @@ describe('auth module', async () => {
 
       expect(status).toBe(HttpStatus.NO_CONTENT)
     })
+
+    test('should not start auth with not valid phone', async () => {
+      const { statusCode: status } = await spec.application
+        .inject()
+        .post('/auth')
+        .body({
+          phone: '+5599'
+        })
+        .end()
+
+      expect(status).toBe(HttpStatus.BAD_REQUEST)
+    })
   })
 
   // post /auth/verify
