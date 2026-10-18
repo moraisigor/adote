@@ -1,6 +1,7 @@
 import { HttpStatus } from '@nestjs/common'
 
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
+import { Types } from 'mongoose'
 
 import type { FavResponse } from '@/module/fav/fav.response'
 
@@ -38,6 +39,22 @@ describe('fav module', async () => {
         id: post
       })
     })
+
+    test('should not add unknown fav', async () => {
+      const {
+        authorization: { token: { hash } = { hash: '' } }
+      } = spec.scenario
+
+      const id = new Types.ObjectId().toHexString()
+
+      const { statusCode: status } = await spec.application
+        .inject()
+        .post(`/user/fav/${id}`)
+        .cookies({ token: hash })
+        .end()
+
+      expect(status).toBe(HttpStatus.NOT_FOUND)
+    })
   })
 
   // delete /fav/post
@@ -62,6 +79,22 @@ describe('fav module', async () => {
       expect(response).toMatchObject({
         id: post
       })
+    })
+
+    test('should not remove unknown fav', async () => {
+      const {
+        authorization: { token: { hash } = { hash: '' } }
+      } = spec.scenario
+
+      const id = new Types.ObjectId().toHexString()
+
+      const { statusCode: status } = await spec.application
+        .inject()
+        .delete(`/user/fav/${id}`)
+        .cookies({ token: hash })
+        .end()
+
+      expect(status).toBe(HttpStatus.NOT_FOUND)
     })
   })
 
