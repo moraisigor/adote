@@ -1,6 +1,7 @@
 import { HttpStatus } from '@nestjs/common'
 
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
+import { Types } from 'mongoose'
 
 import { Kind } from '@/module/breed/type/kind'
 import type { PetResponse, RemovePetResponse } from '@/module/pet/pet.response'
@@ -226,6 +227,20 @@ describe('pet module', async () => {
       expect(response).toMatchObject({
         id
       })
+    })
+
+    test('should not remove unknown pet', async () => {
+      const { hash } = spec.scenario
+
+      const id = new Types.ObjectId().toHexString()
+
+      const { statusCode: status } = await spec.application
+        .inject()
+        .delete(`/pet/${id}`)
+        .cookies({ token: hash })
+        .end()
+
+      expect(status).toBe(HttpStatus.NOT_FOUND)
     })
   })
 
