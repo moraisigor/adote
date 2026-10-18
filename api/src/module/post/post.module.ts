@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { forwardRef, Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
 import { ImageModule } from '@/module/image/image.module'
@@ -23,7 +23,7 @@ import { Post, PostSchema } from './repository/post.schema'
     ImageModule,
     LocationModule,
     PermissionModule,
-    PetModule
+    forwardRef(() => PetModule)
   ],
   exports: [PostRepository],
   providers: [

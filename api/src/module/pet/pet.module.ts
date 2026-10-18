@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { AdopterModule } from '@/module/adopter/adopter.module'
 import { BreedModule } from '@/module/breed/breed.module'
 import { PermissionModule } from '@/module/permission/permission.module'
+import { PostModule } from '@/module/post/post.module'
 
 import { PetController } from './pet.controller'
 import { PetProvider } from './provider'
@@ -20,7 +21,8 @@ import { Pet, PetSchema } from './repository/pet.schema'
     MongooseModule.forFeature([{ name: Pet.name, schema: PetSchema }]),
     BreedModule,
     PermissionModule,
-    forwardRef(() => AdopterModule)
+    forwardRef(() => AdopterModule),
+    forwardRef(() => PostModule)
   ],
   exports: [PetRepository],
   providers: [
