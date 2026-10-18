@@ -9,8 +9,11 @@ defaults:
   run:
     working-directory: ./api
 
+permissions:
+  contents: read
+
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: checkout repository
@@ -21,9 +24,9 @@ jobs:
           bun-version: 1.4.0
       - name: install dependency
         run: bun install --frozen-lockfile
-      - name: lint check
-        run: bun lint:check
-      - name: format check
+      - name: check format
         run: bun format:check
+      - name: check lint
+        run: bun lint:check
       - name: run test
         run: bun test:coverage
