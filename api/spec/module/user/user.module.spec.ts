@@ -2,11 +2,14 @@ import { HttpStatus } from '@nestjs/common/enums'
 
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
 
+import { ImageKind } from '@/module/image/type/image'
 import type { OrganizationResponse } from '@/module/organization/organization.response'
 import { Gender } from '@/module/pet/type/gender'
 import { Size } from '@/module/pet/type/size'
 import type { PostResponse } from '@/module/post/post.response'
 import type { UserResponse } from '@/module/user/user.response'
+
+import { url } from '@/helper/image'
 
 import { Spec } from '../spec'
 
@@ -83,7 +86,7 @@ describe('user module', async () => {
       expect(response).toMatchObject([
         {
           id: expect.any(String),
-          image: ['image.jpg'],
+          image: [expect.any(String)],
           pet: {
             id: expect.any(String),
             name: 'Oreo',
@@ -163,7 +166,6 @@ describe('user module', async () => {
 
       expect(response).toMatchObject({
         id: expect.any(String),
-        phone: '+5599999999999',
         name: 'Name',
         contact: {
           mail: 'mail@example.com',
@@ -234,12 +236,14 @@ describe('user module', async () => {
 
       await spec.scenario.build.user.save()
 
+      const image = await spec.scenario.build.image.save(ImageKind.USER)
+
       const { statusCode: status, json } = await spec.application
         .inject()
         .put('/user/image')
         .cookies({ token: hash })
         .body({
-          image: 'image.jpg'
+          image: image
         })
         .end()
 
@@ -251,7 +255,7 @@ describe('user module', async () => {
         id: expect.any(String),
         phone: '+5599999999999',
         name: 'Name',
-        image: 'image.jpg',
+        image: url(image),
         contact: {
           mail: 'mail@example.com',
           phone: '+5599999999999',
