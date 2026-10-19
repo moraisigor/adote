@@ -12,7 +12,37 @@ describe('adopter module', async () => {
   beforeAll(async () => {
     await spec.start()
 
-    await spec.scenario.post()
+    await spec.scenario.adopter()
+  })
+
+  // get /adopter
+  describe('/adopter', () => {
+    test('should list adopter', async () => {
+      const { hash } = spec.scenario
+
+      await spec.scenario.build.adopter.create()
+
+      const { statusCode: status, json } = await spec.application
+        .inject()
+        .get('/adopter')
+        .query({ page: '1', amount: '10' })
+        .cookies({ token: hash })
+        .end()
+
+      const response = json<AdopterResponse[]>()
+
+      expect(status).toBe(HttpStatus.OK)
+
+      expect(response).toContainEqual({
+        id: expect.any(String),
+        name: 'Name',
+        phone: '+5511999999999',
+        pet: {
+          id: expect.any(String),
+          name: 'Oreo'
+        }
+      })
+    })
   })
 
   // post /adopter

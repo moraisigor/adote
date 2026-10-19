@@ -5,6 +5,7 @@ import type { NestFastifyApplication } from '@nestjs/platform-fastify'
 import { spyOn } from 'bun:test'
 import { isNil } from 'lodash'
 
+import type { AdopterResponse } from '@/module/adopter/adopter.response'
 import type { Token } from '@/module/auth/type/token'
 import type { BreedResponse } from '@/module/breed/breed.response'
 import { Kind } from '@/module/breed/type/kind'
@@ -87,6 +88,25 @@ export class Scenario {
         this.bucket.set(key, user)
 
         return key
+      }
+    },
+    adopter: {
+      create: async () => {
+        const {
+          pet: { id: pet }
+        } = await this.build.post.create()
+
+        const { json } = await this.application
+          .inject()
+          .post('/adopter')
+          .body({
+            name: 'Name',
+            phone: '+5511999999999',
+            pet: pet
+          })
+          .end()
+
+        return json<AdopterResponse[]>()
       }
     },
     breed: {
@@ -289,6 +309,13 @@ export class Scenario {
     const session = await this.session(account)
 
     Object.assign(this.authorization, session)
+  }
+
+  async adopter() {
+    await this.build.configuration.breed()
+    await this.build.configuration.location()
+
+    await this.authenticate()
   }
 
   async breed() {
