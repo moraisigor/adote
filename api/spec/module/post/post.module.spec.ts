@@ -368,6 +368,36 @@ describe('post module', async () => {
         publish: true
       })
     })
+
+    test('should not publish unknown post', async () => {
+      const { hash } = spec.scenario
+
+      const id = new Types.ObjectId().toHexString()
+
+      const { statusCode: status } = await spec.application
+        .inject()
+        .put(`/post/${id}/publish`)
+        .cookies({ token: hash })
+        .body({ publish: true })
+        .end()
+
+      expect(status).toBe(HttpStatus.NOT_FOUND)
+    })
+
+    test('should not publish post without permission', async () => {
+      const { token: { hash } = { hash: '' } } = await spec.scenario.session('+5511999999999')
+
+      const { id } = await spec.scenario.build.post.create()
+
+      const { statusCode: status } = await spec.application
+        .inject()
+        .put(`/post/${id}/publish`)
+        .cookies({ token: hash })
+        .body({ publish: true })
+        .end()
+
+      expect(status).toBe(HttpStatus.FORBIDDEN)
+    })
   })
 
   // delete /post/id
