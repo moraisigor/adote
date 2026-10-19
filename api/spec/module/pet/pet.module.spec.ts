@@ -84,6 +84,34 @@ describe('pet module', async () => {
         }
       })
     })
+
+    test('should not get unknown pet', async () => {
+      const { hash } = spec.scenario
+
+      const id = new Types.ObjectId().toHexString()
+
+      const { statusCode: status } = await spec.application
+        .inject()
+        .get(`/pet/${id}`)
+        .cookies({ token: hash })
+        .end()
+
+      expect(status).toBe(HttpStatus.NOT_FOUND)
+    })
+
+    test('should not get pet without permission', async () => {
+      const { token: { hash } = { hash: '' } } = await spec.scenario.session('+5511999999999')
+
+      const { id } = await spec.scenario.build.pet.create()
+
+      const { statusCode: status } = await spec.application
+        .inject()
+        .get(`/pet/${id}`)
+        .cookies({ token: hash })
+        .end()
+
+      expect(status).toBe(HttpStatus.FORBIDDEN)
+    })
   })
 
   // post /pet
