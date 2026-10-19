@@ -18,7 +18,7 @@ describe('image module', async () => {
 
   // post /image
   describe('/image', () => {
-    test.each([ImageKind.POST, ImageKind.USER])('should save image', async (kind) => {
+    test.each([ImageKind.POST, ImageKind.USER])('should save %s image', async (kind) => {
       const { hash } = spec.scenario
 
       const { statusCode: status, json } = await spec.application

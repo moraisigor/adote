@@ -25,7 +25,7 @@ describe('user module', async () => {
 
   // get /user
   describe('/user', () => {
-    test('should not list user as user', async () => {
+    test('should not list user without permission', async () => {
       const { hash } = spec.scenario
 
       const { statusCode: status } = await spec.application
