@@ -16,8 +16,8 @@ describe('fav module', async () => {
     await spec.scenario.fav()
   })
 
-  // post /fav/post
-  describe('/fav/post', () => {
+  // post /user/fav/post
+  describe('/user/fav/post', () => {
     test('should add fav', async () => {
       const { hash } = spec.scenario
 
@@ -53,8 +53,8 @@ describe('fav module', async () => {
     })
   })
 
-  // delete /fav/post
-  describe('/fav/post', () => {
+  // delete /user/fav/post
+  describe('/user/fav/post', () => {
     test('should remove fav', async () => {
       const { hash } = spec.scenario
 
