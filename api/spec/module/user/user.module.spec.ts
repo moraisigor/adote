@@ -314,6 +314,16 @@ describe('user module', async () => {
         id: expect.any(String)
       })
     })
+
+    test('should not remove unknown user', async () => {
+      const { statusCode: status } = await spec.application
+        .inject()
+        .delete('/user')
+        .cookies({ token: '' })
+        .end()
+
+      expect(status).toBe(HttpStatus.NOT_FOUND)
+    })
   })
 
   afterAll(async () => {
