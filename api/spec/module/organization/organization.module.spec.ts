@@ -19,6 +19,21 @@ describe('organization module', async () => {
     await spec.scenario.organization()
   })
 
+  // get /organization
+  describe('/organization', () => {
+    test('should not list organization without permission', async () => {
+      const { hash } = spec.scenario
+
+      const { statusCode: status } = await spec.application
+        .inject()
+        .get('/organization')
+        .cookies({ token: hash })
+        .end()
+
+      expect(status).toBe(HttpStatus.FORBIDDEN)
+    })
+  })
+
   // get /organization/id
   describe('/organization/id', () => {
     test('should get organization', async () => {
