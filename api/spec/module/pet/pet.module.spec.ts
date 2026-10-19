@@ -207,6 +207,32 @@ describe('pet module', async () => {
         }
       })
     })
+
+    test('should not create pet organization without permission', async () => {
+      const { token: { hash } = { hash: '' } } = await spec.scenario.session('+5511999999999')
+
+      const list = await spec.scenario.build.breed.list()
+
+      const { id: breed } = list.find((e) => e.name === 'Buldogue Inglês') ?? { id: null }
+
+      const [{ id: organization }] = await spec.scenario.build.user.organization()
+
+      const { statusCode: status } = await spec.application
+        .inject()
+        .post('/pet')
+        .cookies({ token: hash })
+        .body({
+          name: 'Oreo',
+          kind: Kind.DOG,
+          size: Size.MEDIUM,
+          gender: Gender.MALE,
+          breed: breed,
+          organization: organization
+        })
+        .end()
+
+      expect(status).toBe(HttpStatus.FORBIDDEN)
+    })
   })
 
   // put /pet/id
