@@ -53,6 +53,21 @@ describe('pet module', async () => {
         }
       ])
     })
+
+    test('should not list pet organization without permission', async () => {
+      const { token: { hash } = { hash: '' } } = await spec.scenario.session('+5511999999999')
+
+      const [{ id: organization }] = await spec.scenario.build.user.organization()
+
+      const { statusCode: status } = await spec.application
+        .inject()
+        .get('/pet')
+        .query({ page: '1', amount: '10', organization })
+        .cookies({ token: hash })
+        .end()
+
+      expect(status).toBe(HttpStatus.FORBIDDEN)
+    })
   })
 
   // get /pet/id
