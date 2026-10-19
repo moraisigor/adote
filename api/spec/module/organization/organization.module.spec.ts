@@ -141,6 +141,34 @@ describe('organization module', async () => {
         id
       })
     })
+
+    test('should not remove unknown organization', async () => {
+      const { hash } = spec.scenario
+
+      const id = new Types.ObjectId().toHexString()
+
+      const { statusCode: status } = await spec.application
+        .inject()
+        .delete(`/organization/${id}`)
+        .cookies({ token: hash })
+        .end()
+
+      expect(status).toBe(HttpStatus.NOT_FOUND)
+    })
+
+    test('should not remove organization without permission', async () => {
+      const { token: { hash } = { hash: '' } } = await spec.scenario.session('+5511999999999')
+
+      const { id } = await spec.scenario.build.organization.create('Remove')
+
+      const { statusCode: status } = await spec.application
+        .inject()
+        .delete(`/organization/${id}`)
+        .cookies({ token: hash })
+        .end()
+
+      expect(status).toBe(HttpStatus.FORBIDDEN)
+    })
   })
 
   afterAll(async () => {
