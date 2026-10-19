@@ -205,6 +205,56 @@ describe('pet module', async () => {
         }
       })
     })
+
+    test('should not save unknown pet', async () => {
+      const { hash } = spec.scenario
+
+      const id = new Types.ObjectId().toHexString()
+
+      const list = await spec.scenario.build.breed.list()
+
+      const { id: breed } = list.find((e) => e.name === 'Sem Raça Definida') ?? { id: null }
+
+      const { statusCode: status } = await spec.application
+        .inject()
+        .put(`/pet/${id}`)
+        .cookies({ token: hash })
+        .body({
+          name: 'Estopinha',
+          kind: Kind.DOG,
+          size: Size.MEDIUM,
+          gender: Gender.FEMALE,
+          breed: breed
+        })
+        .end()
+
+      expect(status).toBe(HttpStatus.NOT_FOUND)
+    })
+
+    test('should not save pet without permission', async () => {
+      const { token: { hash } = { hash: '' } } = await spec.scenario.session('+5511999999999')
+
+      const { id } = await spec.scenario.build.pet.create()
+
+      const list = await spec.scenario.build.breed.list()
+
+      const { id: breed } = list.find((e) => e.name === 'Sem Raça Definida') ?? { id: null }
+
+      const { statusCode: status } = await spec.application
+        .inject()
+        .put(`/pet/${id}`)
+        .cookies({ token: hash })
+        .body({
+          name: 'Estopinha',
+          kind: Kind.DOG,
+          size: Size.MEDIUM,
+          gender: Gender.FEMALE,
+          breed: breed
+        })
+        .end()
+
+      expect(status).toBe(HttpStatus.FORBIDDEN)
+    })
   })
 
   // delete /pet/id
