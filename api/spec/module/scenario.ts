@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt'
 import type { NestFastifyApplication } from '@nestjs/platform-fastify'
 
 import { spyOn } from 'bun:test'
+import { isNil } from 'lodash'
 
 import type { Token } from '@/module/auth/type/token'
 import type { BreedResponse } from '@/module/breed/breed.response'
@@ -244,7 +245,7 @@ export class Scenario {
     }
   }
 
-  async authenticate(account?: string) {
+  async session(account?: string): Promise<Authorization> {
     const { phone, code } = await this.build.auth.auth(account)
 
     const { cookies } = await this.application
@@ -259,25 +260,35 @@ export class Scenario {
     const token = cookies.find((e) => e.name === 'token')
     const renew = cookies.find((e) => e.name === 'renew')
 
-    if (token) {
-      const { sub: user } = this.application
-        .get(JwtService, { strict: false })
-        .decode<{ sub: string }>(token.value)
-
-      this.authorization.user = user
-
-      this.authorization.token = {
-        hash: token.value,
-        expire: token.expires ?? new Date()
-      }
+    if (isNil(token)) {
+      throw new Error()
     }
 
-    if (renew) {
-      this.authorization.renew = {
+    if (isNil(renew)) {
+      throw new Error()
+    }
+
+    const { sub: user } = this.application
+      .get(JwtService, { strict: false })
+      .decode<{ sub: string }>(token.value)
+
+    return {
+      user: user,
+      token: {
+        hash: token.value,
+        expire: token.expires ?? new Date()
+      },
+      renew: {
         hash: renew.value,
         expire: renew.expires ?? new Date()
       }
     }
+  }
+
+  async authenticate(account?: string) {
+    const session = await this.session(account)
+
+    Object.assign(this.authorization, session)
   }
 
   async breed() {

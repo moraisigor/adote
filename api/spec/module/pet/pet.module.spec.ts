@@ -19,7 +19,7 @@ describe('pet module', async () => {
     await spec.scenario.pet()
   })
 
-  // list /pet
+  // get /pet
   describe('/pet', () => {
     test('should list pet', async () => {
       const { hash } = spec.scenario
@@ -241,6 +241,20 @@ describe('pet module', async () => {
         .end()
 
       expect(status).toBe(HttpStatus.NOT_FOUND)
+    })
+
+    test('should not remove pet without permission', async () => {
+      const { token: { hash } = { hash: '' } } = await spec.scenario.session('+5511999999999')
+
+      const { id } = await spec.scenario.build.pet.create()
+
+      const { statusCode: status } = await spec.application
+        .inject()
+        .delete(`/pet/${id}`)
+        .cookies({ token: hash })
+        .end()
+
+      expect(status).toBe(HttpStatus.FORBIDDEN)
     })
   })
 
