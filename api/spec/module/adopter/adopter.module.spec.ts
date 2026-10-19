@@ -43,6 +43,35 @@ describe('adopter module', async () => {
         }
       })
     })
+
+    test('should list adopter with organization', async () => {
+      const { hash } = spec.scenario
+
+      const { id: organization } = await spec.scenario.build.organization.create()
+
+      await spec.scenario.build.adopter.create('Oreo', organization)
+
+      const { statusCode: status, json } = await spec.application
+        .inject()
+        .get('/adopter')
+        .query({ page: '1', amount: '10', organization })
+        .cookies({ token: hash })
+        .end()
+
+      const response = json<AdopterResponse[]>()
+
+      expect(status).toBe(HttpStatus.OK)
+
+      expect(response).toContainEqual({
+        id: expect.any(String),
+        name: 'Name',
+        phone: '+5511999999999',
+        pet: {
+          id: expect.any(String),
+          name: 'Oreo'
+        }
+      })
+    })
   })
 
   // post /adopter
