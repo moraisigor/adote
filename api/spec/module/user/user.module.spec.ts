@@ -8,7 +8,7 @@ import type { OrganizationResponse } from '@/module/organization/organization.re
 import { Gender } from '@/module/pet/type/gender'
 import { Size } from '@/module/pet/type/size'
 import type { PostResponse } from '@/module/post/post.response'
-import type { UserResponse } from '@/module/user/user.response'
+import type { RemoveUserResponse, UserResponse } from '@/module/user/user.response'
 
 import { url } from '@/helper/image'
 
@@ -291,6 +291,27 @@ describe('user module', async () => {
           city: 'Recife',
           state: 'Pernambuco'
         }
+      })
+    })
+  })
+
+  // delete /user
+  describe('/user', () => {
+    test('should remove user', async () => {
+      const { token: { hash } = { hash: '' } } = await spec.scenario.session('+5511999999999')
+
+      const { statusCode: status, json } = await spec.application
+        .inject()
+        .delete('/user')
+        .cookies({ token: hash })
+        .end()
+
+      const response = json<RemoveUserResponse>()
+
+      expect(status).toBe(HttpStatus.OK)
+
+      expect(response).toMatchObject({
+        id: expect.any(String)
       })
     })
   })
