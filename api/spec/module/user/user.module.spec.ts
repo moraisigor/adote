@@ -126,16 +126,27 @@ describe('user module', async () => {
         }
       ])
     })
+
+    test('should not list post organization without permission', async () => {
+      const { token: { hash } = { hash: '' } } = await spec.scenario.session('+5511999999999')
+
+      const [{ id: organization }] = await spec.scenario.build.user.organization()
+
+      const { statusCode: status } = await spec.application
+        .inject()
+        .get('/user/post')
+        .query({ page: '1', amount: '10', organization })
+        .cookies({ token: hash })
+        .end()
+
+      expect(status).toBe(HttpStatus.FORBIDDEN)
+    })
   })
 
   // get /user/organization
   describe('/user/organization', () => {
     test('should list organization', async () => {
       const { hash } = spec.scenario
-
-      await spec.scenario.build.organization.create()
-
-      await spec.scenario.build.organization.save()
 
       const { statusCode: status, json } = await spec.application
         .inject()

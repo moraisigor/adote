@@ -339,7 +339,10 @@ export class Scenario {
 
     await this.authenticate()
 
+    await this.build.organization.create()
+
     await this.build.user.save()
+    await this.build.organization.save()
   }
 
   async manager() {
