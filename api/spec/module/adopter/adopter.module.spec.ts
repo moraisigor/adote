@@ -72,6 +72,21 @@ describe('adopter module', async () => {
         }
       })
     })
+
+    test('should not list adopter organization without permission', async () => {
+      const { token: { hash } = { hash: '' } } = await spec.scenario.session('+5511999999999')
+
+      const { id: organization } = await spec.scenario.build.organization.create()
+
+      const { statusCode: status } = await spec.application
+        .inject()
+        .get('/adopter')
+        .query({ page: '1', amount: '10', organization })
+        .cookies({ token: hash })
+        .end()
+
+      expect(status).toBe(HttpStatus.FORBIDDEN)
+    })
   })
 
   // post /adopter
