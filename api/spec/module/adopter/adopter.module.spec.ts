@@ -76,7 +76,7 @@ describe('adopter module', async () => {
     test('should not list adopter organization without permission', async () => {
       const { token: { hash } = { hash: '' } } = await spec.scenario.session('+5511999999999')
 
-      const { id: organization } = await spec.scenario.build.organization.create()
+      const [{ id: organization }] = await spec.scenario.build.user.organization()
 
       const { statusCode: status } = await spec.application
         .inject()
