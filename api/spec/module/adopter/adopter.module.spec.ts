@@ -108,6 +108,24 @@ describe('adopter module', async () => {
 
       expect(status).toBe(HttpStatus.NO_CONTENT)
     })
+
+    test.each([[{}], ['+5599']])('should not create adopter with %p phone', async (phone) => {
+      const {
+        pet: { id: pet }
+      } = await spec.scenario.build.post.create()
+
+      const { statusCode: status } = await spec.application
+        .inject()
+        .post('/api/adopter')
+        .body({
+          name: 'Name',
+          phone: phone,
+          pet: pet
+        })
+        .end()
+
+      expect(status).toBe(HttpStatus.BAD_REQUEST)
+    })
   })
 
   afterAll(async () => {
