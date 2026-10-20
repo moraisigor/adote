@@ -26,7 +26,7 @@ describe('organization module', async () => {
 
       const { statusCode: status } = await spec.application
         .inject()
-        .get('/organization')
+        .get('/api/organization')
         .cookies({ token: hash })
         .end()
 
@@ -39,7 +39,10 @@ describe('organization module', async () => {
     test('should get organization', async () => {
       const { id } = await spec.scenario.build.organization.create()
 
-      const { statusCode: status, json } = await spec.application.inject().get(`/organization/${id}`).end()
+      const { statusCode: status, json } = await spec.application
+        .inject()
+        .get(`/api/organization/${id}`)
+        .end()
 
       const response = json<OrganizationResponse>()
 
@@ -54,7 +57,7 @@ describe('organization module', async () => {
     test('should not get unknown organization', async () => {
       const id = new Types.ObjectId().toHexString()
 
-      const { statusCode: status } = await spec.application.inject().get(`/organization/${id}`).end()
+      const { statusCode: status } = await spec.application.inject().get(`/api/organization/${id}`).end()
 
       expect(status).toBe(HttpStatus.NOT_FOUND)
     })
@@ -67,7 +70,7 @@ describe('organization module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .post('/organization')
+        .post('/api/organization')
         .cookies({ token: hash })
         .body({
           name: 'Create'
@@ -94,7 +97,7 @@ describe('organization module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .put(`/organization/${id}`)
+        .put(`/api/organization/${id}`)
         .cookies({ token: hash })
         .body({
           name: 'Save',
@@ -129,7 +132,7 @@ describe('organization module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .delete(`/organization/${id}`)
+        .delete(`/api/organization/${id}`)
         .cookies({ token: hash })
         .end()
 
@@ -149,7 +152,7 @@ describe('organization module', async () => {
 
       const { statusCode: status } = await spec.application
         .inject()
-        .delete(`/organization/${id}`)
+        .delete(`/api/organization/${id}`)
         .cookies({ token: hash })
         .end()
 
@@ -163,7 +166,7 @@ describe('organization module', async () => {
 
       const { statusCode: status } = await spec.application
         .inject()
-        .delete(`/organization/${id}`)
+        .delete(`/api/organization/${id}`)
         .cookies({ token: hash })
         .end()
 
@@ -197,7 +200,7 @@ describe('organization module', () => {
 
         const { statusCode: status, json } = await spec.application
           .inject()
-          .get('/organization')
+          .get('/api/organization')
           .cookies({ token: hash })
           .end()
 

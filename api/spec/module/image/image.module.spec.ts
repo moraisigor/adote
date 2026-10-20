@@ -23,7 +23,7 @@ describe('image module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .post('/image')
+        .post('/api/image')
         .cookies({ token: hash })
         .body({
           kind,

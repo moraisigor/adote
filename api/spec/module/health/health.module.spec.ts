@@ -14,7 +14,7 @@ describe('health module', async () => {
   // get /health
   describe('/health', () => {
     test('should get health', async () => {
-      const { statusCode: status, json } = await spec.application.inject().get('/health').end()
+      const { statusCode: status, json } = await spec.application.inject().get('/api/health').end()
 
       const response = json<{ state: boolean }>()
 

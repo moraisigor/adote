@@ -57,7 +57,7 @@ export class Scenario {
         )
 
         try {
-          await this.application.inject().post('/auth').body({ phone }).end()
+          await this.application.inject().post('/api/auth').body({ phone }).end()
 
           const [, code] = provider.mock.calls.pop() ?? []
 
@@ -73,7 +73,7 @@ export class Scenario {
 
         const { json } = await this.application
           .inject()
-          .post('/image')
+          .post('/api/image')
           .cookies({ token: this.hash })
           .body({
             kind,
@@ -97,7 +97,7 @@ export class Scenario {
 
         await this.application
           .inject()
-          .post('/adopter')
+          .post('/api/adopter')
           .body({
             name: 'Name',
             phone: '+5511999999999',
@@ -108,7 +108,7 @@ export class Scenario {
     },
     breed: {
       list: async () => {
-        const { json } = await this.application.inject().get('/breed').query({ kind: Kind.DOG }).end()
+        const { json } = await this.application.inject().get('/api/breed').query({ kind: Kind.DOG }).end()
 
         return json<BreedResponse[]>()
       }
@@ -124,7 +124,7 @@ export class Scenario {
 
         const { json } = await this.application
           .inject()
-          .post(`/user/fav/${post}`)
+          .post(`/api/user/fav/${post}`)
           .cookies({ token: this.hash })
           .end()
 
@@ -133,7 +133,11 @@ export class Scenario {
     },
     location: {
       search: async () => {
-        const { json } = await this.application.inject().get('/location').query({ search: 'recife' }).end()
+        const { json } = await this.application
+          .inject()
+          .get('/api/location')
+          .query({ search: 'recife' })
+          .end()
 
         return json<LocationResponse[]>()
       }
@@ -142,7 +146,7 @@ export class Scenario {
       create: async (name: string = 'Name') => {
         const { json } = await this.application
           .inject()
-          .post('/organization')
+          .post('/api/organization')
           .cookies({ token: this.hash })
           .body({
             name: name
@@ -158,7 +162,7 @@ export class Scenario {
 
         const { json } = await this.application
           .inject()
-          .put(`/organization/${id}`)
+          .put(`/api/organization/${id}`)
           .cookies({ token: this.hash })
           .body({
             name: name,
@@ -182,7 +186,7 @@ export class Scenario {
 
         const { json } = await this.application
           .inject()
-          .post('/pet')
+          .post('/api/pet')
           .cookies({ token: this.hash })
           .body({
             name: name,
@@ -207,7 +211,7 @@ export class Scenario {
 
         const { json } = await this.application
           .inject()
-          .post('/post')
+          .post('/api/post')
           .cookies({ token: this.hash })
           .body({
             image: [image],
@@ -224,7 +228,7 @@ export class Scenario {
       current: async () => {
         const { json } = await this.application
           .inject()
-          .get('/user/current')
+          .get('/api/user/current')
           .cookies({ token: this.hash })
           .end()
 
@@ -233,7 +237,7 @@ export class Scenario {
       organization: async () => {
         const { json } = await this.application
           .inject()
-          .get('/user/organization')
+          .get('/api/user/organization')
           .cookies({ token: this.hash })
           .end()
 
@@ -244,7 +248,7 @@ export class Scenario {
 
         const { json } = await this.application
           .inject()
-          .put('/user')
+          .put('/api/user')
           .cookies({ token: this.hash })
           .body({
             name: name,
@@ -267,7 +271,7 @@ export class Scenario {
 
     const { cookies } = await this.application
       .inject()
-      .post('/auth/verify')
+      .post('/api/auth/verify')
       .body({
         phone,
         code

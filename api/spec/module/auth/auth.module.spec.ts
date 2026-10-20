@@ -16,7 +16,7 @@ describe('auth module', async () => {
     test('should start auth', async () => {
       const { statusCode: status } = await spec.application
         .inject()
-        .post('/auth')
+        .post('/api/auth')
         .body({
           phone: '+5599999999999'
         })
@@ -28,7 +28,7 @@ describe('auth module', async () => {
     test('should not start auth with not valid phone', async () => {
       const { statusCode: status } = await spec.application
         .inject()
-        .post('/auth')
+        .post('/api/auth')
         .body({
           phone: '+5599'
         })
@@ -45,7 +45,7 @@ describe('auth module', async () => {
 
       const { statusCode: status, cookies } = await spec.application
         .inject()
-        .post('/auth/verify')
+        .post('/api/auth/verify')
         .body({
           phone,
           code
@@ -83,7 +83,7 @@ describe('auth module', async () => {
 
       const { statusCode: status, cookies } = await spec.application
         .inject()
-        .post('/auth/renew')
+        .post('/api/auth/renew')
         .cookies({ renew: hash })
         .end()
 
@@ -108,7 +108,7 @@ describe('auth module', async () => {
   // post /auth/expire
   describe('/auth/expire', () => {
     test('should expire auth', async () => {
-      const { statusCode: status, cookies } = await spec.application.inject().post('/auth/expire').end()
+      const { statusCode: status, cookies } = await spec.application.inject().post('/api/auth/expire').end()
 
       expect(status).toBe(HttpStatus.NO_CONTENT)
 

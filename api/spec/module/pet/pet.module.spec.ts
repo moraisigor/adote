@@ -28,7 +28,7 @@ describe('pet module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .get('/pet')
+        .get('/api/pet')
         .cookies({ token: hash })
         .query({ page: '1', amount: '10' })
         .end()
@@ -61,7 +61,7 @@ describe('pet module', async () => {
 
       const { statusCode: status } = await spec.application
         .inject()
-        .get('/pet')
+        .get('/api/pet')
         .query({ page: '1', amount: '10', organization })
         .cookies({ token: hash })
         .end()
@@ -79,7 +79,7 @@ describe('pet module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .get(`/pet/${id}`)
+        .get(`/api/pet/${id}`)
         .cookies({ token: hash })
         .end()
 
@@ -107,7 +107,7 @@ describe('pet module', async () => {
 
       const { statusCode: status } = await spec.application
         .inject()
-        .get(`/pet/${id}`)
+        .get(`/api/pet/${id}`)
         .cookies({ token: hash })
         .end()
 
@@ -121,7 +121,7 @@ describe('pet module', async () => {
 
       const { statusCode: status } = await spec.application
         .inject()
-        .get(`/pet/${id}`)
+        .get(`/api/pet/${id}`)
         .cookies({ token: hash })
         .end()
 
@@ -140,7 +140,7 @@ describe('pet module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .post('/pet')
+        .post('/api/pet')
         .cookies({ token: hash })
         .body({
           name: 'Oreo',
@@ -179,7 +179,7 @@ describe('pet module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .post('/pet')
+        .post('/api/pet')
         .cookies({ token: hash })
         .body({
           name: 'Oreo',
@@ -219,7 +219,7 @@ describe('pet module', async () => {
 
       const { statusCode: status } = await spec.application
         .inject()
-        .post('/pet')
+        .post('/api/pet')
         .cookies({ token: hash })
         .body({
           name: 'Oreo',
@@ -248,7 +248,7 @@ describe('pet module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .put(`/pet/${id}`)
+        .put(`/api/pet/${id}`)
         .cookies({ token: hash })
         .body({
           name: 'Estopinha',
@@ -286,7 +286,7 @@ describe('pet module', async () => {
 
       const { statusCode: status } = await spec.application
         .inject()
-        .put(`/pet/${id}`)
+        .put(`/api/pet/${id}`)
         .cookies({ token: hash })
         .body({
           name: 'Estopinha',
@@ -311,7 +311,7 @@ describe('pet module', async () => {
 
       const { statusCode: status } = await spec.application
         .inject()
-        .put(`/pet/${id}`)
+        .put(`/api/pet/${id}`)
         .cookies({ token: hash })
         .body({
           name: 'Estopinha',
@@ -335,7 +335,7 @@ describe('pet module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .delete(`/pet/${id}`)
+        .delete(`/api/pet/${id}`)
         .cookies({ token: hash })
         .end()
 
@@ -355,7 +355,7 @@ describe('pet module', async () => {
 
       const { statusCode: status } = await spec.application
         .inject()
-        .delete(`/pet/${id}`)
+        .delete(`/api/pet/${id}`)
         .cookies({ token: hash })
         .end()
 
@@ -369,7 +369,7 @@ describe('pet module', async () => {
 
       const { statusCode: status } = await spec.application
         .inject()
-        .delete(`/pet/${id}`)
+        .delete(`/api/pet/${id}`)
         .cookies({ token: hash })
         .end()
 

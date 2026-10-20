@@ -25,7 +25,7 @@ describe('fav module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .post(`/user/fav/${post}`)
+        .post(`/api/user/fav/${post}`)
         .cookies({ token: hash })
         .end()
 
@@ -45,7 +45,7 @@ describe('fav module', async () => {
 
       const { statusCode: status } = await spec.application
         .inject()
-        .post(`/user/fav/${id}`)
+        .post(`/api/user/fav/${id}`)
         .cookies({ token: hash })
         .end()
 
@@ -62,7 +62,7 @@ describe('fav module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .delete(`/user/fav/${post}`)
+        .delete(`/api/user/fav/${post}`)
         .cookies({ token: hash })
         .end()
 
@@ -82,7 +82,7 @@ describe('fav module', async () => {
 
       const { statusCode: status } = await spec.application
         .inject()
-        .delete(`/user/fav/${id}`)
+        .delete(`/api/user/fav/${id}`)
         .cookies({ token: hash })
         .end()
 

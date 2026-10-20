@@ -24,7 +24,7 @@ describe('adopter module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .get('/adopter')
+        .get('/api/adopter')
         .query({ page: '1', amount: '10' })
         .cookies({ token: hash })
         .end()
@@ -53,7 +53,7 @@ describe('adopter module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .get('/adopter')
+        .get('/api/adopter')
         .query({ page: '1', amount: '10', organization })
         .cookies({ token: hash })
         .end()
@@ -80,7 +80,7 @@ describe('adopter module', async () => {
 
       const { statusCode: status } = await spec.application
         .inject()
-        .get('/adopter')
+        .get('/api/adopter')
         .query({ page: '1', amount: '10', organization })
         .cookies({ token: hash })
         .end()
@@ -98,7 +98,7 @@ describe('adopter module', async () => {
 
       const { statusCode: status } = await spec.application
         .inject()
-        .post('/adopter')
+        .post('/api/adopter')
         .body({
           name: 'Name',
           phone: '+5511999999999',

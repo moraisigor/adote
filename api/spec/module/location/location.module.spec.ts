@@ -21,7 +21,7 @@ describe('location module', async () => {
     test('should search location', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
-        .get('/location')
+        .get('/api/location')
         .query({ search: 'recife' })
         .end()
 

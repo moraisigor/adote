@@ -30,7 +30,7 @@ describe('post module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .get('/post')
+        .get('/api/post')
         .query({ page: '1', amount: '10', location: [location] })
         .end()
 
@@ -79,7 +79,7 @@ describe('post module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .get('/post')
+        .get('/api/post')
         .query({ page: '1', amount: '10', organization: organization })
         .end()
 
@@ -127,7 +127,7 @@ describe('post module', async () => {
     test('should get post', async () => {
       const { id: post } = await spec.scenario.build.post.create()
 
-      const { statusCode: status, json } = await spec.application.inject().get(`/post/${post}`).end()
+      const { statusCode: status, json } = await spec.application.inject().get(`/api/post/${post}`).end()
 
       const response = json<PostResponse>()
 
@@ -166,7 +166,7 @@ describe('post module', async () => {
     test('should not get unknown post', async () => {
       const id = new Types.ObjectId().toHexString()
 
-      const { statusCode: status } = await spec.application.inject().get(`/post/${id}`).end()
+      const { statusCode: status } = await spec.application.inject().get(`/api/post/${id}`).end()
 
       expect(status).toBe(HttpStatus.NOT_FOUND)
     })
@@ -184,7 +184,7 @@ describe('post module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .post('/post')
+        .post('/api/post')
         .cookies({ token: hash })
         .body({
           image: [image],
@@ -240,7 +240,7 @@ describe('post module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .post('/post')
+        .post('/api/post')
         .cookies({ token: hash })
         .body({
           image: [image],
@@ -301,7 +301,7 @@ describe('post module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .put(`/post/${id}`)
+        .put(`/api/post/${id}`)
         .cookies({ token: hash })
         .body({
           image: [x, y],
@@ -354,7 +354,7 @@ describe('post module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .put(`/post/${id}/publish`)
+        .put(`/api/post/${id}/publish`)
         .cookies({ token: hash })
         .body({ publish: true })
         .end()
@@ -376,7 +376,7 @@ describe('post module', async () => {
 
       const { statusCode: status } = await spec.application
         .inject()
-        .put(`/post/${id}/publish`)
+        .put(`/api/post/${id}/publish`)
         .cookies({ token: hash })
         .body({ publish: true })
         .end()
@@ -391,7 +391,7 @@ describe('post module', async () => {
 
       const { statusCode: status } = await spec.application
         .inject()
-        .put(`/post/${id}/publish`)
+        .put(`/api/post/${id}/publish`)
         .cookies({ token: hash })
         .body({ publish: true })
         .end()
@@ -409,7 +409,7 @@ describe('post module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .delete(`/post/${post}`)
+        .delete(`/api/post/${post}`)
         .cookies({ token: hash })
         .end()
 
@@ -429,7 +429,7 @@ describe('post module', async () => {
 
       const { statusCode: status } = await spec.application
         .inject()
-        .delete(`/post/${id}`)
+        .delete(`/api/post/${id}`)
         .cookies({ token: hash })
         .end()
 
@@ -443,7 +443,7 @@ describe('post module', async () => {
 
       const { statusCode: status } = await spec.application
         .inject()
-        .delete(`/post/${id}`)
+        .delete(`/api/post/${id}`)
         .cookies({ token: hash })
         .end()
 

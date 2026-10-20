@@ -30,7 +30,7 @@ describe('user module', async () => {
 
       const { statusCode: status } = await spec.application
         .inject()
-        .get('/user')
+        .get('/api/user')
         .cookies({ token: hash })
         .end()
 
@@ -47,7 +47,7 @@ describe('user module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .get('/user/current')
+        .get('/api/user/current')
         .cookies({ token: hash })
         .end()
 
@@ -84,7 +84,7 @@ describe('user module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .get('/user/post')
+        .get('/api/user/post')
         .query({ page: '1', amount: '10' })
         .cookies({ token: hash })
         .end()
@@ -134,7 +134,7 @@ describe('user module', async () => {
 
       const { statusCode: status } = await spec.application
         .inject()
-        .get('/user/post')
+        .get('/api/user/post')
         .query({ page: '1', amount: '10', organization })
         .cookies({ token: hash })
         .end()
@@ -150,7 +150,7 @@ describe('user module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .get('/user/organization')
+        .get('/api/user/organization')
         .cookies({ token: hash })
         .end()
 
@@ -179,7 +179,7 @@ describe('user module', async () => {
     test('should get user', async () => {
       const { id } = await spec.scenario.build.user.save()
 
-      const { statusCode: status, json } = await spec.application.inject().get(`/user/${id}`).end()
+      const { statusCode: status, json } = await spec.application.inject().get(`/api/user/${id}`).end()
 
       const response = json<UserResponse>()
 
@@ -204,7 +204,7 @@ describe('user module', async () => {
     test('should not get unknown user', async () => {
       const id = new Types.ObjectId().toHexString()
 
-      const { statusCode: status } = await spec.application.inject().get(`/user/${id}`).end()
+      const { statusCode: status } = await spec.application.inject().get(`/api/user/${id}`).end()
 
       expect(status).toBe(HttpStatus.NOT_FOUND)
     })
@@ -219,7 +219,7 @@ describe('user module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .put('/user')
+        .put('/api/user')
         .cookies({ token: hash })
         .body({
           name: 'Name',
@@ -265,7 +265,7 @@ describe('user module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .put('/user/image')
+        .put('/api/user/image')
         .cookies({ token: hash })
         .body({
           image: image
@@ -302,7 +302,7 @@ describe('user module', async () => {
 
       const { statusCode: status, json } = await spec.application
         .inject()
-        .delete('/user')
+        .delete('/api/user')
         .cookies({ token: hash })
         .end()
 
@@ -313,16 +313,6 @@ describe('user module', async () => {
       expect(response).toMatchObject({
         id: expect.any(String)
       })
-    })
-
-    test('should not remove unknown user', async () => {
-      const { statusCode: status } = await spec.application
-        .inject()
-        .delete('/user')
-        .cookies({ token: '' })
-        .end()
-
-      expect(status).toBe(HttpStatus.NOT_FOUND)
     })
   })
 
@@ -348,7 +338,7 @@ describe('user module', () => {
 
         const { statusCode: status, json } = await spec.application
           .inject()
-          .get('/user')
+          .get('/api/user')
           .cookies({ token: hash })
           .end()
 

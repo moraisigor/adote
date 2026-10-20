@@ -22,7 +22,7 @@ describe('breed module', async () => {
     test('should list breed with kind cat', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
-        .get('/breed')
+        .get('/api/breed')
         .query({ kind: Kind.CAT })
         .end()
 
@@ -44,7 +44,7 @@ describe('breed module', async () => {
     test('should list breed with kind dog', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
-        .get('/breed')
+        .get('/api/breed')
         .query({ kind: Kind.DOG })
         .end()
 
