@@ -75,7 +75,7 @@ describe('post module', async () => {
     test('should list post with organization', async () => {
       const [{ id: organization }] = await spec.scenario.build.user.organization()
 
-      await spec.scenario.build.post.create('Oreo', organization)
+      await spec.scenario.build.post.create('Oreo', true, organization)
 
       const { statusCode: status, json } = await spec.application
         .inject()
@@ -165,6 +165,14 @@ describe('post module', async () => {
 
     test('should not get unknown post', async () => {
       const id = new Types.ObjectId().toHexString()
+
+      const { statusCode: status } = await spec.application.inject().get(`/api/post/${id}`).end()
+
+      expect(status).toBe(HttpStatus.NOT_FOUND)
+    })
+
+    test('should not get post not publish', async () => {
+      const { id } = await spec.scenario.build.post.create('Oreo', false)
 
       const { statusCode: status } = await spec.application.inject().get(`/api/post/${id}`).end()
 

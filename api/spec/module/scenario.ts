@@ -93,7 +93,7 @@ export class Scenario {
       create: async (name: string = 'Oreo', organization?: string) => {
         const {
           pet: { id: pet }
-        } = await this.build.post.create(name, organization)
+        } = await this.build.post.create(name, true, organization)
 
         await this.application
           .inject()
@@ -202,7 +202,7 @@ export class Scenario {
       }
     },
     post: {
-      create: async (name: string = 'Oreo', organization?: string) => {
+      create: async (name: string = 'Oreo', publish: boolean = true, organization?: string) => {
         const image = await this.build.image.save(ImageKind.POST)
 
         const { id: pet } = await this.build.pet.create(name, organization)
@@ -217,7 +217,7 @@ export class Scenario {
             image: [image],
             pet: pet,
             location: location,
-            publish: true
+            publish: publish
           })
           .end()
 
