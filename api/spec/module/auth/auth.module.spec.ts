@@ -141,6 +141,15 @@ describe('auth module', async () => {
     })
   })
 
+  // get /user/current
+  describe('/user/current', () => {
+    test('should not get current user without authentication', async () => {
+      const { statusCode: status } = await spec.application.inject().get('/api/user/current').end()
+
+      expect(status).toBe(HttpStatus.UNAUTHORIZED)
+    })
+  })
+
   afterAll(async () => {
     await spec.stop()
   })
