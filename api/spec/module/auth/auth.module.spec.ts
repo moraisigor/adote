@@ -25,12 +25,12 @@ describe('auth module', async () => {
       expect(status).toBe(HttpStatus.NO_CONTENT)
     })
 
-    test('should not start auth with not valid phone', async () => {
+    test.each([[{}], ['+5599']])('should not start auth with %p phone', async (phone) => {
       const { statusCode: status } = await spec.application
         .inject()
         .post('/api/auth')
         .body({
-          phone: '+5599'
+          phone
         })
         .end()
 
@@ -67,6 +67,19 @@ describe('auth module', async () => {
           expires: expect.any(Date)
         }
       ])
+    })
+
+    test.each([[{}], ['+5599']])('should not auth user with %p phone', async (phone) => {
+      const { statusCode: status } = await spec.application
+        .inject()
+        .post('/api/auth/verify')
+        .body({
+          phone,
+          code: '123456'
+        })
+        .end()
+
+      expect(status).toBe(HttpStatus.BAD_REQUEST)
     })
   })
 
