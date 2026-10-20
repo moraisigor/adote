@@ -13,7 +13,7 @@ describe('image module', async () => {
   beforeAll(async () => {
     await spec.start()
 
-    await spec.scenario.user()
+    await spec.scenario.image()
   })
 
   // post /image

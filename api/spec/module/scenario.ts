@@ -332,6 +332,10 @@ export class Scenario {
     await this.build.user.save()
   }
 
+  async image() {
+    await this.authenticate()
+  }
+
   async location() {
     await this.build.configuration.location()
   }
