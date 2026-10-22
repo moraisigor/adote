@@ -67,28 +67,6 @@ export class Scenario {
         }
       }
     },
-    image: {
-      save: async (kind: ImageKind) => {
-        const { user = '' } = this.authorization
-
-        const { json } = await this.application
-          .inject()
-          .post('/api/image')
-          .cookies({ token: this.hash })
-          .body({
-            kind,
-            size: 1024,
-            extension: 'image/webp'
-          })
-          .end()
-
-        const { key } = json<ImageResponse>()
-
-        this.bucket.set(key, user)
-
-        return key
-      }
-    },
     adopter: {
       create: async (name: string = 'Oreo', organization?: string) => {
         const {
@@ -129,6 +107,28 @@ export class Scenario {
           .end()
 
         return json<FavResponse>()
+      }
+    },
+    image: {
+      save: async (kind: ImageKind) => {
+        const { user = '' } = this.authorization
+
+        const { json } = await this.application
+          .inject()
+          .post('/api/image')
+          .cookies({ token: this.hash })
+          .body({
+            kind,
+            size: 1024,
+            extension: 'image/webp'
+          })
+          .end()
+
+        const { key } = json<ImageResponse>()
+
+        this.bucket.set(key, user)
+
+        return key
       }
     },
     location: {
