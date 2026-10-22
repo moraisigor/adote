@@ -1,12 +1,13 @@
 export const IMAGE_SIZE = 2 * 1024 * 1024
 
 // kind/key/extension
-export const IMAGE_PATTERN = /^(pet|post|user)\/[\w-]{24}\.webp$/
+export const IMAGE_PATTERN = /^(pet|post|user|organization)\/[\w-]{24}\.webp$/
 
 export const ImageKind = {
   PET: 'pet',
   POST: 'post',
-  USER: 'user'
+  USER: 'user',
+  ORGANIZATION: 'organization'
 } as const
 
 export const ImageExtension = {

@@ -8,8 +8,11 @@ import {
   IsString,
   IsUrl,
   Length,
+  Matches,
   ValidateNested
 } from 'class-validator'
+
+import { IMAGE_PATTERN } from '@/module/image/type/image'
 
 import { PageRequest } from '@/helper/page'
 import { trim } from '@/helper/string'
@@ -22,6 +25,11 @@ export class GetOrganizationParam {
 }
 
 export class SaveOrganizationParam {
+  @IsMongoId({ message: 'the id is not valid' })
+  readonly id!: string
+}
+
+export class SaveImageParam {
   @IsMongoId({ message: 'the id is not valid' })
   readonly id!: string
 }
@@ -71,4 +79,10 @@ export class SaveOrganizationRequest {
   @IsMongoId({ message: 'the location is not valid' })
   @IsOptional()
   readonly location?: string
+}
+
+export class SaveImageRequest {
+  @IsString()
+  @Matches(IMAGE_PATTERN)
+  readonly image!: string
 }

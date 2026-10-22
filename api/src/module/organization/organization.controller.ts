@@ -14,6 +14,8 @@ import {
   GetOrganizationParam,
   ListOrganizationRequest,
   RemoveOrganizationParam,
+  SaveImageParam,
+  SaveImageRequest,
   SaveOrganizationParam,
   SaveOrganizationRequest
 } from './organization.request'
@@ -60,6 +62,22 @@ export class OrganizationController {
     const { id } = param
 
     return this.provider.save.run(id, request)
+  }
+
+  @Put(':id/image')
+  @OrganizationPermission([OrganizationRole.MANAGER])
+  image(
+    @Param() param: SaveImageParam,
+    @Body() request: SaveImageRequest,
+    @Current() session: Session
+  ): Promise<OrganizationResponse> {
+    const { id } = param
+    const { image } = request
+    const {
+      user: { id: user }
+    } = session
+
+    return this.provider.image.run(id, image, user)
   }
 
   @Delete(':id')
