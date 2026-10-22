@@ -1,7 +1,14 @@
-import { Injectable, NotFoundException, type CanActivate, type ExecutionContext } from '@nestjs/common'
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  type CanActivate,
+  type ExecutionContext
+} from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 
 import { isNil } from 'lodash'
+import { isObjectIdOrHexString } from 'mongoose'
 
 import type { Session } from '@/type/token'
 
@@ -36,6 +43,10 @@ export class OrganizationPermissionGuard implements CanActivate {
       user: Session
       params: { id: string }
     }>()
+
+    if (!isObjectIdOrHexString(organization)) {
+      throw new BadRequestException('the id is not valid')
+    }
 
     const exists = await this.repository.exists({ _id: organization })
 
