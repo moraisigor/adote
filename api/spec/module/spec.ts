@@ -56,7 +56,8 @@ export class Spec {
   }
 
   async stop() {
-    await this.repository.stop()
     await this.application.close()
+
+    await this.repository.stop()
   }
 }
