@@ -1,4 +1,4 @@
-import { HttpStatus } from '@nestjs/common/enums'
+import { HttpStatus } from '@nestjs/common'
 
 import { afterAll, beforeAll, describe, expect, test } from 'bun:test'
 import { Types } from 'mongoose'
