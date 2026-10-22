@@ -6,6 +6,7 @@ import type { Model } from 'mongoose'
 import { Breed } from '@/module/breed/repository/breed.schema'
 import { Location } from '@/module/location/repository/location.schema'
 import { User } from '@/module/user/repository/user.schema'
+import { Role } from '@/module/user/type/role'
 
 import { Spec } from '../spec'
 
@@ -54,7 +55,8 @@ describe('configuration module', async () => {
       expect(result).toMatchObject({
         id: expect.any(String),
         name: 'Oreo',
-        phone: '+5581999999999'
+        phone: '+5581999999999',
+        role: Role.MANAGER
       })
     })
   })
