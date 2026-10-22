@@ -26,7 +26,7 @@ import {
   SideBarItem,
   SideBarLabel,
   SideBarSection
-} from '@hollowsoft/numb'
+} from '@hollowsoft/estopinha'
 
 type SideBarMenuProps = {
   user?: {

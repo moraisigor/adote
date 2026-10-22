@@ -2,7 +2,7 @@
 
 import { useCallback, type ReactNode } from 'react'
 
-import { SideBarLayout } from '@hollowsoft/numb'
+import { SideBarLayout } from '@hollowsoft/estopinha'
 import { useRouter } from 'next/navigation'
 
 import { useListOrganization } from '@/http/organization'

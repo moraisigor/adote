@@ -15,7 +15,7 @@ import {
   NavBarItem,
   NavBarSection,
   NavBarSpacer
-} from '@hollowsoft/numb'
+} from '@hollowsoft/estopinha'
 
 type NavBarMenuProps = {
   user?: {
