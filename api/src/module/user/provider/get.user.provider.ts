@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 
+import { isNil } from 'lodash'
+
 import { UserRepository } from '../repository/user.repository'
 import { UserResponse } from '../user.response'
 
@@ -10,10 +12,10 @@ export class GetUserProvider {
   async run(id: string): Promise<UserResponse> {
     const user = await this.repository.find({ _id: id })
 
-    if (user) {
-      return new UserResponse(user)
+    if (isNil(user)) {
+      throw new NotFoundException()
     }
 
-    throw new NotFoundException()
+    return new UserResponse(user)
   }
 }
