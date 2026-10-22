@@ -27,9 +27,9 @@ export class RemovePostProvider {
       throw new ForbiddenException()
     }
 
-    const result = await this.repository.remove({ _id: id })
+    const remove = await this.repository.remove({ _id: id })
 
-    if (isNil(result)) {
+    if (!remove) {
       throw new NotFoundException()
     }
 
