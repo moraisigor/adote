@@ -19,7 +19,7 @@ const ATTEMPT = 0
 
 @Injectable()
 export class PhoneAuthProvider {
-  private readonly CodeSecret: string
+  private readonly secret: string
 
   constructor(
     @Inject(CACHE_MANAGER) private readonly store: Cache,
@@ -27,7 +27,7 @@ export class PhoneAuthProvider {
     private readonly lock: LockAuthProvider,
     private readonly notify: NotifyProvider
   ) {
-    this.CodeSecret = this.config.getOrThrow<string>('CODE_SECRET')
+    this.secret = this.config.getOrThrow<string>('CODE_SECRET')
   }
 
   async run(phone: string): Promise<void> {
@@ -42,7 +42,7 @@ export class PhoneAuthProvider {
     await this.store.set<Code>(
       phone,
       {
-        hash: sign(code, phone, this.CodeSecret),
+        hash: sign(code, phone, this.secret),
         expire: Date.now() + EXPIRE,
         attempt: ATTEMPT
       },

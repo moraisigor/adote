@@ -15,14 +15,14 @@ import { Option, RenewOption } from '../type/cookie'
 export class ExpireAuthProvider {
   private readonly logger = new Logger(ExpireAuthProvider.name)
 
-  private readonly TokenRenewSecret: string
+  private readonly secret: string
 
   constructor(
     private readonly token: JwtService,
     private readonly config: ConfigService,
     private readonly repository: UserRepository
   ) {
-    this.TokenRenewSecret = this.config.getOrThrow<string>('TOKEN_RENEW_SECRET')
+    this.secret = this.config.getOrThrow<string>('TOKEN_RENEW_SECRET')
   }
 
   async run(reply: FastifyReply, renew?: string): Promise<void> {
@@ -31,7 +31,7 @@ export class ExpireAuthProvider {
 
     if (renew) {
       const token = await this.token
-        .verifyAsync(renew, { secret: this.TokenRenewSecret })
+        .verifyAsync(renew, { secret: this.secret })
         .catch((e) => this.logger.error(e))
 
       if (token) {

@@ -23,7 +23,7 @@ const INTERVAL = 0
 
 @Injectable()
 export class VerifyAuthProvider {
-  private readonly CodeSecret: string
+  private readonly secret: string
 
   constructor(
     @Inject(CACHE_MANAGER) private readonly store: Cache,
@@ -32,7 +32,7 @@ export class VerifyAuthProvider {
     private readonly token: TokenAuthProvider,
     private readonly repository: UserRepository
   ) {
-    this.CodeSecret = this.config.getOrThrow<string>('CODE_SECRET')
+    this.secret = this.config.getOrThrow<string>('CODE_SECRET')
   }
 
   private save(phone: string) {
@@ -74,7 +74,7 @@ export class VerifyAuthProvider {
     const verify = {
       code,
       phone,
-      secret: this.CodeSecret
+      secret: this.secret
     }
 
     if (equals(hash, verify)) {

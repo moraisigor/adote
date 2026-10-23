@@ -8,25 +8,39 @@ import type { UserDocument } from '@/module/user/repository/user.schema'
 
 import { Option, RenewOption } from '../type/cookie'
 
+type Param = {
+  token: {
+    secret: string
+    expire: number
+  }
+  renew: {
+    secret: string
+    expire: number
+  }
+}
+
 @Injectable()
 export class TokenAuthProvider {
-  private readonly TokenSecret: string
-  private readonly TokenExpire: number
-  private readonly TokenRenewSecret: string
-  private readonly TokenRenewExpire: number
+  private readonly param: Param
 
   constructor(
     private readonly token: JwtService,
     private readonly config: ConfigService
   ) {
-    this.TokenSecret = this.config.getOrThrow<string>('TOKEN_SECRET')
-    this.TokenExpire = this.config.getOrThrow<number>('TOKEN_EXPIRE')
-    this.TokenRenewSecret = this.config.getOrThrow<string>('TOKEN_RENEW_SECRET')
-    this.TokenRenewExpire = this.config.getOrThrow<number>('TOKEN_RENEW_EXPIRE')
+    this.param = {
+      token: {
+        secret: this.config.getOrThrow<string>('TOKEN_SECRET'),
+        expire: this.config.getOrThrow<number>('TOKEN_EXPIRE')
+      },
+      renew: {
+        secret: this.config.getOrThrow<string>('TOKEN_RENEW_SECRET'),
+        expire: this.config.getOrThrow<number>('TOKEN_RENEW_EXPIRE')
+      }
+    }
   }
 
   run(user: Pick<UserDocument, 'id' | 'phone' | 'role' | 'session'>, reply: FastifyReply) {
-    const param = {
+    const value = {
       sub: user.id,
       user: {
         id: user.id,
@@ -37,35 +51,29 @@ export class TokenAuthProvider {
     }
 
     const token = {
-      hash: this.token.sign(param, {
-        secret: this.TokenSecret,
-        expiresIn: this.TokenExpire
+      hash: this.token.sign(value, {
+        secret: this.param.token.secret,
+        expiresIn: this.param.token.expire
       }),
-      expire: this.TokenExpire
+      expire: this.param.token.expire
     }
 
     const renew = {
-      hash: this.token.sign(param, {
-        secret: this.TokenRenewSecret,
-        expiresIn: this.TokenRenewExpire
+      hash: this.token.sign(value, {
+        secret: this.param.renew.secret,
+        expiresIn: this.param.renew.expire
       }),
-      expire: this.TokenRenewExpire
+      expire: this.param.renew.expire
     }
 
-    reply.setCookie(
-      'token',
-      token.hash,
-      Object.assign({}, Option, {
-        expires: new Date(Date.now() + token.expire * 1000)
-      })
-    )
+    reply.setCookie('token', token.hash, {
+      ...Option,
+      expires: new Date(Date.now() + token.expire * 1000)
+    })
 
-    reply.setCookie(
-      'renew',
-      renew.hash,
-      Object.assign({}, RenewOption, {
-        expires: new Date(Date.now() + renew.expire * 1000)
-      })
-    )
+    reply.setCookie('renew', renew.hash, {
+      ...RenewOption,
+      expires: new Date(Date.now() + renew.expire * 1000)
+    })
   }
 }
