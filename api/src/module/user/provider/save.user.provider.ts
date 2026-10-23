@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 
+import { isNil } from 'lodash'
 import { Types } from 'mongoose'
 
 import { UserRepository } from '../repository/user.repository'
@@ -23,10 +24,10 @@ export class SaveUserProvider {
 
     const user = await this.repository.save(new Types.ObjectId(id), map, { returnDocument: 'after' })
 
-    if (user) {
-      return new CurrentUserResponse(user)
+    if (isNil(user)) {
+      throw new NotFoundException()
     }
 
-    throw new NotFoundException()
+    return new CurrentUserResponse(user)
   }
 }

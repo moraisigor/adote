@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 
+import { isNil } from 'lodash'
 import { Types } from 'mongoose'
 
 import { FavResponse } from '../fav.response'
@@ -14,10 +15,10 @@ export class RemoveFavProvider {
       returnDocument: 'after'
     })
 
-    if (result) {
-      return new FavResponse(post)
+    if (isNil(result)) {
+      throw new NotFoundException()
     }
 
-    throw new NotFoundException()
+    return new FavResponse(post)
   }
 }

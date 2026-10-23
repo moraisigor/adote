@@ -10,10 +10,10 @@ export class RemoveOrganizationProvider {
   async run(id: string): Promise<RemoveOrganizationResponse> {
     const result = await this.repository.remove({ _id: id })
 
-    if (result) {
-      return new RemoveOrganizationResponse(id)
+    if (!result) {
+      throw new NotFoundException()
     }
 
-    throw new NotFoundException()
+    return new RemoveOrganizationResponse(id)
   }
 }

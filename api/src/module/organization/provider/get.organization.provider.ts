@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 
+import { isNil } from 'lodash'
+
 import { OrganizationResponse } from '../organization.response'
 import { OrganizationRepository } from '../repository/organization.repository'
 
@@ -10,10 +12,10 @@ export class GetOrganizationProvider {
   async run(id: string): Promise<OrganizationResponse> {
     const organization = await this.repository.find({ _id: id })
 
-    if (organization) {
-      return new OrganizationResponse(organization)
+    if (isNil(organization)) {
+      throw new NotFoundException()
     }
 
-    throw new NotFoundException()
+    return new OrganizationResponse(organization)
   }
 }

@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 
+import { isNil } from 'lodash'
+
 import { PostResponse } from '../post.response'
 import { PostRepository } from '../repository/post.repository'
 
@@ -10,10 +12,10 @@ export class GetPostProvider {
   async run(id: string): Promise<PostResponse> {
     const post = await this.repository.find({ _id: id, publish: true })
 
-    if (post) {
-      return new PostResponse(post)
+    if (isNil(post)) {
+      throw new NotFoundException()
     }
 
-    throw new NotFoundException()
+    return new PostResponse(post)
   }
 }

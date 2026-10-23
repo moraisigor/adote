@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 
+import { isNil } from 'lodash'
 import { Types } from 'mongoose'
 
 import { SaveOrganizationRequest } from '../organization.request'
@@ -24,10 +25,10 @@ export class SaveOrganizationProvider {
 
     const organization = await this.repository.save(new Types.ObjectId(id), map, { returnDocument: 'after' })
 
-    if (organization) {
-      return new OrganizationResponse(organization)
+    if (isNil(organization)) {
+      throw new NotFoundException()
     }
 
-    throw new NotFoundException()
+    return new OrganizationResponse(organization)
   }
 }

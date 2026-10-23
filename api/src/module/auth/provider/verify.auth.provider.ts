@@ -111,14 +111,16 @@ export class VerifyAuthProvider {
 
     const user = await this.save(phone)
 
-    if (user) {
-      const { enable } = user
-
-      if (enable) {
-        return this.token.run(user, reply)
-      }
+    if (isNil(user)) {
+      throw new UnauthorizedException()
     }
 
-    throw new UnauthorizedException()
+    const { enable } = user
+
+    if (!enable) {
+      throw new UnauthorizedException()
+    }
+
+    return this.token.run(user, reply)
   }
 }

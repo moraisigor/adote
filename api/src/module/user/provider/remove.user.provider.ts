@@ -10,10 +10,10 @@ export class RemoveUserProvider {
   async run(id: string): Promise<RemoveUserResponse> {
     const result = await this.repository.remove({ _id: id })
 
-    if (result) {
-      return new RemoveUserResponse(id)
+    if (!result) {
+      throw new NotFoundException()
     }
 
-    throw new NotFoundException()
+    return new RemoveUserResponse(id)
   }
 }

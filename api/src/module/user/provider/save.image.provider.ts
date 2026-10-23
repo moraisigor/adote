@@ -19,16 +19,16 @@ export class SaveImageProvider {
   async run(id: string, image: string): Promise<CurrentUserResponse> {
     const valid = await this._image.validate.run([image], ImageKind.USER, id)
 
-    if (valid) {
-      const user = await this.repository.save(new Types.ObjectId(id), { image }, { returnDocument: 'after' })
-
-      if (isNil(user)) {
-        throw new BadRequestException()
-      }
-
-      return new CurrentUserResponse(user)
+    if (!valid) {
+      throw new BadRequestException()
     }
 
-    throw new BadRequestException()
+    const user = await this.repository.save(new Types.ObjectId(id), { image }, { returnDocument: 'after' })
+
+    if (isNil(user)) {
+      throw new BadRequestException()
+    }
+
+    return new CurrentUserResponse(user)
   }
 }
