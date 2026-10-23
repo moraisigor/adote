@@ -14,7 +14,7 @@ export class ImageController {
   constructor(private readonly provider: ImageProvider) {}
 
   @Post()
-  @Throttle({ default: { limit: 50, ttl: hours(1) } })
+  @Throttle({ default: { ttl: hours(1), limit: 50 } })
   save(@Body() request: SaveImageRequest, @Current() session: Session): Promise<ImageResponse> {
     const {
       user: { id }
