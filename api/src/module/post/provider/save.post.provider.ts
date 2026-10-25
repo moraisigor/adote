@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 
 import { difference, isNil } from 'lodash'
 import { Types } from 'mongoose'
@@ -46,11 +46,7 @@ export class SavePostProvider {
       throw new NotFoundException()
     }
 
-    const permission = await this.permission.resource.run(current, post)
-
-    if (!permission) {
-      throw new ForbiddenException()
-    }
+    await this.permission.resource.run(current, post)
 
     const exists = await this._location.exists({ _id: location })
 

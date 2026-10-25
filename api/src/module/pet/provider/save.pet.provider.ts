@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 
 import { isNil } from 'lodash'
 import { Types } from 'mongoose'
@@ -39,11 +39,7 @@ export class SavePetProvider {
       throw new NotFoundException()
     }
 
-    const permission = await this.permission.resource.run(current, pet)
-
-    if (!permission) {
-      throw new ForbiddenException()
-    }
+    await this.permission.resource.run(current, pet)
 
     const exists = await this._breed.exists({ _id: breed, kind })
 

@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 
 import { isNil } from 'lodash'
 import { Types } from 'mongoose'
@@ -22,11 +22,7 @@ export class PublishPostProvider {
       throw new NotFoundException()
     }
 
-    const permission = await this.permission.resource.run(current, post)
-
-    if (!permission) {
-      throw new ForbiddenException()
-    }
+    await this.permission.resource.run(current, post)
 
     const result = await this.repository.save(
       new Types.ObjectId(id),

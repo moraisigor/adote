@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 
 import { isNil } from 'lodash'
 
@@ -21,11 +21,7 @@ export class GetPetProvider {
       throw new NotFoundException()
     }
 
-    const permission = await this.permission.resource.run(current, pet)
-
-    if (!permission) {
-      throw new ForbiddenException()
-    }
+    await this.permission.resource.run(current, pet)
 
     return new PetResponse(pet)
   }

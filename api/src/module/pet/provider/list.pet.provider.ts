@@ -1,13 +1,10 @@
-import { ForbiddenException, Injectable } from '@nestjs/common'
-
-import { Types, type QueryFilter } from 'mongoose'
+import { Injectable } from '@nestjs/common'
 
 import { PermissionProvider } from '@/module/permission/provider'
 
 import { ListPetRequest } from '../pet.request'
 import { PetResponse } from '../pet.response'
 import { PetRepository } from '../repository/pet.repository'
-import type { Pet } from '../repository/pet.schema'
 
 @Injectable()
 export class ListPetProvider {
@@ -16,33 +13,15 @@ export class ListPetProvider {
     private readonly repository: PetRepository
   ) {}
 
-  private async list(request: ListPetRequest, query: QueryFilter<Pet>): Promise<PetResponse[]> {
-    const { page, amount } = request
+  async run(request: ListPetRequest, current: string): Promise<PetResponse[]> {
+    const { page, amount, organization } = request
 
     const skip = (page - 1) * amount
 
-    const list = await this.repository.list(skip, amount, query)
+    const scope = await this.permission.scope.run(current, organization)
+
+    const list = await this.repository.list(skip, amount, scope)
 
     return list.map((e) => new PetResponse(e))
-  }
-
-  async run(request: ListPetRequest, current: string): Promise<PetResponse[]> {
-    const { organization } = request
-
-    if (organization) {
-      const permission = await this.permission.organization.run(current, organization)
-
-      if (!permission) {
-        throw new ForbiddenException()
-      }
-
-      return await this.list(request, {
-        organization: new Types.ObjectId(organization)
-      })
-    }
-
-    return await this.list(request, {
-      user: new Types.ObjectId(current)
-    })
   }
 }

@@ -1,11 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common'
-
-import { Types, type QueryFilter } from 'mongoose'
+import { Injectable } from '@nestjs/common'
 
 import { PermissionProvider } from '@/module/permission/provider'
 import { PostResponse } from '@/module/post/post.response'
 import { PostRepository } from '@/module/post/repository/post.repository'
-import type { Post } from '@/module/post/repository/post.schema'
 
 import { ListPostRequest } from '../user.request'
 
@@ -16,33 +13,15 @@ export class ListPostProvider {
     private readonly repository: PostRepository
   ) {}
 
-  private async list(request: ListPostRequest, query: QueryFilter<Post>): Promise<PostResponse[]> {
-    const { page, amount } = request
+  async run(request: ListPostRequest, current: string): Promise<PostResponse[]> {
+    const { page, amount, organization } = request
 
     const skip = (page - 1) * amount
 
-    const list = await this.repository.list(skip, amount, query)
+    const scope = await this.permission.scope.run(current, organization)
+
+    const list = await this.repository.list(skip, amount, scope)
 
     return list.map((e) => new PostResponse(e))
-  }
-
-  async run(request: ListPostRequest, current: string): Promise<PostResponse[]> {
-    const { organization } = request
-
-    if (organization) {
-      const permission = await this.permission.organization.run(current, organization)
-
-      if (!permission) {
-        throw new ForbiddenException()
-      }
-
-      return await this.list(request, {
-        organization: new Types.ObjectId(organization)
-      })
-    }
-
-    return await this.list(request, {
-      user: new Types.ObjectId(current)
-    })
   }
 }
