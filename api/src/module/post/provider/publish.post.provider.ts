@@ -16,13 +16,9 @@ export class PublishPostProvider {
   ) {}
 
   async run(id: string, publish: boolean, current: string): Promise<PublishPostResponse> {
-    const post = await this.repository.find({ _id: id })
+    const find = await this.repository.find({ _id: id })
 
-    if (isNil(post)) {
-      throw new NotFoundException()
-    }
-
-    await this.permission.resource.run(current, post)
+    await this.permission.resource.run(current, find)
 
     const result = await this.repository.save(
       new Types.ObjectId(id),

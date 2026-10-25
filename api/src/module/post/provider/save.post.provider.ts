@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 
 import { difference, isNil } from 'lodash'
 import { Types } from 'mongoose'
@@ -11,23 +11,17 @@ import { PermissionProvider } from '@/module/permission/provider'
 import { SavePostRequest } from '../post.request'
 import { PostResponse } from '../post.response'
 import { PostRepository } from '../repository/post.repository'
-import type { PostView } from '../repository/post.schema'
 
 @Injectable()
 export class SavePostProvider {
-  image = {
-    validate: ({ image }: PostView, { image: next }: SavePostRequest, current: string) =>
-      this._image.validate.run(difference(next, image), ImageKind.POST, current)
-  }
-
   constructor(
     private readonly _image: ImageProvider,
+    private readonly _permission: PermissionProvider,
     private readonly _location: LocationRepository,
-    private readonly permission: PermissionProvider,
     private readonly repository: PostRepository
   ) {}
 
-  private build(request: SavePostRequest): { [key: string]: unknown } {
+  private build(request: SavePostRequest) {
     const { image, location, publish } = request
 
     return {
@@ -38,23 +32,16 @@ export class SavePostProvider {
   }
 
   async run(id: string, request: SavePostRequest, current: string): Promise<PostResponse> {
-    const { location } = request
+    const { image, location } = request
 
-    const post = await this.repository.find({ _id: id })
+    const find = await this.repository.find({ _id: id })
 
-    if (isNil(post)) {
-      throw new NotFoundException()
-    }
+    const post = await this._permission.resource.run(current, find)
 
-    await this.permission.resource.run(current, post)
-
-    const exists = await this._location.exists({ _id: location })
-
-    if (!exists) {
-      throw new BadRequestException()
-    }
-
-    const valid = await this.image.validate(post, request, current)
+    const valid = await Promise.all([
+      this._image.validate.run(difference(image, post.image), ImageKind.POST, current),
+      this._location.exists({ _id: location })
+    ]).then((validate) => validate.every(Boolean))
 
     if (!valid) {
       throw new BadRequestException()

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 
 import { isNil } from 'lodash'
 import { Types } from 'mongoose'
@@ -33,17 +33,15 @@ export class SavePetProvider {
   async run(id: string, request: SavePetRequest, current: string): Promise<PetResponse> {
     const { kind, breed } = request
 
-    const pet = await this.repository.find({ _id: id })
+    const find = await this.repository.find({ _id: id })
 
-    if (isNil(pet)) {
-      throw new NotFoundException()
-    }
+    await this.permission.resource.run(current, find)
 
-    await this.permission.resource.run(current, pet)
+    const valid = await Promise.all([this._breed.exists({ _id: breed, kind })]).then((validate) =>
+      validate.every(Boolean)
+    )
 
-    const exists = await this._breed.exists({ _id: breed, kind })
-
-    if (!exists) {
+    if (!valid) {
       throw new BadRequestException()
     }
 
