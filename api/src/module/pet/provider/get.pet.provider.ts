@@ -1,6 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
-
-import { isNil } from 'lodash'
+import { Injectable } from '@nestjs/common'
 
 import { PermissionProvider } from '@/module/permission/provider'
 
@@ -15,13 +13,9 @@ export class GetPetProvider {
   ) {}
 
   async run(id: string, current: string): Promise<PetResponse> {
-    const pet = await this.repository.find({ _id: id })
+    const find = await this.repository.find({ _id: id })
 
-    if (isNil(pet)) {
-      throw new NotFoundException()
-    }
-
-    await this.permission.resource.run(current, pet)
+    const pet = await this.permission.resource.run(current, find)
 
     return new PetResponse(pet)
   }

@@ -125,7 +125,7 @@ describe('pet module', async () => {
         .cookies({ token: hash })
         .end()
 
-      expect(status).toBe(HttpStatus.FORBIDDEN)
+      expect(status).toBe(HttpStatus.NOT_FOUND)
     })
   })
 
@@ -322,7 +322,7 @@ describe('pet module', async () => {
         })
         .end()
 
-      expect(status).toBe(HttpStatus.FORBIDDEN)
+      expect(status).toBe(HttpStatus.NOT_FOUND)
     })
   })
 
@@ -373,7 +373,7 @@ describe('pet module', async () => {
         .cookies({ token: hash })
         .end()
 
-      expect(status).toBe(HttpStatus.FORBIDDEN)
+      expect(status).toBe(HttpStatus.NOT_FOUND)
     })
   })
 

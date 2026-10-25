@@ -1,6 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
-
-import { isNil } from 'lodash'
+import { Injectable } from '@nestjs/common'
 
 import { AdopterRepository } from '@/module/adopter/repository/adopter.repository'
 import { PermissionProvider } from '@/module/permission/provider'
@@ -19,22 +17,13 @@ export class RemovePetProvider {
   ) {}
 
   async run(id: string, current: string): Promise<RemovePetResponse> {
-    const pet = await this.repository.find({ _id: id })
+    const find = await this.repository.find({ _id: id })
 
-    if (isNil(pet)) {
-      throw new NotFoundException()
-    }
+    await this.permission.resource.run(current, find)
 
-    await this.permission.resource.run(current, pet)
-
-    const remove = await this.repository.remove({ _id: id })
-
-    if (!remove) {
-      throw new NotFoundException()
-    }
+    await this.repository.remove({ _id: id })
 
     await this._post.remove({ pet: id })
-
     await this._adopter.remove({ pet: id })
 
     return new RemovePetResponse(id)
