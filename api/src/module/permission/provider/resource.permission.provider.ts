@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { ForbiddenException, Injectable } from '@nestjs/common'
 
 import type { OrganizationRole } from '@/module/organization/type/organization.role'
 
@@ -12,19 +12,29 @@ import type { Resource } from '../type/resource'
 export class ResourcePermissionProvider {
   constructor(private readonly organization: OrganizationPermissionProvider) {}
 
-  async run(current: string, resource: Resource, permission?: OrganizationRole[]): Promise<boolean> {
+  private async permission(
+    current: string,
+    resource: Resource,
+    permission?: OrganizationRole[]
+  ): Promise<boolean> {
     const { user, organization } = resource
 
     if (user) {
       return id(user) === current
     }
 
-    const value = id(organization)
-
-    if (value) {
-      return await this.organization.run(current, value, permission)
+    if (organization) {
+      return await this.organization.run(current, id(organization)!, permission)
     }
 
     return false
+  }
+
+  async run(current: string, resource: Resource, permission?: OrganizationRole[]): Promise<void> {
+    const is = await this.permission(current, resource, permission)
+
+    if (!is) {
+      throw new ForbiddenException()
+    }
   }
 }
