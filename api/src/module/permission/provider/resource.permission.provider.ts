@@ -1,4 +1,6 @@
-import { ForbiddenException, Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
+
+import { isNil } from 'lodash'
 
 import type { OrganizationRole } from '@/module/organization/type/organization.role'
 
@@ -30,11 +32,21 @@ export class ResourcePermissionProvider {
     return false
   }
 
-  async run(current: string, resource: Resource, permission?: OrganizationRole[]): Promise<void> {
+  async run<K extends Resource>(
+    current: string,
+    resource: K | null,
+    permission?: OrganizationRole[]
+  ): Promise<K> {
+    if (isNil(resource)) {
+      throw new NotFoundException()
+    }
+
     const is = await this.permission(current, resource, permission)
 
     if (!is) {
-      throw new ForbiddenException()
+      throw new NotFoundException()
     }
+
+    return resource
   }
 }
