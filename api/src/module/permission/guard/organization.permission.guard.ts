@@ -12,9 +12,12 @@ import { isObjectIdOrHexString } from 'mongoose'
 
 import type { Session } from '@/type/token'
 
+import { ORGANIZATION_PERMISSION } from '@/decorator/organization.permission.decorator'
+
 import { OrganizationRepository } from '@/module/organization/repository/organization.repository'
 import type { OrganizationRole } from '@/module/organization/type/organization.role'
-import { PermissionProvider } from '@/module/permission/provider'
+
+import { PermissionProvider } from '../provider'
 
 @Injectable()
 export class OrganizationPermissionGuard implements CanActivate {
@@ -25,7 +28,7 @@ export class OrganizationPermissionGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext) {
-    const permission = this.reflector.getAllAndOverride<OrganizationRole[]>('organization_permission', [
+    const permission = this.reflector.getAllAndOverride<OrganizationRole[]>(ORGANIZATION_PERMISSION, [
       context.getClass(),
       context.getHandler()
     ])
