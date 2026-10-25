@@ -46,7 +46,7 @@ export class Post {
 
 export const PostSchema = SchemaFactory.createForClass(Post)
 
-PostSchema.index({ pet: 1 })
+PostSchema.index({ pet: 1 }, { unique: true })
 
 PostSchema.index({ user: 1 })
 
