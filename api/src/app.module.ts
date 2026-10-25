@@ -8,6 +8,7 @@ import { SentryGlobalFilter, SentryModule } from '@sentry/nestjs/setup'
 
 import { AdopterModule } from '@/module/adopter/adopter.module'
 import { AuthModule } from '@/module/auth/auth.module'
+import { TokenGuard } from '@/module/auth/guard/token.guard'
 import { BreedModule } from '@/module/breed/breed.module'
 import { ConfigurationModule } from '@/module/configuration/configuration.module'
 import { FavModule } from '@/module/fav/fav.module'
@@ -16,6 +17,8 @@ import { ImageModule } from '@/module/image/image.module'
 import { LocationModule } from '@/module/location/location.module'
 import { NotifyModule } from '@/module/notify/notify.module'
 import { OrganizationModule } from '@/module/organization/organization.module'
+import { OrganizationPermissionGuard } from '@/module/permission/guard/organization.permission.guard'
+import { PermissionGuard } from '@/module/permission/guard/permission.guard'
 import { PermissionModule } from '@/module/permission/permission.module'
 import { PetModule } from '@/module/pet/pet.module'
 import { PostModule } from '@/module/post/post.module'
@@ -61,6 +64,9 @@ import { RouteConfig } from './router.config.factory'
     })
   ],
   providers: [
+    { provide: APP_GUARD, useClass: TokenGuard },
+    { provide: APP_GUARD, useClass: PermissionGuard },
+    { provide: APP_GUARD, useClass: OrganizationPermissionGuard },
     { provide: APP_GUARD, useClass: ThrottlerGuard },
     { provide: APP_FILTER, useClass: SentryGlobalFilter }
   ]

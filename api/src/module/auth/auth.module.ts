@@ -1,18 +1,12 @@
 import { CacheModule } from '@nestjs/cache-manager'
 import { Module } from '@nestjs/common'
-import { APP_GUARD } from '@nestjs/core'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
 
 import { NotifyModule } from '@/module/notify/notify.module'
-import { OrganizationModule } from '@/module/organization/organization.module'
-import { PermissionModule } from '@/module/permission/permission.module'
 import { UserModule } from '@/module/user/user.module'
 
 import { AuthController } from './auth.controller'
-import { OrganizationPermissionGuard } from './guard/organization.permission.guard'
-import { PermissionGuard } from './guard/permission.guard'
-import { TokenGuard } from './guard/token.guard'
 import { AuthProvider } from './provider'
 import { ExpireAuthProvider } from './provider/expire.auth.provider'
 import { LockAuthProvider } from './provider/lock.auth.provider'
@@ -26,8 +20,6 @@ import { TokenStrategy } from './strategy/token.strategy'
 @Module({
   imports: [
     NotifyModule,
-    OrganizationModule,
-    PermissionModule,
     UserModule,
     // dependency
     JwtModule,
@@ -45,10 +37,7 @@ import { TokenStrategy } from './strategy/token.strategy'
     TokenAuthProvider,
     TokenRenewStrategy,
     TokenStrategy,
-    VerifyAuthProvider,
-    { provide: APP_GUARD, useClass: TokenGuard },
-    { provide: APP_GUARD, useClass: PermissionGuard },
-    { provide: APP_GUARD, useClass: OrganizationPermissionGuard }
+    VerifyAuthProvider
   ],
   controllers: [AuthController]
 })
