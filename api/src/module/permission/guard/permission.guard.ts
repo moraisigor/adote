@@ -5,6 +5,8 @@ import { isNil } from 'lodash'
 
 import type { Session } from '@/type/token'
 
+import { PERMISSION } from '@/decorator/permission.decorator'
+
 import type { Role } from '@/module/user/type/role'
 
 @Injectable()
@@ -12,7 +14,7 @@ export class PermissionGuard implements CanActivate {
   constructor(private readonly reflector: Reflector) {}
 
   canActivate(context: ExecutionContext) {
-    const permission = this.reflector.getAllAndOverride<Role[]>('permission', [
+    const permission = this.reflector.getAllAndOverride<Role[]>(PERMISSION, [
       context.getClass(),
       context.getHandler()
     ])
