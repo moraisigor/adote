@@ -1,5 +1,6 @@
 import { plainToInstance as instance, Transform, type TransformFnParams } from 'class-transformer'
 import { IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, validateSync } from 'class-validator'
+import { values } from 'lodash'
 
 import { Env } from './helper/env'
 
@@ -131,7 +132,17 @@ export const validate = (configuration: Record<string, unknown>): EnvConfigurati
 
   const error = validateSync(environment)
 
-  if (error.length) throw new Error()
+  if (error.length) {
+    const message = error
+      .map((e) => {
+        const { constraints } = e
+
+        return `- ${values(constraints).join(', ')}`
+      })
+      .join('\n')
+
+    throw new Error(`environment configuration: ${error.length}\n${message}`)
+  }
 
   return environment
 }
