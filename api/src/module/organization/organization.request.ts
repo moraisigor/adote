@@ -1,17 +1,15 @@
 import { Transform, Type, type TransformFnParams } from 'class-transformer'
 import {
-  IsEmail,
   IsMongoId,
   IsNumberString,
   IsOptional,
-  IsPhoneNumber,
   IsString,
-  IsUrl,
   Length,
   Matches,
   ValidateNested
 } from 'class-validator'
 
+import { ContactRequest } from '@/module/contact/contact.request'
 import { IMAGE_PATTERN } from '@/module/image/type/image'
 
 import { PageRequest } from '@/helper/page'
@@ -37,20 +35,6 @@ export class SaveImageParam {
 export class RemoveOrganizationParam {
   @IsMongoId({ message: 'the id is not valid' })
   readonly id!: string
-}
-
-export class ContactRequest {
-  @IsEmail()
-  @IsOptional()
-  readonly mail?: string
-
-  @IsPhoneNumber('BR')
-  @IsOptional()
-  readonly phone?: string
-
-  @IsUrl()
-  @IsOptional()
-  readonly social?: string
 }
 
 export class CreateOrganizationRequest {

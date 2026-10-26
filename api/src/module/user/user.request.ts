@@ -1,16 +1,7 @@
 import { Transform, Type, type TransformFnParams } from 'class-transformer'
-import {
-  IsEmail,
-  IsMongoId,
-  IsOptional,
-  IsPhoneNumber,
-  IsString,
-  IsUrl,
-  Length,
-  Matches,
-  ValidateNested
-} from 'class-validator'
+import { IsMongoId, IsOptional, IsString, Length, Matches, ValidateNested } from 'class-validator'
 
+import { ContactRequest } from '@/module/contact/contact.request'
 import { IMAGE_PATTERN } from '@/module/image/type/image'
 
 import { PageRequest } from '@/helper/page'
@@ -27,20 +18,6 @@ export class ListPostRequest extends PageRequest {
   @IsMongoId({ message: 'the organization is not valid' })
   @IsOptional()
   readonly organization?: string
-}
-
-class ContactRequest {
-  @IsEmail()
-  @IsOptional()
-  readonly mail?: string
-
-  @IsPhoneNumber('BR')
-  @IsOptional()
-  readonly phone?: string
-
-  @IsUrl()
-  @IsOptional()
-  readonly social?: string
 }
 
 export class SaveUserRequest {
