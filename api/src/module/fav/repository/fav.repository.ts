@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import { Model, Types, type ProjectionType, type QueryFilter, type QueryOptions } from 'mongoose'
+import { Model, Types, type ProjectionType, type QueryOptions } from 'mongoose'
 
 import { User, type UserDocument } from '@/module/user/repository/user.schema'
 
