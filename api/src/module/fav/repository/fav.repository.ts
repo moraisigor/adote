@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import { Model, Types, type QueryOptions } from 'mongoose'
+import { Model, Types, type ProjectionType, type QueryFilter, type QueryOptions } from 'mongoose'
 
 import { User, type UserDocument } from '@/module/user/repository/user.schema'
 
@@ -9,7 +9,15 @@ import { User, type UserDocument } from '@/module/user/repository/user.schema'
 export class FavRepository {
   constructor(@InjectModel(User.name) private readonly model: Model<User>) {}
 
-  save(
+  find(
+    id: Types.ObjectId,
+    projection?: ProjectionType<User>,
+    options?: QueryOptions<User>
+  ): Promise<UserDocument | null> {
+    return this.model.findById(id, projection, options).exec()
+  }
+
+  add(
     post: Types.ObjectId,
     user: Types.ObjectId,
     options?: QueryOptions<User>

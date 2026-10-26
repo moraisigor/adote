@@ -22,7 +22,7 @@ export class AddFavProvider {
       throw new NotFoundException()
     }
 
-    const result = await this.repository.save(new Types.ObjectId(post), new Types.ObjectId(user), {
+    const result = await this.repository.add(new Types.ObjectId(post), new Types.ObjectId(user), {
       returnDocument: 'after'
     })
 
