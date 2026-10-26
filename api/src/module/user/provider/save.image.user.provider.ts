@@ -10,7 +10,7 @@ import { UserRepository } from '../repository/user.repository'
 import { CurrentUserResponse } from '../user.response'
 
 @Injectable()
-export class SaveImageProvider {
+export class SaveImageUserProvider {
   constructor(
     private readonly _image: ImageProvider,
     private readonly repository: UserRepository

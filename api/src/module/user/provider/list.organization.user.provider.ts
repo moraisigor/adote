@@ -8,7 +8,7 @@ import { OrganizationRepository } from '@/module/organization/repository/organiz
 import { PageRequest } from '@/helper/page'
 
 @Injectable()
-export class ListOrganizationProvider {
+export class ListOrganizationUserProvider {
   constructor(private readonly repository: OrganizationRepository) {}
 
   async run(request: PageRequest, current: string): Promise<OrganizationResponse[]> {

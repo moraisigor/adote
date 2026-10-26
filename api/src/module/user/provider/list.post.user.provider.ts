@@ -7,7 +7,7 @@ import { PostRepository } from '@/module/post/repository/post.repository'
 import { ListPostRequest } from '../user.request'
 
 @Injectable()
-export class ListPostProvider {
+export class ListPostUserProvider {
   constructor(
     private readonly permission: PermissionProvider,
     private readonly repository: PostRepository

@@ -9,7 +9,7 @@ import { CreateOrganizationProvider } from './provider/create.organization.provi
 import { GetOrganizationProvider } from './provider/get.organization.provider'
 import { ListOrganizationProvider } from './provider/list.organization.provider'
 import { RemoveOrganizationProvider } from './provider/remove.organization.provider'
-import { SaveImageProvider } from './provider/save.image.provider'
+import { SaveImageOrganizationProvider } from './provider/save.image.organization.provider'
 import { SaveOrganizationProvider } from './provider/save.organization.provider'
 import { OrganizationRepository } from './repository/organization.repository'
 import { Organization, OrganizationSchema } from './repository/organization.schema'
@@ -27,7 +27,7 @@ import { Organization, OrganizationSchema } from './repository/organization.sche
     OrganizationProvider,
     OrganizationRepository,
     RemoveOrganizationProvider,
-    SaveImageProvider,
+    SaveImageOrganizationProvider,
     SaveOrganizationProvider
   ],
   controllers: [OrganizationController]

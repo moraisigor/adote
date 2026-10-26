@@ -9,11 +9,11 @@ import { PostModule } from '@/module/post/post.module'
 import { UserProvider } from './provider'
 import { GetCurrentProvider } from './provider/get.current.provider'
 import { GetUserProvider } from './provider/get.user.provider'
-import { ListOrganizationProvider } from './provider/list.organization.provider'
-import { ListPostProvider } from './provider/list.post.provider'
+import { ListOrganizationUserProvider } from './provider/list.organization.user.provider'
+import { ListPostUserProvider } from './provider/list.post.user.provider'
 import { ListUserProvider } from './provider/list.user.provider'
 import { RemoveUserProvider } from './provider/remove.user.provider'
-import { SaveImageProvider } from './provider/save.image.provider'
+import { SaveImageUserProvider } from './provider/save.image.user.provider'
 import { SaveUserProvider } from './provider/save.user.provider'
 import { UserRepository } from './repository/user.repository'
 import { User, UserSchema } from './repository/user.schema'
@@ -31,11 +31,11 @@ import { UserController } from './user.controller'
   providers: [
     GetCurrentProvider,
     GetUserProvider,
-    ListOrganizationProvider,
-    ListPostProvider,
+    ListOrganizationUserProvider,
+    ListPostUserProvider,
     ListUserProvider,
     RemoveUserProvider,
-    SaveImageProvider,
+    SaveImageUserProvider,
     SaveUserProvider,
     UserProvider,
     UserRepository

@@ -10,7 +10,7 @@ import { OrganizationResponse } from '../organization.response'
 import { OrganizationRepository } from '../repository/organization.repository'
 
 @Injectable()
-export class SaveImageProvider {
+export class SaveImageOrganizationProvider {
   constructor(
     private readonly _image: ImageProvider,
     private readonly repository: OrganizationRepository
