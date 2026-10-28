@@ -29,6 +29,10 @@ export class PostRepository {
     return Boolean(result)
   }
 
+  distinct<K extends keyof Post>(property: K, query?: QueryFilter<Post>, options?: QueryOptions<Post>) {
+    return this.model.distinct(property, query, options).exec()
+  }
+
   list(
     skip: number,
     limit: number,

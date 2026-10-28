@@ -17,6 +17,14 @@ export class OrganizationRepository {
     return Boolean(result)
   }
 
+  distinct<K extends keyof Organization>(
+    property: K,
+    query?: QueryFilter<Organization>,
+    options?: QueryOptions<Organization>
+  ) {
+    return this.model.distinct(property, query, options).exec()
+  }
+
   list(
     skip: number,
     limit: number,

@@ -26,6 +26,10 @@ const POPULATE: PopulateOptions[] = [
 export class UserRepository {
   constructor(@InjectModel(User.name) private readonly model: Model<User>) {}
 
+  distinct<K extends keyof User>(property: K, query?: QueryFilter<User>, options?: QueryOptions<User>) {
+    return this.model.distinct(property, query, options).exec()
+  }
+
   list(
     skip: number,
     limit: number,
