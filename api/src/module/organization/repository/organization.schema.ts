@@ -35,4 +35,6 @@ export class Organization {
 
 export const OrganizationSchema = SchemaFactory.createForClass(Organization)
 
+OrganizationSchema.index({ image: 1 }, { sparse: true })
+
 OrganizationSchema.index({ 'member.user': 1 })

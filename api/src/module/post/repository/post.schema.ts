@@ -50,6 +50,8 @@ PostSchema.index({ pet: 1 }, { unique: true })
 
 PostSchema.index({ user: 1 })
 
+PostSchema.index({ image: 1 })
+
 // publish
 PostSchema.index({ publish: 1, create: 1 })
 

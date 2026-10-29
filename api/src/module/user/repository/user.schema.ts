@@ -53,3 +53,5 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User)
+
+UserSchema.index({ image: 1 }, { sparse: true })
