@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { APP_FILTER, APP_GUARD, RouterModule } from '@nestjs/core'
 import { MongooseModule } from '@nestjs/mongoose'
+import { ScheduleModule } from '@nestjs/schedule'
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
 
 import { SentryGlobalFilter, SentryModule } from '@sentry/nestjs/setup'
@@ -22,6 +23,7 @@ import { PermissionGuard } from '@/module/permission/guard/permission.guard'
 import { PermissionModule } from '@/module/permission/permission.module'
 import { PetModule } from '@/module/pet/pet.module'
 import { PostModule } from '@/module/post/post.module'
+import { TaskModule } from '@/module/task/task.module'
 import { UserModule } from '@/module/user/user.module'
 
 import { env, isProduction } from '@/helper/env'
@@ -46,21 +48,23 @@ import { RouteConfig } from './router.config.factory'
     PermissionModule,
     PetModule,
     PostModule,
+    TaskModule,
     UserModule,
     RouterModule.register(RouteConfig),
     // dependency
-    SentryModule.forRoot(),
     ConfigModule.forRoot({
       validate,
       isGlobal: true,
       envFilePath: `.env.${env}`,
       ignoreEnvFile: isProduction
     }),
-    ThrottlerModule.forRootAsync({
-      useClass: RequestConfigFactory
-    }),
     MongooseModule.forRootAsync({
       useClass: RepositoryConfigFactory
+    }),
+    ScheduleModule.forRoot(),
+    SentryModule.forRoot(),
+    ThrottlerModule.forRootAsync({
+      useClass: RequestConfigFactory
     })
   ],
   providers: [
