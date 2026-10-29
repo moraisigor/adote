@@ -43,14 +43,14 @@ export class CreatePostProvider {
   async run(request: CreatePostRequest, current: string): Promise<PostResponse> {
     const { pet, image, location } = request
 
-    const find = await this._pet.find({ _id: id })
+    const find = await this._pet.find({ _id: pet })
 
     const post = await this._permission.resource.run(current, find)
 
     const valid = await Promise.all([
       this._image.validate.run(image, ImageKind.POST, current),
       this._location.exists({ _id: location }),
-      this.repository.exists({ pet })
+      this.repository.exists({ pet }).then((exists) => !exists)
     ]).then((validate) => validate.every(Boolean))
 
     if (!valid) {
