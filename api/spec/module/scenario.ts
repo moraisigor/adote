@@ -378,17 +378,10 @@ export class Scenario {
   }
 
   async manager() {
-    await this.build.configuration.breed()
-    await this.build.configuration.location()
     await this.build.configuration.manager()
 
     const account = this.application.get(ConfigService).getOrThrow<string>('MANAGER_ACCOUNT')
 
     await this.authenticate(account)
-
-    await this.build.organization.create()
-
-    await this.build.user.save()
-    await this.build.organization.save()
   }
 }

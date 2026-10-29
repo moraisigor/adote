@@ -316,18 +316,8 @@ describe('user module', async () => {
     })
   })
 
-  afterAll(async () => {
-    await spec.stop()
-  })
-})
-
-describe('user module', () => {
-  describe('as manager', async () => {
-    const spec = await Spec.build()
-
+  describe('as manager', () => {
     beforeAll(async () => {
-      await spec.start()
-
       await spec.scenario.manager()
     })
 
@@ -367,9 +357,9 @@ describe('user module', () => {
         ])
       })
     })
+  })
 
-    afterAll(async () => {
-      await spec.stop()
-    })
+  afterAll(async () => {
+    await spec.stop()
   })
 })
