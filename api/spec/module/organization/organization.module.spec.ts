@@ -37,7 +37,7 @@ describe('organization module', async () => {
   // get /organization/id
   describe('/organization/id', () => {
     test('should get organization', async () => {
-      const { id } = await spec.scenario.build.organization.create()
+      const { id } = await spec.scenario.build.organization.create('Get Organization')
 
       const { statusCode: status, json } = await spec.application
         .inject()
@@ -50,7 +50,7 @@ describe('organization module', async () => {
 
       expect(response).toMatchObject({
         id,
-        name: 'Name'
+        name: 'Get Organization'
       })
     })
 
@@ -193,10 +193,6 @@ describe('organization module', () => {
     describe('/organization', () => {
       test('should list organization', async () => {
         const { hash } = spec.scenario
-
-        await spec.scenario.build.organization.create()
-
-        await spec.scenario.build.organization.save()
 
         const { statusCode: status, json } = await spec.application
           .inject()
