@@ -3,6 +3,8 @@ import { Injectable, NotFoundException } from '@nestjs/common'
 import { isNil } from 'lodash'
 import { Types } from 'mongoose'
 
+import { assign, object } from '@/helper/repository'
+
 import { UserRepository } from '../repository/user.repository'
 import { SaveUserRequest } from '../user.request'
 import { CurrentUserResponse } from '../user.response'
@@ -14,13 +16,11 @@ export class SaveUserProvider {
   async run(id: string, request: SaveUserRequest): Promise<CurrentUserResponse> {
     const { name, contact, location } = request
 
-    const map: { [key: string]: unknown } = {
-      'name': name,
-      'contact.mail': contact?.mail,
-      'contact.phone': contact?.phone,
-      'contact.social': contact?.social,
-      'location': location && new Types.ObjectId(location)
-    }
+    const map = assign({
+      name,
+      contact,
+      location: object(location)
+    })
 
     const user = await this.repository.save(new Types.ObjectId(id), map, { returnDocument: 'after' })
 
