@@ -18,4 +18,7 @@ USER bun
 
 EXPOSE 9000
 
+HEALTHCHECK --start-period=10s --retries=2 --timeout=5s --interval=50s \
+  CMD ["bun", "-e", "fetch(`http://localhost:${process.env.PORT}/api/health`).then((e) => return process.exit(0), () => return process.exit(1))"]
+
 CMD ["bun", "./src/main.ts"]
