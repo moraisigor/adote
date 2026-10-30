@@ -21,12 +21,12 @@ describe('image module', async () => {
     test.each([ImageKind.POST, ImageKind.USER, ImageKind.ORGANIZATION])(
       'should save %s image',
       async (kind) => {
-        const { hash } = spec.scenario
+        const { token } = spec.scenario.authentication.get()
 
         const { statusCode: status, json } = await spec.application
           .inject()
           .post('/api/image')
-          .cookies({ token: hash })
+          .cookies({ token: token.hash })
           .body({
             kind,
             size: 1024,

@@ -183,7 +183,7 @@ describe('post module', async () => {
   // post /post
   describe('/post', () => {
     test('should create post', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const { id: pet } = await spec.scenario.build.pet.create()
       const [{ id: location }] = await spec.scenario.build.location.search()
@@ -193,7 +193,7 @@ describe('post module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .post('/api/post')
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .body({
           image: [image],
           pet: pet,
@@ -237,7 +237,7 @@ describe('post module', async () => {
     })
 
     test('should create post with organization', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const [{ id: location }] = await spec.scenario.build.location.search()
       const [{ id: organization }] = await spec.scenario.build.user.organization()
@@ -249,7 +249,7 @@ describe('post module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .post('/api/post')
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .body({
           image: [image],
           pet: pet,
@@ -296,7 +296,7 @@ describe('post module', async () => {
   // put /post/id
   describe('/post/id', () => {
     test('should save post', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const { id } = await spec.scenario.build.post.create()
 
@@ -310,7 +310,7 @@ describe('post module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .put(`/api/post/${id}`)
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .body({
           image: [x, y],
           location: location,
@@ -356,14 +356,14 @@ describe('post module', async () => {
   // put /post/id/publish
   describe('/post/id/publish', () => {
     test('should publish post', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const { id } = await spec.scenario.build.post.create()
 
       const { statusCode: status, json } = await spec.application
         .inject()
         .put(`/api/post/${id}/publish`)
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .body({ publish: true })
         .end()
 
@@ -378,14 +378,14 @@ describe('post module', async () => {
     })
 
     test('should not publish unknown post', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const id = new Types.ObjectId().toHexString()
 
       const { statusCode: status } = await spec.application
         .inject()
         .put(`/api/post/${id}/publish`)
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .body({ publish: true })
         .end()
 
@@ -411,14 +411,14 @@ describe('post module', async () => {
   // delete /post/id
   describe('/post/id', () => {
     test('should remove post', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const { id: post } = await spec.scenario.build.post.create()
 
       const { statusCode: status, json } = await spec.application
         .inject()
         .delete(`/api/post/${post}`)
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       const response = json<RemovePostResponse>()
@@ -431,14 +431,14 @@ describe('post module', async () => {
     })
 
     test('should not remove unknown post', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const id = new Types.ObjectId().toHexString()
 
       const { statusCode: status } = await spec.application
         .inject()
         .delete(`/api/post/${id}`)
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       expect(status).toBe(HttpStatus.NOT_FOUND)

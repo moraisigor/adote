@@ -41,7 +41,7 @@ describe('auth module', async () => {
   // post /auth/verify
   describe('/auth/verify', () => {
     test('should auth user with code', async () => {
-      const { phone, code } = await spec.scenario.build.auth.auth()
+      const { phone, code } = await spec.scenario.build.auth.auth('+5599999999999')
 
       const { statusCode: status, cookies } = await spec.application
         .inject()
@@ -90,14 +90,12 @@ describe('auth module', async () => {
     })
 
     test('should renew auth', async () => {
-      const {
-        authorization: { renew: { hash } = { hash: '' } }
-      } = spec.scenario
+      const { renew } = spec.scenario.authentication.get()
 
       const { statusCode: status, cookies } = await spec.application
         .inject()
         .post('/api/auth/renew')
-        .cookies({ renew: hash })
+        .cookies({ renew: renew.hash })
         .end()
 
       expect(status).toBe(HttpStatus.NO_CONTENT)

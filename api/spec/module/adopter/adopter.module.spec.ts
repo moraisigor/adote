@@ -18,7 +18,7 @@ describe('adopter module', async () => {
   // get /adopter
   describe('/adopter', () => {
     test('should list adopter', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       await spec.scenario.build.adopter.create()
 
@@ -26,7 +26,7 @@ describe('adopter module', async () => {
         .inject()
         .get('/api/adopter')
         .query({ page: '1', amount: '10' })
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       const response = json<AdopterResponse[]>()
@@ -45,7 +45,7 @@ describe('adopter module', async () => {
     })
 
     test('should list adopter with organization', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const { id: organization } = await spec.scenario.build.organization.create()
 
@@ -55,7 +55,7 @@ describe('adopter module', async () => {
         .inject()
         .get('/api/adopter')
         .query({ page: '1', amount: '10', organization })
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       const response = json<AdopterResponse[]>()

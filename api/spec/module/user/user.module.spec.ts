@@ -8,6 +8,7 @@ import type { OrganizationResponse } from '@/module/organization/organization.re
 import { Gender } from '@/module/pet/type/gender'
 import { Size } from '@/module/pet/type/size'
 import type { PostResponse } from '@/module/post/post.response'
+import { Role } from '@/module/user/type/role'
 import type { RemoveUserResponse, UserResponse } from '@/module/user/user.response'
 
 import { url } from '@/helper/image'
@@ -26,12 +27,12 @@ describe('user module', async () => {
   // get /user
   describe('/user', () => {
     test('should not list user without permission', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const { statusCode: status } = await spec.application
         .inject()
         .get('/api/user')
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       expect(status).toBe(HttpStatus.FORBIDDEN)
@@ -41,14 +42,14 @@ describe('user module', async () => {
   // get /user/current
   describe('/user/current', () => {
     test('should get current user', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       await spec.scenario.build.user.save()
 
       const { statusCode: status, json } = await spec.application
         .inject()
         .get('/api/user/current')
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       const response = json<UserResponse>()
@@ -76,7 +77,7 @@ describe('user module', async () => {
   // get /user/post
   describe('/user/post', () => {
     test('should list post', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       await spec.scenario.build.post.create()
 
@@ -86,7 +87,7 @@ describe('user module', async () => {
         .inject()
         .get('/api/user/post')
         .query({ page: '1', amount: '10' })
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       const response = json<PostResponse[]>()
@@ -146,12 +147,12 @@ describe('user module', async () => {
   // get /user/organization
   describe('/user/organization', () => {
     test('should list organization', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const { statusCode: status, json } = await spec.application
         .inject()
         .get('/api/user/organization')
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       const response = json<OrganizationResponse[]>()
@@ -213,14 +214,14 @@ describe('user module', async () => {
   // put /user
   describe('/user', () => {
     test('should save user', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const [{ id: location }] = await spec.scenario.build.location.search()
 
       const { statusCode: status, json } = await spec.application
         .inject()
         .put('/api/user')
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .body({
           name: 'Name',
           contact: {
@@ -257,7 +258,7 @@ describe('user module', async () => {
   // put /user/image
   describe('/user/image', () => {
     test('should save image', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       await spec.scenario.build.user.save()
 
@@ -266,7 +267,7 @@ describe('user module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .put('/api/user/image')
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .body({
           image: image
         })
@@ -324,12 +325,12 @@ describe('user module', async () => {
     // get /user
     describe('/user', () => {
       test('should list user', async () => {
-        const { hash } = spec.scenario
+        const { token } = spec.scenario.authentication.get(Role.MANAGER)
 
         const { statusCode: status, json } = await spec.application
           .inject()
           .get('/api/user')
-          .cookies({ token: hash })
+          .cookies({ token: token.hash })
           .end()
 
         const response = json<UserResponse[]>()

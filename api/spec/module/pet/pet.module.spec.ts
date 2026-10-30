@@ -22,14 +22,14 @@ describe('pet module', async () => {
   // get /pet
   describe('/pet', () => {
     test('should list pet', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       await spec.scenario.build.pet.create()
 
       const { statusCode: status, json } = await spec.application
         .inject()
         .get('/api/pet')
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .query({ page: '1', amount: '10' })
         .end()
 
@@ -73,14 +73,14 @@ describe('pet module', async () => {
   // get /pet/id
   describe('/pet/id', () => {
     test('should get pet', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const { id } = await spec.scenario.build.pet.create()
 
       const { statusCode: status, json } = await spec.application
         .inject()
         .get(`/api/pet/${id}`)
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       const response = json<PetResponse>()
@@ -101,14 +101,14 @@ describe('pet module', async () => {
     })
 
     test('should not get unknown pet', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const id = new Types.ObjectId().toHexString()
 
       const { statusCode: status } = await spec.application
         .inject()
         .get(`/api/pet/${id}`)
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       expect(status).toBe(HttpStatus.NOT_FOUND)
@@ -132,7 +132,7 @@ describe('pet module', async () => {
   // post /pet
   describe('/pet', () => {
     test('should create pet', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const list = await spec.scenario.build.breed.list()
 
@@ -141,7 +141,7 @@ describe('pet module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .post('/api/pet')
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .body({
           name: 'Oreo',
           kind: Kind.DOG,
@@ -169,7 +169,7 @@ describe('pet module', async () => {
     })
 
     test('should create pet with organization', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const list = await spec.scenario.build.breed.list()
 
@@ -180,7 +180,7 @@ describe('pet module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .post('/api/pet')
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .body({
           name: 'Oreo',
           kind: Kind.DOG,
@@ -238,7 +238,7 @@ describe('pet module', async () => {
   // put /pet/id
   describe('/pet/id', () => {
     test('should save pet', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const { id } = await spec.scenario.build.pet.create()
 
@@ -249,7 +249,7 @@ describe('pet module', async () => {
       const { statusCode: status, json } = await spec.application
         .inject()
         .put(`/api/pet/${id}`)
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .body({
           name: 'Estopinha',
           kind: Kind.DOG,
@@ -276,7 +276,7 @@ describe('pet module', async () => {
     })
 
     test('should not save unknown pet', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const id = new Types.ObjectId().toHexString()
 
@@ -287,7 +287,7 @@ describe('pet module', async () => {
       const { statusCode: status } = await spec.application
         .inject()
         .put(`/api/pet/${id}`)
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .body({
           name: 'Estopinha',
           kind: Kind.DOG,
@@ -329,14 +329,14 @@ describe('pet module', async () => {
   // delete /pet/id
   describe('/pet/id', () => {
     test('should remove pet', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const { id } = await spec.scenario.build.pet.create()
 
       const { statusCode: status, json } = await spec.application
         .inject()
         .delete(`/api/pet/${id}`)
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       const response = json<RemovePetResponse>()
@@ -349,14 +349,14 @@ describe('pet module', async () => {
     })
 
     test('should not remove unknown pet', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const id = new Types.ObjectId().toHexString()
 
       const { statusCode: status } = await spec.application
         .inject()
         .delete(`/api/pet/${id}`)
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       expect(status).toBe(HttpStatus.NOT_FOUND)

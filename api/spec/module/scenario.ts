@@ -1,11 +1,9 @@
-import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import type { NestFastifyApplication } from '@nestjs/platform-fastify'
 
 import { spyOn } from 'bun:test'
 import { isNil } from 'lodash'
 
-import type { Token } from '@/module/auth/type/token'
 import type { BreedResponse } from '@/module/breed/breed.response'
 import { Kind } from '@/module/breed/type/kind'
 import { ConfigurationProvider } from '@/module/configuration/provider'
@@ -19,36 +17,22 @@ import type { PetResponse } from '@/module/pet/pet.response'
 import { Gender } from '@/module/pet/type/gender'
 import { Size } from '@/module/pet/type/size'
 import type { PostResponse } from '@/module/post/post.response'
+import { Role } from '@/module/user/type/role'
 import type { UserResponse } from '@/module/user/user.response'
 
+import { Authentication, type Session } from './authentication'
 import { Bucket } from './bucket'
-
-export type Authorization = {
-  user?: string
-  token?: Token
-  renew?: Token
-}
 
 export class Scenario {
   public readonly bucket = new Bucket()
 
-  public readonly authorization: Authorization = {}
-
-  get hash(): string {
-    const { token } = this.authorization
-
-    if (token) {
-      return token.hash
-    }
-
-    throw new Error('the authorization is null')
-  }
+  public readonly authentication = new Authentication()
 
   constructor(private readonly application: NestFastifyApplication) {}
 
   build = {
     auth: {
-      auth: async (phone: string = '+5599999999999') => {
+      auth: async (phone: string) => {
         const provider = spyOn(
           this.application.get(CodeNotifyProvider, {
             strict: false
@@ -98,12 +82,14 @@ export class Scenario {
     },
     fav: {
       add: async () => {
+        const { token } = this.authentication.get()
+
         const { id: post } = await this.build.post.create()
 
         const { json } = await this.application
           .inject()
           .post(`/api/user/fav/${post}`)
-          .cookies({ token: this.hash })
+          .cookies({ token: token.hash })
           .end()
 
         return json<FavResponse>()
@@ -111,12 +97,12 @@ export class Scenario {
     },
     image: {
       save: async (kind: ImageKind) => {
-        const { user = '' } = this.authorization
+        const { id, token } = this.authentication.get()
 
         const { json } = await this.application
           .inject()
           .post('/api/image')
-          .cookies({ token: this.hash })
+          .cookies({ token: token.hash })
           .body({
             kind,
             size: 1024,
@@ -126,7 +112,7 @@ export class Scenario {
 
         const { key } = json<ImageResponse>()
 
-        this.bucket.set(key, user)
+        this.bucket.set(key, id)
 
         return key
       }
@@ -144,10 +130,12 @@ export class Scenario {
     },
     organization: {
       create: async (name: string = 'Name') => {
+        const { token } = this.authentication.get()
+
         const { json } = await this.application
           .inject()
           .post('/api/organization')
-          .cookies({ token: this.hash })
+          .cookies({ token: token.hash })
           .body({
             name: name
           })
@@ -156,6 +144,8 @@ export class Scenario {
         return json<OrganizationResponse>()
       },
       save: async (name: string = 'Name') => {
+        const { token } = this.authentication.get()
+
         const [{ id }] = await this.build.user.organization()
 
         const [{ id: location }] = await this.build.location.search()
@@ -163,7 +153,7 @@ export class Scenario {
         const { json } = await this.application
           .inject()
           .put(`/api/organization/${id}`)
-          .cookies({ token: this.hash })
+          .cookies({ token: token.hash })
           .body({
             name: name,
             contact: {
@@ -180,6 +170,8 @@ export class Scenario {
     },
     pet: {
       create: async (name: string = 'Oreo', organization?: string) => {
+        const { token } = this.authentication.get()
+
         const list = await this.build.breed.list()
 
         const { id: breed } = list.find((e) => e.name === 'Buldogue Inglês') ?? { id: null }
@@ -187,7 +179,7 @@ export class Scenario {
         const { json } = await this.application
           .inject()
           .post('/api/pet')
-          .cookies({ token: this.hash })
+          .cookies({ token: token.hash })
           .body({
             name: name,
             kind: Kind.DOG,
@@ -203,6 +195,8 @@ export class Scenario {
     },
     post: {
       create: async (name: string = 'Oreo', publish: boolean = true, organization?: string) => {
+        const { token } = this.authentication.get()
+
         const image = await this.build.image.save(ImageKind.POST)
 
         const { id: pet } = await this.build.pet.create(name, organization)
@@ -212,7 +206,7 @@ export class Scenario {
         const { json } = await this.application
           .inject()
           .post('/api/post')
-          .cookies({ token: this.hash })
+          .cookies({ token: token.hash })
           .body({
             image: [image],
             pet: pet,
@@ -226,30 +220,36 @@ export class Scenario {
     },
     user: {
       current: async () => {
+        const { token } = this.authentication.get()
+
         const { json } = await this.application
           .inject()
           .get('/api/user/current')
-          .cookies({ token: this.hash })
+          .cookies({ token: token.hash })
           .end()
 
         return json<UserResponse>()
       },
       organization: async () => {
+        const { token } = this.authentication.get()
+
         const { json } = await this.application
           .inject()
           .get('/api/user/organization')
-          .cookies({ token: this.hash })
+          .cookies({ token: token.hash })
           .end()
 
         return json<OrganizationResponse[]>()
       },
       save: async (name: string = 'Name') => {
+        const { token } = this.authentication.get()
+
         const [{ id: location }] = await this.build.location.search()
 
         const { json } = await this.application
           .inject()
           .put('/api/user')
-          .cookies({ token: this.hash })
+          .cookies({ token: token.hash })
           .body({
             name: name,
             contact: {
@@ -266,14 +266,14 @@ export class Scenario {
     }
   }
 
-  async session(account?: string): Promise<Authorization> {
-    const { phone, code } = await this.build.auth.auth(account)
+  async session(phone: string): Promise<Session> {
+    const { phone: account, code } = await this.build.auth.auth(phone)
 
     const { cookies } = await this.application
       .inject()
       .post('/api/auth/verify')
       .body({
-        phone,
+        phone: account,
         code
       })
       .end()
@@ -294,7 +294,7 @@ export class Scenario {
       .decode<{ sub: string }>(token.value)
 
     return {
-      user: user,
+      id: user,
       token: {
         hash: token.value,
         expire: token.expires ?? new Date()
@@ -306,10 +306,10 @@ export class Scenario {
     }
   }
 
-  async authenticate(account?: string) {
-    const session = await this.session(account)
+  async authenticate(phone: string = '+5599999999999', role: Role = Role.MEMBER) {
+    const session = await this.session(phone)
 
-    Object.assign(this.authorization, session)
+    this.authentication.set(role, session)
   }
 
   async adopter() {
@@ -378,10 +378,8 @@ export class Scenario {
   }
 
   async manager() {
-    await this.build.configuration.manager()
+    const { phone, role } = await this.build.configuration.manager()
 
-    const account = this.application.get(ConfigService).getOrThrow<string>('MANAGER_ACCOUNT')
-
-    await this.authenticate(account)
+    await this.authenticate(phone, role)
   }
 }

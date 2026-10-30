@@ -7,6 +7,7 @@ import type {
   OrganizationResponse,
   RemoveOrganizationResponse
 } from '@/module/organization/organization.response'
+import { Role } from '@/module/user/type/role'
 
 import { Spec } from '../spec'
 
@@ -22,12 +23,12 @@ describe('organization module', async () => {
   // get /organization
   describe('/organization', () => {
     test('should not list organization without permission', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const { statusCode: status } = await spec.application
         .inject()
         .get('/api/organization')
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       expect(status).toBe(HttpStatus.FORBIDDEN)
@@ -66,12 +67,12 @@ describe('organization module', async () => {
   // post /organization
   describe('/organization', () => {
     test('should create organization', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const { statusCode: status, json } = await spec.application
         .inject()
         .post('/api/organization')
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .body({
           name: 'Create'
         })
@@ -91,14 +92,14 @@ describe('organization module', async () => {
   // put /organization/id
   describe('/organization/id', () => {
     test('should save organization', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const { id } = await spec.scenario.build.organization.create('Save')
 
       const { statusCode: status, json } = await spec.application
         .inject()
         .put(`/api/organization/${id}`)
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .body({
           name: 'Save',
           contact: {
@@ -126,14 +127,14 @@ describe('organization module', async () => {
   // delete /organization/id
   describe('/organization/id', () => {
     test('should remove organization', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const { id } = await spec.scenario.build.organization.create('Remove')
 
       const { statusCode: status, json } = await spec.application
         .inject()
         .delete(`/api/organization/${id}`)
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       const response = json<RemoveOrganizationResponse>()
@@ -146,14 +147,14 @@ describe('organization module', async () => {
     })
 
     test('should not remove unknown organization', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const id = new Types.ObjectId().toHexString()
 
       const { statusCode: status } = await spec.application
         .inject()
         .delete(`/api/organization/${id}`)
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       expect(status).toBe(HttpStatus.NOT_FOUND)
@@ -182,12 +183,12 @@ describe('organization module', async () => {
     // get /organization
     describe('/organization', () => {
       test('should list organization', async () => {
-        const { hash } = spec.scenario
+        const { token } = spec.scenario.authentication.get(Role.MANAGER)
 
         const { statusCode: status, json } = await spec.application
           .inject()
           .get('/api/organization')
-          .cookies({ token: hash })
+          .cookies({ token: token.hash })
           .end()
 
         const response = json<OrganizationResponse[]>()

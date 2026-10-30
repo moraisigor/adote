@@ -1,7 +1,10 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { BadRequestException, Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 
+import { isNil } from 'lodash'
+
 import { UserRepository } from '@/module/user/repository/user.repository'
+import type { UserDocument } from '@/module/user/repository/user.schema'
 import { Role } from '@/module/user/type/role'
 
 import { format } from '@/helper/phone'
@@ -15,7 +18,7 @@ export class SetManagerProvider {
     private readonly repository: UserRepository
   ) {}
 
-  async run() {
+  async run(): Promise<UserDocument> {
     const phone = this.config.getOrThrow<string>('MANAGER_ACCOUNT')
 
     const result = await this.repository.update(
@@ -32,6 +35,10 @@ export class SetManagerProvider {
       }
     )
 
-    this.logger.log(result)
+    if (isNil(result)) {
+      throw new BadRequestException()
+    }
+
+    return result
   }
 }

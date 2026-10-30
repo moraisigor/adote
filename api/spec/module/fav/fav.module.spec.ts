@@ -19,14 +19,14 @@ describe('fav module', async () => {
   // post /user/fav/post
   describe('/user/fav/post', () => {
     test('should add fav', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const { id: post } = await spec.scenario.build.post.create()
 
       const { statusCode: status, json } = await spec.application
         .inject()
         .post(`/api/user/fav/${post}`)
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       const response = json<FavResponse>()
@@ -39,14 +39,14 @@ describe('fav module', async () => {
     })
 
     test('should not add unknown fav', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const id = new Types.ObjectId().toHexString()
 
       const { statusCode: status } = await spec.application
         .inject()
         .post(`/api/user/fav/${id}`)
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       expect(status).toBe(HttpStatus.NOT_FOUND)
@@ -56,14 +56,14 @@ describe('fav module', async () => {
   // delete /user/fav/post
   describe('/user/fav/post', () => {
     test('should remove fav', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const { id: post } = await spec.scenario.build.fav.add()
 
       const { statusCode: status, json } = await spec.application
         .inject()
         .delete(`/api/user/fav/${post}`)
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       const response = json<FavResponse>()
@@ -76,14 +76,14 @@ describe('fav module', async () => {
     })
 
     test('should not remove unknown fav', async () => {
-      const { hash } = spec.scenario
+      const { token } = spec.scenario.authentication.get()
 
       const id = new Types.ObjectId().toHexString()
 
       const { statusCode: status } = await spec.application
         .inject()
         .delete(`/api/user/fav/${id}`)
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       expect(status).toBe(HttpStatus.NOT_FOUND)
