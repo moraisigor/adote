@@ -55,7 +55,7 @@ describe('pet module', async () => {
     })
 
     test('should not list pet organization without permission', async () => {
-      const { token: { hash } = { hash: '' } } = await spec.scenario.account('+5511999999999')
+      const { token } = await spec.scenario.account('+5511999999999')
 
       const [{ id: organization }] = await spec.scenario.build.user.organization()
 
@@ -63,7 +63,7 @@ describe('pet module', async () => {
         .inject()
         .get('/api/pet')
         .query({ page: '1', amount: '10', organization })
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       expect(status).toBe(HttpStatus.FORBIDDEN)
@@ -115,14 +115,14 @@ describe('pet module', async () => {
     })
 
     test('should not get pet without permission', async () => {
-      const { token: { hash } = { hash: '' } } = await spec.scenario.account('+5511999999999')
+      const { token } = await spec.scenario.account('+5511999999999')
 
       const { id } = await spec.scenario.build.pet.create()
 
       const { statusCode: status } = await spec.application
         .inject()
         .get(`/api/pet/${id}`)
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       expect(status).toBe(HttpStatus.NOT_FOUND)
@@ -209,7 +209,7 @@ describe('pet module', async () => {
     })
 
     test('should not create pet organization without permission', async () => {
-      const { token: { hash } = { hash: '' } } = await spec.scenario.account('+5511999999999')
+      const { token } = await spec.scenario.account('+5511999999999')
 
       const list = await spec.scenario.build.breed.list()
 
@@ -220,7 +220,7 @@ describe('pet module', async () => {
       const { statusCode: status } = await spec.application
         .inject()
         .post('/api/pet')
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .body({
           name: 'Oreo',
           kind: Kind.DOG,
@@ -301,7 +301,7 @@ describe('pet module', async () => {
     })
 
     test('should not save pet without permission', async () => {
-      const { token: { hash } = { hash: '' } } = await spec.scenario.account('+5511999999999')
+      const { token } = await spec.scenario.account('+5511999999999')
 
       const { id } = await spec.scenario.build.pet.create()
 
@@ -312,7 +312,7 @@ describe('pet module', async () => {
       const { statusCode: status } = await spec.application
         .inject()
         .put(`/api/pet/${id}`)
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .body({
           name: 'Estopinha',
           kind: Kind.DOG,
@@ -363,14 +363,14 @@ describe('pet module', async () => {
     })
 
     test('should not remove pet without permission', async () => {
-      const { token: { hash } = { hash: '' } } = await spec.scenario.account('+5511999999999')
+      const { token } = await spec.scenario.account('+5511999999999')
 
       const { id } = await spec.scenario.build.pet.create()
 
       const { statusCode: status } = await spec.application
         .inject()
         .delete(`/api/pet/${id}`)
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       expect(status).toBe(HttpStatus.NOT_FOUND)

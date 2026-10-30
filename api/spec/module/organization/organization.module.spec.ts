@@ -161,14 +161,14 @@ describe('organization module', async () => {
     })
 
     test('should not remove organization without permission', async () => {
-      const { token: { hash } = { hash: '' } } = await spec.scenario.account('+5511999999999')
+      const { token } = await spec.scenario.account('+5511999999999')
 
       const { id } = await spec.scenario.build.organization.create('Remove')
 
       const { statusCode: status } = await spec.application
         .inject()
         .delete(`/api/organization/${id}`)
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       expect(status).toBe(HttpStatus.FORBIDDEN)

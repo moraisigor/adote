@@ -74,7 +74,7 @@ describe('adopter module', async () => {
     })
 
     test('should not list adopter organization without permission', async () => {
-      const { token: { hash } = { hash: '' } } = await spec.scenario.account('+5511999999999')
+      const { token } = await spec.scenario.account('+5511999999999')
 
       const [{ id: organization }] = await spec.scenario.build.user.organization()
 
@@ -82,7 +82,7 @@ describe('adopter module', async () => {
         .inject()
         .get('/api/adopter')
         .query({ page: '1', amount: '10', organization })
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       expect(status).toBe(HttpStatus.FORBIDDEN)

@@ -129,7 +129,7 @@ describe('user module', async () => {
     })
 
     test('should not list post organization without permission', async () => {
-      const { token: { hash } = { hash: '' } } = await spec.scenario.account('+5511999999999')
+      const { token } = await spec.scenario.account('+5511999999999')
 
       const [{ id: organization }] = await spec.scenario.build.user.organization()
 
@@ -137,7 +137,7 @@ describe('user module', async () => {
         .inject()
         .get('/api/user/post')
         .query({ page: '1', amount: '10', organization })
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       expect(status).toBe(HttpStatus.FORBIDDEN)
@@ -299,12 +299,12 @@ describe('user module', async () => {
   // delete /user
   describe('/user', () => {
     test('should remove user', async () => {
-      const { token: { hash } = { hash: '' } } = await spec.scenario.account('+5511999999999')
+      const { token } = await spec.scenario.account('+5511999999999')
 
       const { statusCode: status, json } = await spec.application
         .inject()
         .delete('/api/user')
-        .cookies({ token: hash })
+        .cookies({ token: token.hash })
         .end()
 
       const response = json<RemoveUserResponse>()
