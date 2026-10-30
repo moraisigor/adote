@@ -24,7 +24,7 @@ import { Authentication, type Session } from './authentication'
 import { Bucket } from './bucket'
 
 export class Scenario {
-  private readonly bucket = new Bucket()
+  public readonly bucket = new Bucket()
 
   private readonly authentication = new Authentication()
 
