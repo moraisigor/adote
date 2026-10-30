@@ -197,13 +197,11 @@ describe('organization module', async () => {
 
         expect(status).toBe(HttpStatus.OK)
 
-        expect(response).toEqual(
-          expect.arrayContaining([
-            expect.objectContaining({
-              id: expect.any(String),
-              name: 'Name'
-            })
-          ])
+        expect(response).toContainEqual(
+          expect.objectContaining({
+            id: expect.any(String),
+            name: 'Name'
+          })
         )
       })
     })

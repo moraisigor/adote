@@ -337,23 +337,22 @@ describe('user module', async () => {
 
         expect(status).toBe(HttpStatus.OK)
 
-        expect(response).toEqual(
-          expect.arrayContaining([
-            expect.objectContaining({
-              id: expect.any(String),
+        expect(response).toContainEqual(
+          expect.objectContaining({
+            id: expect.any(String),
+            phone: '+5599999999999',
+            name: 'Name',
+            contact: {
+              mail: 'mail@example.com',
               phone: '+5599999999999',
-              name: 'Name',
-              contact: {
-                mail: 'mail@example.com',
-                phone: '+5599999999999',
-                social: 'https://example.com/name'
-              },
-              location: expect.objectContaining({
-                city: 'Recife',
-                state: 'Pernambuco'
-              })
-            })
-          ])
+              social: 'https://example.com/name'
+            },
+            location: {
+              id: expect.any(String),
+              city: 'Recife',
+              state: 'Pernambuco'
+            }
+          })
         )
       })
     })
