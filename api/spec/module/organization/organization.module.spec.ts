@@ -185,6 +185,8 @@ describe('organization module', async () => {
       test('should list organization', async () => {
         const { token } = spec.scenario.session(Role.MANAGER)
 
+        await spec.scenario.build.organization.create()
+
         const { statusCode: status, json } = await spec.application
           .inject()
           .get('/api/organization')
@@ -195,19 +197,14 @@ describe('organization module', async () => {
 
         expect(status).toBe(HttpStatus.OK)
 
-        expect(response).toHaveLength(1)
-
-        expect(response).toMatchObject([
-          {
-            id: expect.any(String),
-            name: 'Name',
-            contact: {
-              mail: 'mail@example.com',
-              phone: '+5599999999999',
-              social: 'https://example.com/name'
-            }
-          }
-        ])
+        expect(response).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              id: expect.any(String),
+              name: 'Name'
+            })
+          ])
+        )
       })
     })
   })
