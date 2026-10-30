@@ -21,7 +21,7 @@ describe('image module', async () => {
     test.each([ImageKind.POST, ImageKind.USER, ImageKind.ORGANIZATION])(
       'should save %s image',
       async (kind) => {
-        const { token } = spec.scenario.authentication.get()
+        const { token } = spec.scenario.session()
 
         const { statusCode: status, json } = await spec.application
           .inject()

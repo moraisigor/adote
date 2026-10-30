@@ -23,7 +23,7 @@ describe('organization module', async () => {
   // get /organization
   describe('/organization', () => {
     test('should not list organization without permission', async () => {
-      const { token } = spec.scenario.authentication.get()
+      const { token } = spec.scenario.session()
 
       const { statusCode: status } = await spec.application
         .inject()
@@ -67,7 +67,7 @@ describe('organization module', async () => {
   // post /organization
   describe('/organization', () => {
     test('should create organization', async () => {
-      const { token } = spec.scenario.authentication.get()
+      const { token } = spec.scenario.session()
 
       const { statusCode: status, json } = await spec.application
         .inject()
@@ -92,7 +92,7 @@ describe('organization module', async () => {
   // put /organization/id
   describe('/organization/id', () => {
     test('should save organization', async () => {
-      const { token } = spec.scenario.authentication.get()
+      const { token } = spec.scenario.session()
 
       const { id } = await spec.scenario.build.organization.create('Save')
 
@@ -127,7 +127,7 @@ describe('organization module', async () => {
   // delete /organization/id
   describe('/organization/id', () => {
     test('should remove organization', async () => {
-      const { token } = spec.scenario.authentication.get()
+      const { token } = spec.scenario.session()
 
       const { id } = await spec.scenario.build.organization.create('Remove')
 
@@ -147,7 +147,7 @@ describe('organization module', async () => {
     })
 
     test('should not remove unknown organization', async () => {
-      const { token } = spec.scenario.authentication.get()
+      const { token } = spec.scenario.session()
 
       const id = new Types.ObjectId().toHexString()
 
@@ -161,7 +161,7 @@ describe('organization module', async () => {
     })
 
     test('should not remove organization without permission', async () => {
-      const { token: { hash } = { hash: '' } } = await spec.scenario.session('+5511999999999')
+      const { token: { hash } = { hash: '' } } = await spec.scenario.account('+5511999999999')
 
       const { id } = await spec.scenario.build.organization.create('Remove')
 
@@ -183,7 +183,7 @@ describe('organization module', async () => {
     // get /organization
     describe('/organization', () => {
       test('should list organization', async () => {
-        const { token } = spec.scenario.authentication.get(Role.MANAGER)
+        const { token } = spec.scenario.session(Role.MANAGER)
 
         const { statusCode: status, json } = await spec.application
           .inject()

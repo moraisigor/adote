@@ -27,7 +27,7 @@ describe('user module', async () => {
   // get /user
   describe('/user', () => {
     test('should not list user without permission', async () => {
-      const { token } = spec.scenario.authentication.get()
+      const { token } = spec.scenario.session()
 
       const { statusCode: status } = await spec.application
         .inject()
@@ -42,7 +42,7 @@ describe('user module', async () => {
   // get /user/current
   describe('/user/current', () => {
     test('should get current user', async () => {
-      const { token } = spec.scenario.authentication.get()
+      const { token } = spec.scenario.session()
 
       await spec.scenario.build.user.save()
 
@@ -77,7 +77,7 @@ describe('user module', async () => {
   // get /user/post
   describe('/user/post', () => {
     test('should list post', async () => {
-      const { token } = spec.scenario.authentication.get()
+      const { token } = spec.scenario.session()
 
       await spec.scenario.build.post.create()
 
@@ -129,7 +129,7 @@ describe('user module', async () => {
     })
 
     test('should not list post organization without permission', async () => {
-      const { token: { hash } = { hash: '' } } = await spec.scenario.session('+5511999999999')
+      const { token: { hash } = { hash: '' } } = await spec.scenario.account('+5511999999999')
 
       const [{ id: organization }] = await spec.scenario.build.user.organization()
 
@@ -147,7 +147,7 @@ describe('user module', async () => {
   // get /user/organization
   describe('/user/organization', () => {
     test('should list organization', async () => {
-      const { token } = spec.scenario.authentication.get()
+      const { token } = spec.scenario.session()
 
       const { statusCode: status, json } = await spec.application
         .inject()
@@ -214,7 +214,7 @@ describe('user module', async () => {
   // put /user
   describe('/user', () => {
     test('should save user', async () => {
-      const { token } = spec.scenario.authentication.get()
+      const { token } = spec.scenario.session()
 
       const [{ id: location }] = await spec.scenario.build.location.search()
 
@@ -258,7 +258,7 @@ describe('user module', async () => {
   // put /user/image
   describe('/user/image', () => {
     test('should save image', async () => {
-      const { token } = spec.scenario.authentication.get()
+      const { token } = spec.scenario.session()
 
       await spec.scenario.build.user.save()
 
@@ -299,7 +299,7 @@ describe('user module', async () => {
   // delete /user
   describe('/user', () => {
     test('should remove user', async () => {
-      const { token: { hash } = { hash: '' } } = await spec.scenario.session('+5511999999999')
+      const { token: { hash } = { hash: '' } } = await spec.scenario.account('+5511999999999')
 
       const { statusCode: status, json } = await spec.application
         .inject()
@@ -325,7 +325,7 @@ describe('user module', async () => {
     // get /user
     describe('/user', () => {
       test('should list user', async () => {
-        const { token } = spec.scenario.authentication.get(Role.MANAGER)
+        const { token } = spec.scenario.session(Role.MANAGER)
 
         const { statusCode: status, json } = await spec.application
           .inject()

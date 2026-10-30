@@ -24,11 +24,9 @@ import { Authentication, type Session } from './authentication'
 import { Bucket } from './bucket'
 
 export class Scenario {
-  public readonly bucket = new Bucket()
+  private readonly bucket = new Bucket()
 
-  public readonly authentication = new Authentication()
-
-  constructor(private readonly application: NestFastifyApplication) {}
+  private readonly authentication = new Authentication()
 
   build = {
     auth: {
@@ -266,7 +264,13 @@ export class Scenario {
     }
   }
 
-  async session(phone: string): Promise<Session> {
+  constructor(private readonly application: NestFastifyApplication) {}
+
+  session(key: Role = Role.MEMBER): Session {
+    return this.authentication.get(key)
+  }
+
+  async account(phone: string): Promise<Session> {
     const { phone: account, code } = await this.build.auth.auth(phone)
 
     const { cookies } = await this.application
@@ -307,7 +311,7 @@ export class Scenario {
   }
 
   async authenticate(phone: string = '+5599999999999', role: Role = Role.MEMBER) {
-    const session = await this.session(phone)
+    const session = await this.account(phone)
 
     this.authentication.set(role, session)
   }

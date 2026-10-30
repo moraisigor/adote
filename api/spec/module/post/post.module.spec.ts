@@ -183,7 +183,7 @@ describe('post module', async () => {
   // post /post
   describe('/post', () => {
     test('should create post', async () => {
-      const { token } = spec.scenario.authentication.get()
+      const { token } = spec.scenario.session()
 
       const { id: pet } = await spec.scenario.build.pet.create()
       const [{ id: location }] = await spec.scenario.build.location.search()
@@ -237,7 +237,7 @@ describe('post module', async () => {
     })
 
     test('should create post with organization', async () => {
-      const { token } = spec.scenario.authentication.get()
+      const { token } = spec.scenario.session()
 
       const [{ id: location }] = await spec.scenario.build.location.search()
       const [{ id: organization }] = await spec.scenario.build.user.organization()
@@ -296,7 +296,7 @@ describe('post module', async () => {
   // put /post/id
   describe('/post/id', () => {
     test('should save post', async () => {
-      const { token } = spec.scenario.authentication.get()
+      const { token } = spec.scenario.session()
 
       const { id } = await spec.scenario.build.post.create()
 
@@ -356,7 +356,7 @@ describe('post module', async () => {
   // put /post/id/publish
   describe('/post/id/publish', () => {
     test('should publish post', async () => {
-      const { token } = spec.scenario.authentication.get()
+      const { token } = spec.scenario.session()
 
       const { id } = await spec.scenario.build.post.create()
 
@@ -378,7 +378,7 @@ describe('post module', async () => {
     })
 
     test('should not publish unknown post', async () => {
-      const { token } = spec.scenario.authentication.get()
+      const { token } = spec.scenario.session()
 
       const id = new Types.ObjectId().toHexString()
 
@@ -393,7 +393,7 @@ describe('post module', async () => {
     })
 
     test('should not publish post without permission', async () => {
-      const { token: { hash } = { hash: '' } } = await spec.scenario.session('+5511999999999')
+      const { token: { hash } = { hash: '' } } = await spec.scenario.account('+5511999999999')
 
       const { id } = await spec.scenario.build.post.create()
 
@@ -411,7 +411,7 @@ describe('post module', async () => {
   // delete /post/id
   describe('/post/id', () => {
     test('should remove post', async () => {
-      const { token } = spec.scenario.authentication.get()
+      const { token } = spec.scenario.session()
 
       const { id: post } = await spec.scenario.build.post.create()
 
@@ -431,7 +431,7 @@ describe('post module', async () => {
     })
 
     test('should not remove unknown post', async () => {
-      const { token } = spec.scenario.authentication.get()
+      const { token } = spec.scenario.session()
 
       const id = new Types.ObjectId().toHexString()
 
@@ -445,7 +445,7 @@ describe('post module', async () => {
     })
 
     test('should not remove post without permission', async () => {
-      const { token: { hash } = { hash: '' } } = await spec.scenario.session('+5511999999999')
+      const { token: { hash } = { hash: '' } } = await spec.scenario.account('+5511999999999')
 
       const { id } = await spec.scenario.build.post.create()
 

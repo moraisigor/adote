@@ -90,7 +90,7 @@ describe('auth module', async () => {
     })
 
     test('should renew auth', async () => {
-      const { renew } = spec.scenario.authentication.get()
+      const { renew } = spec.scenario.session()
 
       const { statusCode: status, cookies } = await spec.application
         .inject()

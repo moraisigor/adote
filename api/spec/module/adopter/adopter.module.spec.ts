@@ -18,7 +18,7 @@ describe('adopter module', async () => {
   // get /adopter
   describe('/adopter', () => {
     test('should list adopter', async () => {
-      const { token } = spec.scenario.authentication.get()
+      const { token } = spec.scenario.session()
 
       await spec.scenario.build.adopter.create()
 
@@ -45,7 +45,7 @@ describe('adopter module', async () => {
     })
 
     test('should list adopter with organization', async () => {
-      const { token } = spec.scenario.authentication.get()
+      const { token } = spec.scenario.session()
 
       const { id: organization } = await spec.scenario.build.organization.create()
 
@@ -74,7 +74,7 @@ describe('adopter module', async () => {
     })
 
     test('should not list adopter organization without permission', async () => {
-      const { token: { hash } = { hash: '' } } = await spec.scenario.session('+5511999999999')
+      const { token: { hash } = { hash: '' } } = await spec.scenario.account('+5511999999999')
 
       const [{ id: organization }] = await spec.scenario.build.user.organization()
 
