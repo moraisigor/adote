@@ -16,6 +16,7 @@ import { FavModule } from '@/module/fav/fav.module'
 import { HealthModule } from '@/module/health/health.module'
 import { ImageModule } from '@/module/image/image.module'
 import { LocationModule } from '@/module/location/location.module'
+import { MemoryModule } from '@/module/memory/memory.module'
 import { NotifyModule } from '@/module/notify/notify.module'
 import { OrganizationModule } from '@/module/organization/organization.module'
 import { OrganizationPermissionGuard } from '@/module/permission/guard/organization.permission.guard'
@@ -43,6 +44,7 @@ import { RouteConfig } from './router.config.factory'
     HealthModule,
     ImageModule,
     LocationModule,
+    MemoryModule,
     NotifyModule,
     OrganizationModule,
     PermissionModule,

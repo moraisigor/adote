@@ -74,6 +74,11 @@ export class EnvConfiguration {
   @Transform(transform)
   readonly TOKEN_RENEW_EXPIRE!: number
 
+  // memory
+  @IsString()
+  @IsNotEmpty()
+  readonly MEMORY_URI!: string
+
   // storage
   @IsString()
   @IsNotEmpty()
