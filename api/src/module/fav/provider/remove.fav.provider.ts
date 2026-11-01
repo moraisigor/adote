@@ -3,17 +3,22 @@ import { Injectable, NotFoundException } from '@nestjs/common'
 import { isNil } from 'lodash'
 import { Types } from 'mongoose'
 
+import { UserRepository } from '@/module/user/repository/user.repository'
+
 import { FavResponse } from '../fav.response'
-import { FavRepository } from '../repository/fav.repository'
 
 @Injectable()
 export class RemoveFavProvider {
-  constructor(private readonly repository: FavRepository) {}
+  constructor(private readonly repository: UserRepository) {}
 
   async run(post: string, user: string): Promise<FavResponse> {
-    const result = await this.repository.remove(new Types.ObjectId(post), new Types.ObjectId(user), {
-      returnDocument: 'after'
-    })
+    const fav = new Types.ObjectId(post)
+
+    const result = await this.repository.update(
+      { _id: new Types.ObjectId(user), fav },
+      { $pull: { fav } },
+      { returnDocument: 'after' }
+    )
 
     if (isNil(result)) {
       throw new NotFoundException()

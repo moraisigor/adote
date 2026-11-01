@@ -2,7 +2,7 @@ import { Injectable, type OnModuleDestroy } from '@nestjs/common'
 
 import { RedisClient } from 'bun'
 
-import type { MemoryConfigFactory } from '@/memory.config.factory'
+import { MemoryConfigFactory } from '@/memory.config.factory'
 
 @Injectable()
 export class MemoryStore implements OnModuleDestroy {

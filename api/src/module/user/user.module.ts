@@ -27,7 +27,7 @@ import { UserController } from './user.controller'
     PermissionModule,
     PostModule
   ],
-  exports: [UserRepository, MongooseModule],
+  exports: [UserRepository],
   providers: [
     GetCurrentProvider,
     GetUserProvider,
