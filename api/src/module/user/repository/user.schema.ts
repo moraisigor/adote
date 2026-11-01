@@ -24,7 +24,7 @@ export type UserView = MergeType<
   collection: 'User'
 })
 export class User {
-  @Prop({ type: String, unique: true, required: true })
+  @Prop({ type: String, required: true })
   phone!: string
 
   @Prop({ type: String })
@@ -53,5 +53,7 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User)
+
+UserSchema.index({ phone: 1 }, { unique: true })
 
 UserSchema.index({ image: 1 }, { sparse: true })

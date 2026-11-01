@@ -48,14 +48,16 @@ export const PostSchema = SchemaFactory.createForClass(Post)
 
 PostSchema.index({ pet: 1 }, { unique: true })
 
-PostSchema.index({ user: 1 })
+PostSchema.index({ user: 1, _id: 1 })
+
+PostSchema.index({ organization: 1, _id: 1 })
 
 PostSchema.index({ image: 1 })
 
 // publish
-PostSchema.index({ publish: 1, create: 1 })
+PostSchema.index({ publish: 1, create: 1, _id: 1 })
 
-PostSchema.index({ publish: 1, location: 1, create: 1 })
+PostSchema.index({ publish: 1, location: 1, create: 1, _id: 1 })
 
 // organization
-PostSchema.index({ organization: 1, publish: 1, create: 1 })
+PostSchema.index({ organization: 1, publish: 1, create: 1, _id: 1 })

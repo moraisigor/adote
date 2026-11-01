@@ -47,6 +47,6 @@ export class Pet {
 
 export const PetSchema = SchemaFactory.createForClass(Pet)
 
-PetSchema.index({ user: 1 })
+PetSchema.index({ user: 1, _id: 1 })
 
-PetSchema.index({ organization: 1 })
+PetSchema.index({ organization: 1, _id: 1 })

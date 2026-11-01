@@ -14,13 +14,13 @@ export type OrganizationDocument = HydratedDocument<Organization>
   collection: 'Organization'
 })
 export class Organization {
-  @Prop({ type: String, unique: true, required: true })
+  @Prop({ type: String, required: true })
   name!: string
 
   @Prop({ type: String })
   image?: string
 
-  @Prop({ type: String, unique: true, sparse: true })
+  @Prop({ type: String })
   document?: string
 
   @Prop({ type: Contact })
@@ -35,6 +35,10 @@ export class Organization {
 
 export const OrganizationSchema = SchemaFactory.createForClass(Organization)
 
+OrganizationSchema.index({ name: 1 }, { unique: true })
+
+OrganizationSchema.index({ document: 1 }, { unique: true, sparse: true })
+
 OrganizationSchema.index({ image: 1 }, { sparse: true })
 
-OrganizationSchema.index({ 'member.user': 1 })
+OrganizationSchema.index({ 'member.user': 1, '_id': 1 })

@@ -21,6 +21,4 @@ export class Breed {
 
 export const BreedSchema = SchemaFactory.createForClass(Breed)
 
-BreedSchema.index({ kind: 1 })
-
-BreedSchema.index({ name: 1, kind: 1 }, { unique: true })
+BreedSchema.index({ kind: 1, name: 1 }, { unique: true })
