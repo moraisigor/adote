@@ -23,7 +23,7 @@ const POPULATE: PopulateOptions[] = [
 export class PostRepository {
   constructor(@InjectModel(Post.name) private readonly model: Model<Post>) {}
 
-  async exists(query: QueryFilter<Post>) {
+  async exists(query: QueryFilter<Post>): Promise<boolean> {
     const result = await this.model.exists(query).exec()
 
     return Boolean(result)
@@ -40,10 +40,13 @@ export class PostRepository {
     projection?: ProjectionType<Post>,
     options?: QueryOptions<Post>
   ): Promise<PostView[]> {
+    const { sort } = options ?? {}
+
     return this.model
       .find(query, projection, options)
       .skip(skip)
       .limit(limit)
+      .sort(sort ?? { _id: 1 })
       .populate<PostView>(POPULATE)
       .exec()
   }
@@ -77,7 +80,13 @@ export class PostRepository {
     return this.model.findByIdAndUpdate(id, post, options).populate<PostView>(POPULATE).exec()
   }
 
-  async remove(query?: QueryFilter<Post>): Promise<boolean> {
+  async remove(query?: QueryFilter<Post>, many: boolean = false): Promise<boolean> {
+    if (many) {
+      const { deletedCount: count } = await this.model.deleteMany(query).exec()
+
+      return count >= 1
+    }
+
     const { deletedCount: count } = await this.model.deleteOne(query).exec()
 
     return count >= 1

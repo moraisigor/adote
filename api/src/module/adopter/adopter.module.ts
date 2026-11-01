@@ -5,6 +5,7 @@ import { PermissionModule } from '@/module/permission/permission.module'
 import { PostModule } from '@/module/post/post.module'
 
 import { AdopterController } from './adopter.controller'
+import { RemoveAdopterListener } from './listener/remove.adopter.listener'
 import { AdopterProvider } from './provider'
 import { CreateAdopterProvider } from './provider/create.adopter.provider'
 import { ListAdopterProvider } from './provider/list.adopter.provider'
@@ -18,7 +19,13 @@ import { Adopter, AdopterSchema } from './repository/adopter.schema'
     forwardRef(() => PostModule)
   ],
   exports: [AdopterRepository],
-  providers: [AdopterProvider, AdopterRepository, CreateAdopterProvider, ListAdopterProvider],
+  providers: [
+    AdopterProvider,
+    AdopterRepository,
+    CreateAdopterProvider,
+    ListAdopterProvider,
+    RemoveAdopterListener
+  ],
   controllers: [AdopterController]
 })
 export class AdopterModule {}

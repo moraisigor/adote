@@ -6,6 +6,7 @@ import { LocationModule } from '@/module/location/location.module'
 import { PermissionModule } from '@/module/permission/permission.module'
 import { PetModule } from '@/module/pet/pet.module'
 
+import { RemovePostListener } from './listener/remove.post.listener'
 import { PostController } from './post.controller'
 import { PostProvider } from './provider'
 import { CreatePostProvider } from './provider/create.post.provider'
@@ -32,6 +33,7 @@ import { Post, PostSchema } from './repository/post.schema'
     ListPostProvider,
     PostProvider,
     PostRepository,
+    RemovePostListener,
     PublishPostProvider,
     RemovePostProvider,
     SavePostProvider

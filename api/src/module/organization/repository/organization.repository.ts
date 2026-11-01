@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import type { Model, ProjectionType, QueryFilter, QueryOptions, Types } from 'mongoose'
+import type { Model, mongo, ProjectionType, QueryFilter, QueryOptions, Types, UpdateQuery } from 'mongoose'
 
 import { Organization, type OrganizationDocument } from './organization.schema'
 
@@ -11,13 +11,13 @@ import type { OrganizationRole } from '../type/organization.role'
 export class OrganizationRepository {
   constructor(@InjectModel(Organization.name) private readonly model: Model<Organization>) {}
 
-  async exists(query: QueryFilter<Organization>) {
+  async exists(query: QueryFilter<Organization>): Promise<boolean> {
     const result = await this.model.exists(query).exec()
 
     return Boolean(result)
   }
 
-  distinct<K extends keyof Organization>(
+  distinct<K extends keyof mongo.WithId<Organization>>(
     property: K,
     query?: QueryFilter<Organization>,
     options?: QueryOptions<Organization>
@@ -32,7 +32,14 @@ export class OrganizationRepository {
     projection?: ProjectionType<Organization>,
     options?: QueryOptions<Organization>
   ): Promise<OrganizationDocument[]> {
-    return this.model.find(query, projection, options).skip(skip).limit(limit).exec()
+    const { sort } = options ?? {}
+
+    return this.model
+      .find(query, projection, options)
+      .skip(skip)
+      .limit(limit)
+      .sort(sort ?? { _id: 1 })
+      .exec()
   }
 
   find(
@@ -51,6 +58,12 @@ export class OrganizationRepository {
     }[]
   }): Promise<OrganizationDocument> {
     return this.model.create(organization)
+  }
+
+  async update(query: QueryFilter<Organization>, update: UpdateQuery<Organization>) {
+    const { modifiedCount: count } = await this.model.updateMany(query, update).exec()
+
+    return count >= 1
   }
 
   save(

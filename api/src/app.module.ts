@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { APP_FILTER, APP_GUARD, RouterModule } from '@nestjs/core'
+import { EventEmitterModule } from '@nestjs/event-emitter'
 import { MongooseModule } from '@nestjs/mongoose'
 import { ScheduleModule } from '@nestjs/schedule'
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
@@ -60,6 +61,7 @@ import { RouteConfig } from './router.config.factory'
       envFilePath: `.env.${env}`,
       ignoreEnvFile: isProduction
     }),
+    EventEmitterModule.forRoot(),
     MongooseModule.forRootAsync({
       useClass: RepositoryConfigFactory
     }),

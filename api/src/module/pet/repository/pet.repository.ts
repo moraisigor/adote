@@ -28,10 +28,13 @@ export class PetRepository {
     projection?: ProjectionType<Pet>,
     options?: QueryOptions<Pet>
   ): Promise<PetView[]> {
+    const { sort } = options ?? {}
+
     return this.model
       .find(query, projection, options)
       .skip(skip)
       .limit(limit)
+      .sort(sort ?? { _id: 1 })
       .populate<PetView>(POPULATE)
       .exec()
   }
@@ -67,7 +70,13 @@ export class PetRepository {
     return this.model.findByIdAndUpdate(id, pet, options).populate<PetView>(POPULATE).exec()
   }
 
-  async remove(query?: QueryFilter<Pet>): Promise<boolean> {
+  async remove(query?: QueryFilter<Pet>, many: boolean = false): Promise<boolean> {
+    if (many) {
+      const { deletedCount: count } = await this.model.deleteMany(query).exec()
+
+      return count >= 1
+    }
+
     const { deletedCount: count } = await this.model.deleteOne(query).exec()
 
     return count >= 1
