@@ -34,18 +34,16 @@ export class Spec {
     const memory = await RedisMemoryServer.create()
     const repository = await MongoMemoryServer.create()
 
+    const [host, port] = await Promise.all([memory.getHost(), memory.getPort()])
+
     const module = await Test.createTestingModule({
       imports: [AppModule]
     })
       .overrideProvider(MemoryConfigFactory)
       .useValue({
-        createMemoryOptions: async () => {
-          const [host, port] = await Promise.all([memory.getHost(), memory.getPort()])
-
-          return {
-            uri: `redis://${host}:${port}`
-          }
-        }
+        createMemoryOptions: () => ({
+          uri: `redis://${host}:${port}`
+        })
       })
       .overrideProvider(RepositoryConfigFactory)
       .useValue({
@@ -57,12 +55,12 @@ export class Spec {
       .useFactory({
         factory: (config: ConfigService, storage: MemoryThrottlerStorage) => ({
           createThrottlerOptions: () => {
-            const request = new RequestConfigFactory(config, storage)
+            const factory = new RequestConfigFactory(config, storage)
 
-            return {
-              throttlers: request.createThrottlerOptions(),
-              skipIf: () => !throttler
-            }
+            const option = factory.createThrottlerOptions()
+            option.skipIf = () => !throttler
+
+            return option
           }
         }),
         inject: [ConfigService, MemoryThrottlerStorage]
