@@ -8,7 +8,7 @@ import { url } from '@/helper/image'
 
 import type { PostView } from './repository/post.schema'
 
-export class PetResponse {
+export class PetPostResponse {
   readonly id: string
   readonly name: string
   readonly size: Size
@@ -26,7 +26,7 @@ export class PetResponse {
   }
 }
 
-class UserResponse {
+class UserPostResponse {
   readonly id: string
   readonly name?: string
   readonly image?: string
@@ -45,7 +45,7 @@ class UserResponse {
   }
 }
 
-class OrganizationResponse {
+class OrganizationPostResponse {
   readonly id: string
   readonly name: string
   readonly image?: string
@@ -67,25 +67,25 @@ class OrganizationResponse {
 export class PostResponse {
   readonly id: string
   readonly image: string[]
-  readonly pet: PetResponse
+  readonly pet: PetPostResponse
   readonly location: LocationResponse
-  readonly user?: UserResponse
-  readonly organization?: OrganizationResponse
+  readonly user?: UserPostResponse
+  readonly organization?: OrganizationPostResponse
 
   constructor(post: PostView) {
     const { pet, location, user, organization } = post
 
     this.id = post.id
     this.image = post.image.map((e) => url(e) ?? e)
-    this.pet = new PetResponse(pet)
+    this.pet = new PetPostResponse(pet)
     this.location = new LocationResponse(location)
 
     if (user) {
-      this.user = new UserResponse(user)
+      this.user = new UserPostResponse(user)
     }
 
     if (organization) {
-      this.organization = new OrganizationResponse(organization)
+      this.organization = new OrganizationPostResponse(organization)
     }
   }
 }

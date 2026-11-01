@@ -14,7 +14,7 @@ export class GetUserParam {
 
 export class ListUserRequest extends PageRequest {}
 
-export class ListPostRequest extends PageRequest {
+export class ListPostUserRequest extends PageRequest {
   @IsMongoId({ message: 'the organization is not valid' })
   @IsOptional()
   readonly organization?: string
@@ -36,7 +36,7 @@ export class SaveUserRequest {
   readonly location?: string
 }
 
-export class SaveImageRequest {
+export class SaveImageUserRequest {
   @IsString()
   @Matches(IMAGE_PATTERN)
   readonly image!: string

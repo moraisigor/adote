@@ -15,9 +15,9 @@ import { UserProvider } from './provider'
 import { Role } from './type/role'
 import {
   GetUserParam,
-  ListPostRequest,
+  ListPostUserRequest,
   ListUserRequest,
-  SaveImageRequest,
+  SaveImageUserRequest,
   SaveUserRequest
 } from './user.request'
 import { CurrentUserResponse, RemoveUserResponse, UserResponse } from './user.response'
@@ -42,7 +42,7 @@ export class UserController {
   }
 
   @Get('post')
-  post(@Query() request: ListPostRequest, @Current() session: Session): Promise<PostResponse[]> {
+  post(@Query() request: ListPostUserRequest, @Current() session: Session): Promise<PostResponse[]> {
     const {
       user: { id }
     } = session
@@ -77,7 +77,7 @@ export class UserController {
   }
 
   @Put('image')
-  image(@Body() request: SaveImageRequest, @Current() session: Session): Promise<CurrentUserResponse> {
+  image(@Body() request: SaveImageUserRequest, @Current() session: Session): Promise<CurrentUserResponse> {
     const { image } = request
     const {
       user: { id }

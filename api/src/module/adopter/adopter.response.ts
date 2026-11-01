@@ -1,6 +1,6 @@
 import type { AdopterView } from './repository/adopter.schema'
 
-class PetResponse {
+class PetAdopterResponse {
   readonly id: string
   readonly name: string
 
@@ -14,7 +14,7 @@ export class AdopterResponse {
   readonly id: string
   readonly name: string
   readonly phone: string
-  readonly pet: PetResponse
+  readonly pet: PetAdopterResponse
 
   constructor(adopter: AdopterView) {
     const { pet } = adopter
@@ -22,6 +22,6 @@ export class AdopterResponse {
     this.id = adopter.id
     this.name = adopter.name
     this.phone = adopter.phone
-    this.pet = new PetResponse(pet)
+    this.pet = new PetAdopterResponse(pet)
   }
 }

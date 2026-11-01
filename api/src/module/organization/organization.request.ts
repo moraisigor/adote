@@ -65,7 +65,7 @@ export class SaveOrganizationRequest {
   readonly location?: string
 }
 
-export class SaveImageRequest {
+export class SaveImageOrganizationRequest {
   @IsString()
   @Matches(IMAGE_PATTERN)
   readonly image!: string

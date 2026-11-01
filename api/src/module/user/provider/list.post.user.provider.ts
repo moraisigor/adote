@@ -4,7 +4,7 @@ import { PermissionProvider } from '@/module/permission/provider'
 import { PostResponse } from '@/module/post/post.response'
 import { PostRepository } from '@/module/post/repository/post.repository'
 
-import { ListPostRequest } from '../user.request'
+import { ListPostUserRequest } from '../user.request'
 
 @Injectable()
 export class ListPostUserProvider {
@@ -13,7 +13,7 @@ export class ListPostUserProvider {
     private readonly repository: PostRepository
   ) {}
 
-  async run(request: ListPostRequest, current: string): Promise<PostResponse[]> {
+  async run(request: ListPostUserRequest, current: string): Promise<PostResponse[]> {
     const { page, amount, organization } = request
 
     const skip = (page - 1) * amount
