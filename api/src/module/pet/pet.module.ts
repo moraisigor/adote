@@ -6,6 +6,7 @@ import { BreedModule } from '@/module/breed/breed.module'
 import { PermissionModule } from '@/module/permission/permission.module'
 import { PostModule } from '@/module/post/post.module'
 
+import { RemovePetListener } from './listener/remove.pet.listener'
 import { PetController } from './pet.controller'
 import { PetProvider } from './provider'
 import { CreatePetProvider } from './provider/create.pet.provider'
@@ -31,6 +32,7 @@ import { Pet, PetSchema } from './repository/pet.schema'
     ListPetProvider,
     PetProvider,
     PetRepository,
+    RemovePetListener,
     RemovePetProvider,
     SavePetProvider
   ],

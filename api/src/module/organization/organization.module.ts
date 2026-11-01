@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 
 import { ImageModule } from '@/module/image/image.module'
 
+import { RemoveOrganizationListener } from './listener/remove.organization.listener'
 import { OrganizationController } from './organization.controller'
 import { OrganizationProvider } from './provider'
 import { CreateOrganizationProvider } from './provider/create.organization.provider'
@@ -16,8 +17,8 @@ import { Organization, OrganizationSchema } from './repository/organization.sche
 
 @Module({
   imports: [
-    ImageModule,
-    MongooseModule.forFeature([{ name: Organization.name, schema: OrganizationSchema }])
+    MongooseModule.forFeature([{ name: Organization.name, schema: OrganizationSchema }]),
+    ImageModule
   ],
   exports: [OrganizationRepository],
   providers: [
@@ -25,6 +26,7 @@ import { Organization, OrganizationSchema } from './repository/organization.sche
     GetOrganizationProvider,
     ListOrganizationProvider,
     OrganizationProvider,
+    RemoveOrganizationListener,
     OrganizationRepository,
     RemoveOrganizationProvider,
     SaveImageOrganizationProvider,
