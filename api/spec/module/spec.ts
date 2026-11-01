@@ -3,12 +3,15 @@ import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fa
 import { Test } from '@nestjs/testing'
 
 import { MongoMemoryServer } from 'mongodb-memory-server'
+import { RedisMemoryServer } from 'redis-memory-server'
 
 import { ImageStorage } from '@/module/image/image.storage'
+import { MemoryThrottlerStorage } from '@/module/memory/memory.throttler.storage'
 
 import { Scenario } from './scenario'
 import { AppModule } from '@/app.module'
 import { configure } from '@/configure'
+import { MemoryConfigFactory } from '@/memory.config.factory'
 import { RepositoryConfigFactory } from '@/repository.config.factory'
 import { RequestConfigFactory } from '@/request.config.factory'
 
@@ -19,19 +22,31 @@ type Option = {
 export class Spec {
   constructor(
     readonly scenario: Scenario,
+    private readonly memory: RedisMemoryServer,
     private readonly repository: MongoMemoryServer,
     readonly application: NestFastifyApplication,
     readonly option: Option
   ) {}
 
-  public static build = async (option: Option = { throttler: true }) => {
+  public static build = async (option: Option = { throttler: false }) => {
     const { throttler } = option
 
+    const memory = await RedisMemoryServer.create()
     const repository = await MongoMemoryServer.create()
 
     const module = await Test.createTestingModule({
       imports: [AppModule]
     })
+      .overrideProvider(MemoryConfigFactory)
+      .useValue({
+        createMemoryOptions: async () => {
+          const [host, port] = await Promise.all([memory.getHost(), memory.getPort()])
+
+          return {
+            uri: `redis://${host}:${port}`
+          }
+        }
+      })
       .overrideProvider(RepositoryConfigFactory)
       .useValue({
         createMongooseOptions: () => ({
@@ -40,13 +55,17 @@ export class Spec {
       })
       .overrideProvider(RequestConfigFactory)
       .useFactory({
-        factory: (config: ConfigService) => ({
-          createThrottlerOptions: () => ({
-            skipIf: () => !throttler,
-            throttlers: new RequestConfigFactory(config).createThrottlerOptions()
-          })
+        factory: (config: ConfigService, storage: MemoryThrottlerStorage) => ({
+          createThrottlerOptions: () => {
+            const request = new RequestConfigFactory(config, storage)
+
+            return {
+              throttlers: request.createThrottlerOptions(),
+              skipIf: () => !throttler
+            }
+          }
         }),
-        inject: [ConfigService]
+        inject: [ConfigService, MemoryThrottlerStorage]
       })
       .compile()
 
@@ -54,7 +73,7 @@ export class Spec {
 
     await configure(application)
 
-    return new Spec(new Scenario(application), repository, application, option)
+    return new Spec(new Scenario(application), memory, repository, application, option)
   }
 
   async start() {
@@ -69,6 +88,7 @@ export class Spec {
   async stop() {
     await this.application.close()
 
+    await this.memory.stop()
     await this.repository.stop()
   }
 }

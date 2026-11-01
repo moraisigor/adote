@@ -1,31 +1,25 @@
-import { CACHE_MANAGER } from '@nestjs/cache-manager'
-import { Inject, Injectable } from '@nestjs/common'
+import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { ThrottlerException } from '@nestjs/throttler'
 
-import type { Cache } from 'cache-manager'
-
+import { MemoryProvider } from '@/module/memory/provider'
 import { NotifyProvider } from '@/module/notify/provider'
 
 import { generate, sign } from '@/helper/code'
 
 import { LockAuthProvider } from './lock.auth.provider'
 
-import type { Code } from '../type/code'
-
-const EXPIRE = 5 * 60 * 1000
-
-const ATTEMPT = 0
+import { EXPIRE } from '../constant'
 
 @Injectable()
 export class PhoneAuthProvider {
   private readonly secret: string
 
   constructor(
-    @Inject(CACHE_MANAGER) private readonly store: Cache,
     private readonly config: ConfigService,
     private readonly lock: LockAuthProvider,
-    private readonly notify: NotifyProvider
+    private readonly notify: NotifyProvider,
+    private readonly memory: MemoryProvider
   ) {
     this.secret = this.config.getOrThrow<string>('CODE_SECRET')
   }
@@ -39,15 +33,9 @@ export class PhoneAuthProvider {
 
     const code = generate()
 
-    await this.store.set<Code>(
-      phone,
-      {
-        hash: sign(code, phone, this.secret),
-        expire: Date.now() + EXPIRE,
-        attempt: ATTEMPT
-      },
-      EXPIRE
-    )
+    await this.memory.key.set(`auth:code:${phone}`, EXPIRE, sign(code, phone, this.secret))
+
+    await this.memory.key.remove(`auth:attempt:${phone}`)
 
     await this.notify.code.run(phone, code)
   }

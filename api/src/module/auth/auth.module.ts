@@ -1,4 +1,3 @@
-import { CacheModule } from '@nestjs/cache-manager'
 import { Module } from '@nestjs/common'
 import { JwtModule } from '@nestjs/jwt'
 import { PassportModule } from '@nestjs/passport'
@@ -23,10 +22,7 @@ import { TokenStrategy } from './strategy/token.strategy'
     UserModule,
     // dependency
     JwtModule,
-    PassportModule,
-    CacheModule.register({
-      ttl: 2 * 60 * 1000
-    })
+    PassportModule
   ],
   providers: [
     AuthProvider,

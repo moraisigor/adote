@@ -1,35 +1,31 @@
-import { CACHE_MANAGER } from '@nestjs/cache-manager'
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common'
+import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { ThrottlerException } from '@nestjs/throttler'
 
-import type { Cache } from 'cache-manager'
 import type { FastifyReply } from 'fastify'
 import { isNil } from 'lodash'
 
+import { MemoryProvider } from '@/module/memory/provider'
 import { UserRepository } from '@/module/user/repository/user.repository'
 
 import { equals } from '@/helper/code'
-import { serialize } from '@/helper/queue'
 
 import { LockAuthProvider } from './lock.auth.provider'
 import { TokenAuthProvider } from './token.auth.provider'
 
-import type { Code } from '../type/code'
+import { EXPIRE } from '../constant'
 
 const ATTEMPT = 5
-
-const INTERVAL = 0
 
 @Injectable()
 export class VerifyAuthProvider {
   private readonly secret: string
 
   constructor(
-    @Inject(CACHE_MANAGER) private readonly store: Cache,
     private readonly config: ConfigService,
     private readonly lock: LockAuthProvider,
     private readonly token: TokenAuthProvider,
+    private readonly memory: MemoryProvider,
     private readonly repository: UserRepository
   ) {
     this.secret = this.config.getOrThrow<string>('CODE_SECRET')
@@ -53,21 +49,15 @@ export class VerifyAuthProvider {
       throw new ThrottlerException()
     }
 
-    const find = await this.store.get<Code>(phone)
+    const hash = await this.memory.key.get<string>(`auth:code:${phone}`)
 
-    if (isNil(find)) {
+    if (isNil(hash)) {
       throw new UnauthorizedException()
     }
 
-    const { hash, expire, attempt } = find
+    const attempt = await this.memory.key.increment(`auth:attempt:${phone}`, EXPIRE)
 
-    const interval = expire - Date.now()
-
-    if (attempt >= ATTEMPT) {
-      throw new UnauthorizedException()
-    }
-
-    if (interval <= INTERVAL) {
+    if (attempt > ATTEMPT) {
       throw new UnauthorizedException()
     }
 
@@ -78,24 +68,10 @@ export class VerifyAuthProvider {
     }
 
     if (equals(hash, verify)) {
-      // remove from lock
       await this.lock.reset(phone)
 
-      // remove from store
-      await this.store.del(phone)
-
-      return true
+      return await this.memory.key.remove(`auth:code:${phone}`)
     }
-
-    await this.store.set<Code>(
-      phone,
-      {
-        hash,
-        expire,
-        attempt: attempt + 1
-      },
-      interval
-    )
 
     await this.lock.fail(phone)
 
@@ -103,7 +79,7 @@ export class VerifyAuthProvider {
   }
 
   async run(phone: string, code: string, reply: FastifyReply): Promise<void> {
-    const valid = await serialize(`verify:${phone}`, () => this.check(phone, code))
+    const valid = await this.check(phone, code)
 
     if (!valid) {
       throw new UnauthorizedException()
