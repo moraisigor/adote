@@ -23,7 +23,7 @@ export class ListPostProvider {
       organization && { organization: new Types.ObjectId(organization) }
     )
 
-    const list = await this.repository.list(skip, amount, query, {}, { sort: { create: 1 } })
+    const list = await this.repository.list(skip, amount, query, {}, { sort: { create: 1, _id: 1 } })
 
     return list.map((e) => new PostResponse(e))
   }

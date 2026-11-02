@@ -26,6 +26,12 @@ const POPULATE: PopulateOptions[] = [
 export class UserRepository {
   constructor(@InjectModel(User.name) private readonly model: Model<User>) {}
 
+  async exists(query: QueryFilter<User>): Promise<boolean> {
+    const result = await this.model.exists(query).exec()
+
+    return Boolean(result)
+  }
+
   distinct<K extends keyof User>(property: K, query?: QueryFilter<User>, options?: QueryOptions<User>) {
     return this.model.distinct(property, query, options).exec()
   }
@@ -37,10 +43,13 @@ export class UserRepository {
     projection?: ProjectionType<User>,
     options?: QueryOptions<User>
   ): Promise<UserView[]> {
+    const { sort } = options ?? {}
+
     return this.model
       .find(query, projection, options)
       .skip(skip)
       .limit(limit)
+      .sort(sort ?? { _id: 1 })
       .populate<UserView>(POPULATE)
       .exec()
   }

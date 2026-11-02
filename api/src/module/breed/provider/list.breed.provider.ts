@@ -9,7 +9,7 @@ export class ListBreedProvider {
   constructor(private readonly repository: BreedRepository) {}
 
   async run(kind: Kind): Promise<BreedResponse[]> {
-    const list = await this.repository.list({ kind })
+    const list = await this.repository.list({ kind }, {}, { sort: { name: 1 } })
 
     return list.map((e) => new BreedResponse(e))
   }

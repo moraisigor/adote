@@ -23,10 +23,13 @@ export class AdopterRepository {
     projection?: ProjectionType<Adopter>,
     options?: QueryOptions<Adopter>
   ): Promise<AdopterView[]> {
+    const { sort } = options ?? {}
+
     return this.model
       .find(query, projection, options)
       .skip(skip)
       .limit(limit)
+      .sort(sort ?? { _id: 1 })
       .populate<AdopterView>(POPULATE)
       .exec()
   }
