@@ -1,7 +1,15 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import type { Model, PopulateOptions, ProjectionType, QueryFilter, QueryOptions, Types } from 'mongoose'
+import type {
+  Model,
+  mongo,
+  PopulateOptions,
+  ProjectionType,
+  QueryFilter,
+  QueryOptions,
+  Types
+} from 'mongoose'
 
 import type { Kind } from '@/module/breed/type/kind'
 
@@ -20,6 +28,20 @@ const POPULATE: PopulateOptions[] = [
 @Injectable()
 export class PetRepository {
   constructor(@InjectModel(Pet.name) private readonly model: Model<Pet>) {}
+
+  async exists(query: QueryFilter<Pet>): Promise<boolean> {
+    const result = await this.model.exists(query).exec()
+
+    return Boolean(result)
+  }
+
+  distinct<K extends keyof mongo.WithId<Pet>>(
+    property: K,
+    query?: QueryFilter<Pet>,
+    options?: QueryOptions<Pet>
+  ) {
+    return this.model.distinct(property, query, options).exec()
+  }
 
   list(
     skip: number,

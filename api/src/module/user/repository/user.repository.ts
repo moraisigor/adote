@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/mongoose'
 import {
   Types,
   type Model,
+  type mongo,
   type PopulateOptions,
   type ProjectionType,
   type QueryFilter,
@@ -32,7 +33,11 @@ export class UserRepository {
     return Boolean(result)
   }
 
-  distinct<K extends keyof User>(property: K, query?: QueryFilter<User>, options?: QueryOptions<User>) {
+  distinct<K extends keyof mongo.WithId<User>>(
+    property: K,
+    query?: QueryFilter<User>,
+    options?: QueryOptions<User>
+  ) {
     return this.model.distinct(property, query, options).exec()
   }
 

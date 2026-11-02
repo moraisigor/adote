@@ -60,7 +60,7 @@ export class OrganizationRepository {
     return this.model.create(organization)
   }
 
-  async update(query: QueryFilter<Organization>, update: UpdateQuery<Organization>) {
+  async update(query: QueryFilter<Organization>, update: UpdateQuery<Organization>): Promise<boolean> {
     const { modifiedCount: count } = await this.model.updateMany(query, update).exec()
 
     return count >= 1

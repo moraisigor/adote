@@ -11,10 +11,18 @@ import type { Kind } from '../type/kind'
 export class BreedRepository {
   constructor(@InjectModel(Breed.name) private readonly model: Model<Breed>) {}
 
-  async exists(query: QueryFilter<Breed>) {
+  async exists(query: QueryFilter<Breed>): Promise<boolean> {
     const result = await this.model.exists(query).exec()
 
     return Boolean(result)
+  }
+
+  distinct<K extends keyof mongo.WithId<Breed>>(
+    property: K,
+    query?: QueryFilter<Breed>,
+    options?: QueryOptions<Breed>
+  ) {
+    return this.model.distinct(property, query, options).exec()
   }
 
   list(

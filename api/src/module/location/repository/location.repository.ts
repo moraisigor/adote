@@ -9,10 +9,18 @@ import { Location, type LocationDocument } from './location.schema'
 export class LocationRepository {
   constructor(@InjectModel(Location.name) private readonly model: Model<Location>) {}
 
-  async exists(query: QueryFilter<Location>) {
+  async exists(query: QueryFilter<Location>): Promise<boolean> {
     const result = await this.model.exists(query).exec()
 
     return Boolean(result)
+  }
+
+  distinct<K extends keyof mongo.WithId<Location>>(
+    property: K,
+    query?: QueryFilter<Location>,
+    options?: QueryOptions<Location>
+  ) {
+    return this.model.distinct(property, query, options).exec()
   }
 
   list(
