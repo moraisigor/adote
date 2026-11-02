@@ -68,7 +68,9 @@ export class PostRepository {
     projection?: ProjectionType<Post>,
     options?: QueryOptions<Post>
   ): Promise<PostView | null> {
-    return this.model.findOne(query, projection, options).populate<PostView>(POPULATE).exec()
+    return this.model
+      .findOne<PostView>(query, projection, Object.assign({ populate: POPULATE }, options))
+      .exec()
   }
 
   // prettier-ignore

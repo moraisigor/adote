@@ -5,7 +5,7 @@ import { Types } from 'mongoose'
 
 import { PostRepository } from '@/module/post/repository/post.repository'
 
-import { object } from '@/helper/repository'
+import { id, object } from '@/helper/repository'
 
 import { CreateAdopterRequest } from '../adopter.request'
 import { AdopterRepository } from '../repository/adopter.repository'
@@ -20,7 +20,10 @@ export class CreateAdopterProvider {
   async run(request: CreateAdopterRequest): Promise<void> {
     const { name, phone, pet } = request
 
-    const post = await this._post.find({ pet, publish: true })
+    const post = await this._post.find({ pet, publish: true }, 'user organization', {
+      populate: [],
+      lean: true
+    })
 
     if (isNil(post)) {
       throw new BadRequestException()
@@ -32,8 +35,8 @@ export class CreateAdopterProvider {
       name,
       phone,
       pet: new Types.ObjectId(pet),
-      user: object(user),
-      organization: object(organization)
+      user: object(id(user)),
+      organization: object(id(organization))
     })
   }
 }
