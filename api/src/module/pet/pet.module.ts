@@ -1,10 +1,8 @@
-import { forwardRef, Module } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
-import { AdopterModule } from '@/module/adopter/adopter.module'
 import { BreedModule } from '@/module/breed/breed.module'
 import { PermissionModule } from '@/module/permission/permission.module'
-import { PostModule } from '@/module/post/post.module'
 
 import { RemovePetListener } from './listener/remove.pet.listener'
 import { PetController } from './pet.controller'
@@ -21,9 +19,7 @@ import { Pet, PetSchema } from './repository/pet.schema'
   imports: [
     MongooseModule.forFeature([{ name: Pet.name, schema: PetSchema }]),
     BreedModule,
-    PermissionModule,
-    forwardRef(() => AdopterModule),
-    forwardRef(() => PostModule)
+    PermissionModule
   ],
   exports: [PetRepository],
   providers: [

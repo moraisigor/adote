@@ -1,17 +1,16 @@
 import { Injectable } from '@nestjs/common'
+import { EventEmitter2 } from '@nestjs/event-emitter'
 
-import { AdopterRepository } from '@/module/adopter/repository/adopter.repository'
 import { PermissionProvider } from '@/module/permission/provider'
-import { PostRepository } from '@/module/post/repository/post.repository'
 
+import { PetEvent } from '../pet.event'
 import { RemovePetResponse } from '../pet.response'
 import { PetRepository } from '../repository/pet.repository'
 
 @Injectable()
 export class RemovePetProvider {
   constructor(
-    private readonly _post: PostRepository,
-    private readonly _adopter: AdopterRepository,
+    private readonly event: EventEmitter2,
     private readonly permission: PermissionProvider,
     private readonly repository: PetRepository
   ) {}
@@ -21,10 +20,9 @@ export class RemovePetProvider {
 
     await this.permission.resource.run(current, find)
 
-    await this.repository.remove({ _id: id })
+    await this.event.emitAsync(PetEvent.REMOVE, id)
 
-    await this._post.remove({ pet: id })
-    await this._adopter.remove({ pet: id })
+    await this.repository.remove({ _id: id })
 
     return new RemovePetResponse(id)
   }

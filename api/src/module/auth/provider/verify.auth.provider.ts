@@ -32,7 +32,7 @@ export class VerifyAuthProvider {
   }
 
   private save(phone: string) {
-    return this.repository.update(
+    return this.repository.save(
       { phone },
       { $setOnInsert: { phone } },
       {

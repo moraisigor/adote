@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import type {
-  Model,
-  PopulateOptions,
-  ProjectionType,
-  QueryFilter,
-  QueryOptions,
+import {
   Types,
-  UpdateQuery
+  type Model,
+  type PopulateOptions,
+  type ProjectionType,
+  type QueryFilter,
+  type QueryOptions,
+  type UpdateQuery
 } from 'mongoose'
 
 import { User, type UserDocument, type UserView } from './user.schema'
@@ -71,20 +71,22 @@ export class UserRepository {
     return this.model.create(user)
   }
 
-  update(
-    query?: QueryFilter<User>,
-    update?: UpdateQuery<User>,
-    options?: QueryOptions<User>
-  ): Promise<UserDocument | null> {
-    return this.model.findOneAndUpdate(query, update, options).exec()
+  async update(query: QueryFilter<User>, update: UpdateQuery<User>): Promise<boolean> {
+    const { modifiedCount: count } = await this.model.updateMany(query, update).exec()
+
+    return count >= 1
   }
 
   save(
-    id: Types.ObjectId,
-    user: { [key: string]: unknown },
+    query: Types.ObjectId | QueryFilter<User>,
+    update?: UpdateQuery<User>,
     options?: QueryOptions<User>
   ): Promise<UserView | null> {
-    return this.model.findByIdAndUpdate(id, user, options).populate<UserView>(POPULATE).exec()
+    if (query instanceof Types.ObjectId) {
+      return this.model.findByIdAndUpdate(query, update, options).populate<UserView>(POPULATE).exec()
+    }
+
+    return this.model.findOneAndUpdate(query, update, options).populate<UserView>(POPULATE).exec()
   }
 
   async remove(query?: QueryFilter<User>): Promise<boolean> {

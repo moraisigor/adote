@@ -1,7 +1,15 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import type { Model, PopulateOptions, ProjectionType, QueryFilter, QueryOptions, Types } from 'mongoose'
+import type {
+  Model,
+  mongo,
+  PopulateOptions,
+  ProjectionType,
+  QueryFilter,
+  QueryOptions,
+  Types
+} from 'mongoose'
 
 import { Post, type PostView } from './post.schema'
 
@@ -29,7 +37,11 @@ export class PostRepository {
     return Boolean(result)
   }
 
-  distinct<K extends keyof Post>(property: K, query?: QueryFilter<Post>, options?: QueryOptions<Post>) {
+  distinct<K extends keyof mongo.WithId<Post>>(
+    property: K,
+    query?: QueryFilter<Post>,
+    options?: QueryOptions<Post>
+  ) {
     return this.model.distinct(property, query, options).exec()
   }
 

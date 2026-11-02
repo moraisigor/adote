@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config'
 import { isNil } from 'lodash'
 
 import { UserRepository } from '@/module/user/repository/user.repository'
-import type { UserDocument } from '@/module/user/repository/user.schema'
+import type { UserView } from '@/module/user/repository/user.schema'
 import { Role } from '@/module/user/type/role'
 
 import { format } from '@/helper/phone'
@@ -18,10 +18,10 @@ export class SetManagerProvider {
     private readonly repository: UserRepository
   ) {}
 
-  async run(): Promise<UserDocument> {
+  async run(): Promise<UserView> {
     const phone = this.config.getOrThrow<string>('MANAGER_ACCOUNT')
 
-    const result = await this.repository.update(
+    const result = await this.repository.save(
       { phone: format(phone) },
       {
         $set: {

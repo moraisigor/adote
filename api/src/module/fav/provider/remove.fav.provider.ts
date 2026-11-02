@@ -14,7 +14,7 @@ export class RemoveFavProvider {
   async run(post: string, user: string): Promise<FavResponse> {
     const fav = new Types.ObjectId(post)
 
-    const result = await this.repository.update(
+    const result = await this.repository.save(
       { _id: new Types.ObjectId(user), fav },
       { $pull: { fav } },
       { returnDocument: 'after' }

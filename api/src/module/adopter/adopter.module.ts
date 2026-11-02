@@ -1,4 +1,4 @@
-import { forwardRef, Module } from '@nestjs/common'
+import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
 import { PermissionModule } from '@/module/permission/permission.module'
@@ -16,7 +16,7 @@ import { Adopter, AdopterSchema } from './repository/adopter.schema'
   imports: [
     MongooseModule.forFeature([{ name: Adopter.name, schema: AdopterSchema }]),
     PermissionModule,
-    forwardRef(() => PostModule)
+    PostModule
   ],
   exports: [AdopterRepository],
   providers: [
