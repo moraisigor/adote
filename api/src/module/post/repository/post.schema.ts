@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
 import { SchemaTypes, type HydratedDocument, type MergeType, type Types } from 'mongoose'
+import lean from 'mongoose-lean-virtuals'
 
 import type { LocationDocument } from '@/module/location/repository/location.schema'
 import type { OrganizationDocument } from '@/module/organization/repository/organization.schema'
@@ -61,3 +62,5 @@ PostSchema.index({ publish: 1, location: 1, create: 1, _id: 1 })
 
 // organization
 PostSchema.index({ organization: 1, publish: 1, create: 1, _id: 1 })
+
+PostSchema.plugin(lean)

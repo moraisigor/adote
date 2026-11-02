@@ -16,7 +16,7 @@ export class RemovePostProvider {
   ) {}
 
   async run(id: string, current: string): Promise<RemovePostResponse> {
-    const find = await this.repository.find({ _id: id })
+    const find = await this.repository.find({ _id: id }, 'user organization', { populate: [] })
 
     await this.permission.resource.run(current, find)
 

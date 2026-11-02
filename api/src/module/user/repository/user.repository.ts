@@ -12,6 +12,8 @@ import {
   type UpdateQuery
 } from 'mongoose'
 
+import { LEAN } from '@/helper/repository'
+
 import { User, type UserDocument, type UserView } from './user.schema'
 
 import type { Role } from '../type/role'
@@ -51,7 +53,7 @@ export class UserRepository {
     const { sort } = options ?? {}
 
     return this.model
-      .find(query, projection, options)
+      .find(query, projection, Object.assign({ lean: LEAN }, options))
       .skip(skip)
       .limit(limit)
       .sort(sort ?? { _id: 1 })
@@ -64,7 +66,9 @@ export class UserRepository {
     projection?: ProjectionType<User>,
     options?: QueryOptions<User>
   ): Promise<UserView | null> {
-    return this.model.findOne(query, projection, options).populate<UserView>(POPULATE).exec()
+    return this.model
+      .findOne<UserView>(query, projection, Object.assign({ lean: LEAN, populate: POPULATE }, options))
+      .exec()
   }
 
   // prettier-ignore

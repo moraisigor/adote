@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
 import { SchemaTypes, type HydratedDocument, type MergeType, type Types } from 'mongoose'
+import lean from 'mongoose-lean-virtuals'
 
 import type { PetDocument } from '@/module/pet/repository/pet.schema'
 
@@ -42,3 +43,5 @@ AdopterSchema.index({ pet: 1, phone: 1 }, { unique: true })
 AdopterSchema.index({ user: 1, _id: 1 })
 
 AdopterSchema.index({ organization: 1, _id: 1 })
+
+AdopterSchema.plugin(lean)

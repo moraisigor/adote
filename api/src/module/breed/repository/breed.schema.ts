@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
 import type { HydratedDocument } from 'mongoose'
+import lean from 'mongoose-lean-virtuals'
 
 import { Kind } from '../type/kind'
 
@@ -22,3 +23,5 @@ export class Breed {
 export const BreedSchema = SchemaFactory.createForClass(Breed)
 
 BreedSchema.index({ kind: 1, name: 1 }, { unique: true })
+
+BreedSchema.plugin(lean)

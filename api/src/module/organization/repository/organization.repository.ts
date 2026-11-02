@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/mongoose'
 
 import type { Model, mongo, ProjectionType, QueryFilter, QueryOptions, Types, UpdateQuery } from 'mongoose'
 
+import { LEAN } from '@/helper/repository'
+
 import { Organization, type OrganizationDocument } from './organization.schema'
 
 import type { OrganizationRole } from '../type/organization.role'
@@ -35,7 +37,7 @@ export class OrganizationRepository {
     const { sort } = options ?? {}
 
     return this.model
-      .find(query, projection, options)
+      .find(query, projection, Object.assign({ lean: LEAN }, options))
       .skip(skip)
       .limit(limit)
       .sort(sort ?? { _id: 1 })
@@ -47,7 +49,7 @@ export class OrganizationRepository {
     projection?: ProjectionType<Organization>,
     options?: QueryOptions<Organization>
   ): Promise<OrganizationDocument | null> {
-    return this.model.findOne(query, projection, options).exec()
+    return this.model.findOne(query, projection, Object.assign({ lean: LEAN }, options)).exec()
   }
 
   create(organization: {

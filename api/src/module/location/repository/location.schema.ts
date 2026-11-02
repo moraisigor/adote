@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
 import type { HydratedDocument } from 'mongoose'
+import lean from 'mongoose-lean-virtuals'
 
 export type LocationDocument = HydratedDocument<Location>
 
@@ -25,3 +26,5 @@ export const LocationSchema = SchemaFactory.createForClass(Location)
 LocationSchema.index({ search: 1 })
 
 LocationSchema.index({ city: 1, state: 1 }, { unique: true })
+
+LocationSchema.plugin(lean)

@@ -3,6 +3,8 @@ import { Types } from 'mongoose'
 
 export type Ref = { id: string } | Types.ObjectId
 
+export const LEAN = { virtuals: true }
+
 export const id = (ref?: Ref) => {
   if (ref instanceof Types.ObjectId) {
     return ref.toHexString()

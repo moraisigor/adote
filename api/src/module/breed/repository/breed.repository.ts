@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/mongoose'
 
 import { Model, type mongo, type ProjectionType, type QueryFilter, type QueryOptions } from 'mongoose'
 
+import { LEAN } from '@/helper/repository'
+
 import { Breed, type BreedDocument } from './breed.schema'
 
 import type { Kind } from '../type/kind'
@@ -30,7 +32,7 @@ export class BreedRepository {
     projection?: ProjectionType<Breed>,
     options?: QueryOptions<Breed>
   ): Promise<BreedDocument[]> {
-    return this.model.find(query, projection, options).exec()
+    return this.model.find(query, projection, Object.assign({ lean: LEAN }, options)).exec()
   }
 
   create(

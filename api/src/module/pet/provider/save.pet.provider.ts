@@ -33,7 +33,7 @@ export class SavePetProvider {
   async run(id: string, request: SavePetRequest, current: string): Promise<PetResponse> {
     const { kind, breed } = request
 
-    const find = await this.repository.find({ _id: id })
+    const find = await this.repository.find({ _id: id }, 'user organization', { populate: [] })
 
     await this.permission.resource.run(current, find)
 

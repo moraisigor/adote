@@ -12,6 +12,8 @@ import type {
   UpdateWriteOpResult
 } from 'mongoose'
 
+import { LEAN } from '@/helper/repository'
+
 import { Adopter, type AdopterView } from './adopter.schema'
 
 const POPULATE: PopulateOptions[] = [
@@ -49,7 +51,7 @@ export class AdopterRepository {
     const { sort } = options ?? {}
 
     return this.model
-      .find(query, projection, options)
+      .find(query, projection, Object.assign({ lean: LEAN }, options))
       .skip(skip)
       .limit(limit)
       .sort(sort ?? { _id: 1 })

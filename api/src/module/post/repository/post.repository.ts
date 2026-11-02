@@ -11,6 +11,8 @@ import type {
   Types
 } from 'mongoose'
 
+import { LEAN } from '@/helper/repository'
+
 import { Post, type PostView } from './post.schema'
 
 const POPULATE: PopulateOptions[] = [
@@ -55,7 +57,7 @@ export class PostRepository {
     const { sort } = options ?? {}
 
     return this.model
-      .find(query, projection, options)
+      .find(query, projection, Object.assign({ lean: LEAN }, options))
       .skip(skip)
       .limit(limit)
       .sort(sort ?? { _id: 1 })
@@ -69,7 +71,7 @@ export class PostRepository {
     options?: QueryOptions<Post>
   ): Promise<PostView | null> {
     return this.model
-      .findOne<PostView>(query, projection, Object.assign({ populate: POPULATE }, options))
+      .findOne<PostView>(query, projection, Object.assign({ lean: LEAN, populate: POPULATE }, options))
       .exec()
   }
 

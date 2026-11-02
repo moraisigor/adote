@@ -20,7 +20,11 @@ export class ListFavProvider {
 
     const skip = (page - 1) * amount
 
-    const user = await this.repository.find({ _id: new Types.ObjectId(current) }, { fav: 1 })
+    const user = await this.repository.find(
+      { _id: new Types.ObjectId(current) },
+      { fav: 1 },
+      { populate: [] }
+    )
 
     const list = await this.post.list(
       skip,

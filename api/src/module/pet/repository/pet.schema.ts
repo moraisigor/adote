@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
 import { SchemaTypes, type HydratedDocument, type MergeType, type Types } from 'mongoose'
+import lean from 'mongoose-lean-virtuals'
 
 import type { BreedDocument } from '@/module/breed/repository/breed.schema'
 import { Kind } from '@/module/breed/type/kind'
@@ -50,3 +51,5 @@ export const PetSchema = SchemaFactory.createForClass(Pet)
 PetSchema.index({ user: 1, _id: 1 })
 
 PetSchema.index({ organization: 1, _id: 1 })
+
+PetSchema.plugin(lean)

@@ -16,7 +16,7 @@ export class PublishPostProvider {
   ) {}
 
   async run(id: string, publish: boolean, current: string): Promise<PublishPostResponse> {
-    const find = await this.repository.find({ _id: id })
+    const find = await this.repository.find({ _id: id }, 'user organization', { populate: [] })
 
     await this.permission.resource.run(current, find)
 

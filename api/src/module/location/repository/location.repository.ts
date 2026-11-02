@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/mongoose'
 
 import { Model, type mongo, type ProjectionType, type QueryFilter, type QueryOptions } from 'mongoose'
 
+import { LEAN } from '@/helper/repository'
+
 import { Location, type LocationDocument } from './location.schema'
 
 @Injectable()
@@ -28,7 +30,7 @@ export class LocationRepository {
     projection?: ProjectionType<Location>,
     options?: QueryOptions<Location>
   ): Promise<LocationDocument[]> {
-    return this.model.find(query, projection, options).exec()
+    return this.model.find(query, projection, Object.assign({ lean: LEAN }, options)).exec()
   }
 
   create(

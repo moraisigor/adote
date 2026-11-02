@@ -34,7 +34,7 @@ export class SavePostProvider {
   async run(id: string, request: SavePostRequest, current: string): Promise<PostResponse> {
     const { image, location } = request
 
-    const find = await this.repository.find({ _id: id })
+    const find = await this.repository.find({ _id: id }, 'image user organization', { populate: [] })
 
     const post = await this._permission.resource.run(current, find)
 

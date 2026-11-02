@@ -13,6 +13,8 @@ import type {
 
 import type { Kind } from '@/module/breed/type/kind'
 
+import { LEAN } from '@/helper/repository'
+
 import { Pet, type PetView } from './pet.schema'
 
 import type { Gender } from '../type/gender'
@@ -53,7 +55,7 @@ export class PetRepository {
     const { sort } = options ?? {}
 
     return this.model
-      .find(query, projection, options)
+      .find(query, projection, Object.assign({ lean: LEAN }, options))
       .skip(skip)
       .limit(limit)
       .sort(sort ?? { _id: 1 })
@@ -66,7 +68,9 @@ export class PetRepository {
     projection?: ProjectionType<Pet>,
     options?: QueryOptions<Pet>
   ): Promise<PetView | null> {
-    return this.model.findOne(query, projection, options).populate<PetView>(POPULATE).exec()
+    return this.model
+      .findOne<PetView>(query, projection, Object.assign({ lean: LEAN, populate: POPULATE }, options))
+      .exec()
   }
 
   // prettier-ignore

@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
 import { SchemaTypes, type HydratedDocument, type Types } from 'mongoose'
+import lean from 'mongoose-lean-virtuals'
 
 import { Contact } from '@/module/contact/contact.schema'
 
@@ -42,3 +43,5 @@ OrganizationSchema.index({ document: 1 }, { unique: true, sparse: true })
 OrganizationSchema.index({ image: 1 }, { sparse: true })
 
 OrganizationSchema.index({ 'member.user': 1, '_id': 1 })
+
+OrganizationSchema.plugin(lean)

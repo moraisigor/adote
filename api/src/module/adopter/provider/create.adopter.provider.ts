@@ -21,8 +21,7 @@ export class CreateAdopterProvider {
     const { name, phone, pet } = request
 
     const post = await this._post.find({ pet, publish: true }, 'user organization', {
-      populate: [],
-      lean: true
+      populate: []
     })
 
     if (isNil(post)) {

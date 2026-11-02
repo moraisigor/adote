@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
 import { SchemaTypes, type HydratedDocument, type MergeType, type Types } from 'mongoose'
+import lean from 'mongoose-lean-virtuals'
 
 import { Contact } from '@/module/contact/contact.schema'
 import type { LocationDocument } from '@/module/location/repository/location.schema'
@@ -59,3 +60,5 @@ UserSchema.index({ phone: 1 }, { unique: true })
 UserSchema.index({ image: 1 }, { sparse: true })
 
 UserSchema.index({ fav: 1 })
+
+UserSchema.plugin(lean)

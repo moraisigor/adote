@@ -43,7 +43,7 @@ export class CreatePostProvider {
   async run(request: CreatePostRequest, current: string): Promise<PostResponse> {
     const { pet, image, location } = request
 
-    const find = await this._pet.find({ _id: pet })
+    const find = await this._pet.find({ _id: pet }, 'user organization', { populate: [] })
 
     const post = await this._permission.resource.run(current, find)
 
