@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 
 import { isNil } from 'lodash'
 import { Types } from 'mongoose'
@@ -7,6 +7,8 @@ import { PostRepository } from '@/module/post/repository/post.repository'
 import { UserRepository } from '@/module/user/repository/user.repository'
 
 import { FavResponse } from '../fav.response'
+
+const LIMIT = 100
 
 @Injectable()
 export class AddFavProvider {
@@ -22,14 +24,17 @@ export class AddFavProvider {
       throw new NotFoundException()
     }
 
-    const result = await this.repository.update(
-      { _id: new Types.ObjectId(user) },
-      { $addToSet: { fav: new Types.ObjectId(post) } },
+    const fav = new Types.ObjectId(post)
+
+    const result = await this.repository.save(
+      { _id: new Types.ObjectId(user), $or: [{ [`fav.${LIMIT - 1}`]: { $exists: false } }, { fav }] },
+      { $addToSet: { fav } },
       { returnDocument: 'after' }
     )
 
+    // the user is loaded on every request, so no match means the list is full
     if (isNil(result)) {
-      throw new NotFoundException()
+      throw new BadRequestException()
     }
 
     return new FavResponse(post)

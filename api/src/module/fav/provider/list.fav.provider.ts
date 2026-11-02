@@ -27,7 +27,7 @@ export class ListFavProvider {
       amount,
       { _id: { $in: user?.fav ?? [] }, publish: true },
       {},
-      { sort: { create: 1 } }
+      { sort: { create: 1, _id: 1 } }
     )
 
     return list.map((e) => new PostResponse(e))

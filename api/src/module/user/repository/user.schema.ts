@@ -57,3 +57,5 @@ export const UserSchema = SchemaFactory.createForClass(User)
 UserSchema.index({ phone: 1 }, { unique: true })
 
 UserSchema.index({ image: 1 }, { sparse: true })
+
+UserSchema.index({ fav: 1 })
