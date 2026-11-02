@@ -8,7 +8,8 @@ import type {
   ProjectionType,
   QueryFilter,
   QueryOptions,
-  Types
+  Types,
+  UpdateQuery
 } from 'mongoose'
 
 import type { Kind } from '@/module/breed/type/kind'
@@ -88,12 +89,8 @@ export class PetRepository {
       .then((model) => model.populate<PetView>(POPULATE))
   }
 
-  save(
-    id: Types.ObjectId,
-    pet: { [key: string]: unknown },
-    options?: QueryOptions<Pet>
-  ): Promise<PetView | null> {
-    return this.model.findByIdAndUpdate(id, pet, options).populate<PetView>(POPULATE).exec()
+  save(id: Types.ObjectId, update: UpdateQuery<Pet>, options?: QueryOptions<Pet>): Promise<PetView | null> {
+    return this.model.findByIdAndUpdate(id, update, options).populate<PetView>(POPULATE).exec()
   }
 
   async remove(query?: QueryFilter<Pet>, many: boolean = false): Promise<boolean> {

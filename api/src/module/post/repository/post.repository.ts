@@ -8,7 +8,8 @@ import type {
   ProjectionType,
   QueryFilter,
   QueryOptions,
-  Types
+  Types,
+  UpdateQuery
 } from 'mongoose'
 
 import { LEAN } from '@/helper/repository'
@@ -90,10 +91,10 @@ export class PostRepository {
 
   save(
     id: Types.ObjectId,
-    post: { [key: string]: unknown },
+    update: UpdateQuery<Post>,
     options?: QueryOptions<Post>
   ): Promise<PostView | null> {
-    return this.model.findByIdAndUpdate(id, post, options).populate<PostView>(POPULATE).exec()
+    return this.model.findByIdAndUpdate(id, update, options).populate<PostView>(POPULATE).exec()
   }
 
   async remove(query?: QueryFilter<Post>, many: boolean = false): Promise<boolean> {

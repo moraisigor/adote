@@ -70,10 +70,10 @@ export class OrganizationRepository {
 
   save(
     id: Types.ObjectId,
-    organization: { [key: string]: unknown },
+    update: UpdateQuery<Organization>,
     options?: QueryOptions<Organization>
   ): Promise<OrganizationDocument | null> {
-    return this.model.findByIdAndUpdate(id, organization, options).exec()
+    return this.model.findByIdAndUpdate(id, update, options).exec()
   }
 
   async remove(query?: QueryFilter<Organization>): Promise<boolean> {
