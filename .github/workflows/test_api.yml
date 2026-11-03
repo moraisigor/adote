@@ -22,6 +22,11 @@ jobs:
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.4.0
+      - name: setup redis
+        id: redis
+        uses: shogo82148/actions-setup-redis@v1
+        with:
+          auto-start: false
       - name: install dependency
         run: bun install --frozen-lockfile
       - name: check type
@@ -32,3 +37,5 @@ jobs:
         run: bun lint:check
       - name: run test
         run: bun test:coverage
+        env:
+          REDISMS_SYSTEM_BINARY: ${{ steps.redis.outputs.redis-path }}/redis-server
