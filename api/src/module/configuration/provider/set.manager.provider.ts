@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 
-import { isNil } from 'lodash'
+import { isNil } from 'lodash-es'
 
 import { UserRepository } from '@/module/user/repository/user.repository'
 import type { UserView } from '@/module/user/repository/user.schema'

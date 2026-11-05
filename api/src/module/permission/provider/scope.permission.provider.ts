@@ -1,6 +1,6 @@
 import { ForbiddenException, Injectable } from '@nestjs/common'
 
-import { isNil } from 'lodash'
+import { isNil } from 'lodash-es'
 import { Types } from 'mongoose'
 
 import { OrganizationPermissionProvider } from './organization.permission.provider'

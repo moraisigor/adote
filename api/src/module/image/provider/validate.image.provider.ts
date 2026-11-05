@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 
 import { HeadObjectCommand } from '@aws-sdk/client-s3'
-import { isEmpty } from 'lodash'
+import { isEmpty } from 'lodash-es'
 
 import { ImageStorage } from '../image.storage'
 import { isKey, type ImageKind } from '../type/image'

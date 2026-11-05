@@ -1,4 +1,4 @@
-import { isNil } from 'lodash'
+import { isNil } from 'lodash-es'
 
 import type { Token } from '@/module/auth/type/token'
 import { Role } from '@/module/user/type/role'

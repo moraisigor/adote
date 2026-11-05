@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 
-import { isNil } from 'lodash'
+import { isNil } from 'lodash-es'
 
 import { OrganizationResponse } from '../organization.response'
 import { OrganizationRepository } from '../repository/organization.repository'

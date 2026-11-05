@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config'
 import { ThrottlerException } from '@nestjs/throttler'
 
 import type { FastifyReply } from 'fastify'
-import { isNil } from 'lodash'
+import { isNil } from 'lodash-es'
 
 import { MemoryProvider } from '@/module/memory/provider'
 import { UserRepository } from '@/module/user/repository/user.repository'

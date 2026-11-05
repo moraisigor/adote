@@ -1,6 +1,6 @@
 import { plainToInstance as instance, Transform, type TransformFnParams } from 'class-transformer'
 import { IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, validateSync } from 'class-validator'
-import { values } from 'lodash'
+import { values } from 'lodash-es'
 
 import { Env } from './helper/env'
 

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 
-import { isNil } from 'lodash'
+import { isNil } from 'lodash-es'
 
 import { UserRepository } from '../repository/user.repository'
 import { CurrentUserResponse } from '../user.response'

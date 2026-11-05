@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { Cron, CronExpression } from '@nestjs/schedule'
 
-import { difference, first, groupBy as group, map, split } from 'lodash'
+import { difference, first, groupBy as group, map, split } from 'lodash-es'
 
 import { ImageProvider } from '@/module/image/provider'
 import { ImageKind } from '@/module/image/type/image'

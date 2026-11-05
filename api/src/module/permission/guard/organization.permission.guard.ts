@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 
-import { isNil } from 'lodash'
+import { isNil } from 'lodash-es'
 import { isObjectIdOrHexString } from 'mongoose'
 
 import type { Session } from '@/type/token'

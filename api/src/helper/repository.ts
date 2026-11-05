@@ -1,4 +1,4 @@
-import { isNil, fromPairs as pair, partition, mapValues as values } from 'lodash'
+import { isNil, fromPairs as pair, partition, mapValues as values } from 'lodash-es'
 import { Types } from 'mongoose'
 
 export type Ref = { id: string } | Types.ObjectId

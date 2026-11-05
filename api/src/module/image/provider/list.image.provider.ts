@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 
 import { paginateListObjectsV2 as paginate } from '@aws-sdk/client-s3'
 import { isBefore } from 'date-fns'
-import { isNil } from 'lodash'
+import { isNil } from 'lodash-es'
 
 import { ImageStorage } from '../image.storage'
 import { IMAGE_PATTERN } from '../type/image'

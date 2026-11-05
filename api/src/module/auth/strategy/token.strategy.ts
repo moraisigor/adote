@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config'
 import { PassportStrategy } from '@nestjs/passport'
 
 import type { FastifyRequest } from 'fastify'
-import { isNil } from 'lodash'
+import { isNil } from 'lodash-es'
 import { Strategy } from 'passport-jwt'
 
 import type { Session, Token } from '@/type/token'

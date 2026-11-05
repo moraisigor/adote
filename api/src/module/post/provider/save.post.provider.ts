@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 
-import { difference, isNil } from 'lodash'
+import { difference, isNil } from 'lodash-es'
 import { Types } from 'mongoose'
 
 import { ImageProvider } from '@/module/image/provider'

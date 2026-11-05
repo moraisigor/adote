@@ -1,5 +1,5 @@
 import { parsePhoneNumberFromString as parse } from 'libphonenumber-js'
-import { isString } from 'lodash'
+import { isString } from 'lodash-es'
 
 export const format = (value: string): string => {
   if (isString(value)) {

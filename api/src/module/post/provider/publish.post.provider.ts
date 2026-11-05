@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 
-import { isNil } from 'lodash'
+import { isNil } from 'lodash-es'
 import { Types } from 'mongoose'
 
 import { PermissionProvider } from '@/module/permission/provider'

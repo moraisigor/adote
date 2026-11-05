@@ -1,7 +1,7 @@
 import { Injectable, type CanActivate, type ExecutionContext } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 
-import { isNil } from 'lodash'
+import { isNil } from 'lodash-es'
 
 import type { Session } from '@/type/token'
 

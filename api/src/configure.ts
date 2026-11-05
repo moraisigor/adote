@@ -5,7 +5,7 @@ import type { NestFastifyApplication } from '@nestjs/platform-fastify'
 import compress from '@fastify/compress'
 import cookie from '@fastify/cookie'
 import helmet from '@fastify/helmet'
-import { split } from 'lodash'
+import { split } from 'lodash-es'
 
 export const configure = async (application: NestFastifyApplication) => {
   const config = application.get(ConfigService)

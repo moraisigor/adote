@@ -1,4 +1,4 @@
-import { isString } from 'lodash'
+import { isString } from 'lodash-es'
 
 export const trim = (value: unknown): unknown => {
   if (isString(value)) {

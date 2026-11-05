@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 
 import type { FastifyReply } from 'fastify'
-import { isNil } from 'lodash'
+import { isNil } from 'lodash-es'
 
 import { UserRepository } from '@/module/user/repository/user.repository'
 

@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 
-import { isNil } from 'lodash'
+import { isNil } from 'lodash-es'
 import { Types } from 'mongoose'
 
 import { BreedRepository } from '@/module/breed/repository/breed.repository'

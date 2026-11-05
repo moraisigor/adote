@@ -2,7 +2,7 @@ import { JwtService } from '@nestjs/jwt'
 import type { NestFastifyApplication } from '@nestjs/platform-fastify'
 
 import { spyOn } from 'bun:test'
-import { isNil } from 'lodash'
+import { isNil } from 'lodash-es'
 
 import type { BreedResponse } from '@/module/breed/breed.response'
 import { Kind } from '@/module/breed/type/kind'

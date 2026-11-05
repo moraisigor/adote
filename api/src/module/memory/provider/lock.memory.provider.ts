@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 
-import { isNil } from 'lodash'
+import { isNil } from 'lodash-es'
 
 import { MemoryStore } from '../memory.store'
 
