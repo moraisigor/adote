@@ -53,7 +53,6 @@ import { RouteConfig } from './router.config.factory'
     PostModule,
     TaskModule,
     UserModule,
-    RouterModule.register(RouteConfig),
     // dependency
     ConfigModule.forRoot({
       validate,
@@ -65,6 +64,7 @@ import { RouteConfig } from './router.config.factory'
     MongooseModule.forRootAsync({
       useClass: RepositoryConfigFactory
     }),
+    RouterModule.register(RouteConfig),
     ScheduleModule.forRoot(),
     SentryModule.forRoot(),
     ThrottlerModule.forRootAsync({

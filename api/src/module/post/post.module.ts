@@ -20,11 +20,12 @@ import { Post, PostSchema } from './repository/post.schema'
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
     ImageModule,
     LocationModule,
     PermissionModule,
-    PetModule
+    PetModule,
+    // dependency
+    MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }])
   ],
   exports: [PostRepository],
   providers: [

@@ -21,11 +21,12 @@ import { UserController } from './user.controller'
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     ImageModule,
     OrganizationModule,
     PermissionModule,
-    PostModule
+    PostModule,
+    // dependency
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }])
   ],
   exports: [UserRepository],
   providers: [

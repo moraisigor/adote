@@ -17,9 +17,10 @@ import { Pet, PetSchema } from './repository/pet.schema'
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Pet.name, schema: PetSchema }]),
     BreedModule,
-    PermissionModule
+    PermissionModule,
+    // dependency
+    MongooseModule.forFeature([{ name: Pet.name, schema: PetSchema }])
   ],
   exports: [PetRepository],
   providers: [

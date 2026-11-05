@@ -14,9 +14,10 @@ import { Adopter, AdopterSchema } from './repository/adopter.schema'
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Adopter.name, schema: AdopterSchema }]),
     PermissionModule,
-    PostModule
+    PostModule,
+    // dependency
+    MongooseModule.forFeature([{ name: Adopter.name, schema: AdopterSchema }])
   ],
   exports: [AdopterRepository],
   providers: [

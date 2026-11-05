@@ -17,8 +17,9 @@ import { Organization, OrganizationSchema } from './repository/organization.sche
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Organization.name, schema: OrganizationSchema }]),
-    ImageModule
+    ImageModule,
+    // dependency
+    MongooseModule.forFeature([{ name: Organization.name, schema: OrganizationSchema }])
   ],
   exports: [OrganizationRepository],
   providers: [
