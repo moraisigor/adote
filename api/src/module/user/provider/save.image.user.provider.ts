@@ -12,12 +12,12 @@ import { CurrentUserResponse } from '../user.response'
 @Injectable()
 export class SaveImageUserProvider {
   constructor(
-    private readonly _image: ImageProvider,
+    private readonly image: ImageProvider,
     private readonly repository: UserRepository
   ) {}
 
   async run(id: string, image: string): Promise<CurrentUserResponse> {
-    const valid = await this._image.validate.run([image], ImageKind.USER, id)
+    const valid = await this.image.validate.run([image], ImageKind.USER, id)
 
     if (!valid) {
       throw new BadRequestException()

@@ -15,8 +15,8 @@ import { PostRepository } from '../repository/post.repository'
 @Injectable()
 export class SavePostProvider {
   constructor(
-    private readonly _image: ImageProvider,
-    private readonly _permission: PermissionProvider,
+    private readonly image: ImageProvider,
+    private readonly permission: PermissionProvider,
     private readonly _location: LocationRepository,
     private readonly repository: PostRepository
   ) {}
@@ -36,10 +36,10 @@ export class SavePostProvider {
 
     const find = await this.repository.find({ _id: id }, 'image user organization', { populate: [] })
 
-    const post = await this._permission.resource.run(current, find)
+    const post = await this.permission.resource.run(current, find)
 
     const valid = await Promise.all([
-      this._image.validate.run(difference(image, post.image), ImageKind.POST, current),
+      this.image.validate.run(difference(image, post.image), ImageKind.POST, current),
       this._location.exists({ _id: location })
     ]).then((validate) => validate.every(Boolean))
 
