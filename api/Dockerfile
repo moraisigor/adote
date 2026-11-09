@@ -16,9 +16,9 @@ COPY --chown=bun:bun src ./src
 
 USER bun
 
-EXPOSE 9000
+EXPOSE 9999
 
 HEALTHCHECK --start-period=10s --retries=2 --timeout=5s --interval=50s \
-  CMD ["bun", "-e", "fetch(`http://localhost:${process.env.PORT}/api/health`).then((e) => process.exit(0), () => process.exit(1))"]
+  CMD ["bun", "-e", "fetch(`http://localhost:${process.env.PORT ?? 9999}/api/health`).then(({ ok: success }) => process.exit(Number(success)), () => process.exit(1))"]
 
 CMD ["bun", "./src/main.ts"]
