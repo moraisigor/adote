@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common'
 
 import { DeleteObjectsCommand } from '@aws-sdk/client-s3'
+import { isEmpty } from 'lodash-es'
 
 import { ImageStorage } from '../image.storage'
 
@@ -18,8 +19,10 @@ export class RemoveImageProvider {
       })
     )
 
-    const message = error.map((e) => `remove ${e.Key}: ${e.Code}`).join('\n')
+    if (!isEmpty(error)) {
+      const message = error.map((e) => `remove ${e.Key}: ${e.Code}`).join('\n')
 
-    this.logger.error(message)
+      this.logger.error(message)
+    }
   }
 }
