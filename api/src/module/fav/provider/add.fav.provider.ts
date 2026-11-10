@@ -13,12 +13,12 @@ const LIMIT = 100
 @Injectable()
 export class AddFavProvider {
   constructor(
-    private readonly post: PostRepository,
+    private readonly _post: PostRepository,
     private readonly repository: UserRepository
   ) {}
 
   async run(post: string, user: string): Promise<FavResponse> {
-    const exists = await this.post.exists({ _id: post, publish: true })
+    const exists = await this._post.exists({ _id: post, publish: true })
 
     if (!exists) {
       throw new NotFoundException()

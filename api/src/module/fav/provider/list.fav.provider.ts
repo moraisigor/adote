@@ -11,7 +11,7 @@ import { ListFavRequest } from '../fav.request'
 @Injectable()
 export class ListFavProvider {
   constructor(
-    private readonly post: PostRepository,
+    private readonly _post: PostRepository,
     private readonly repository: UserRepository
   ) {}
 
@@ -26,7 +26,7 @@ export class ListFavProvider {
       { populate: [] }
     )
 
-    const list = await this.post.list(
+    const list = await this._post.list(
       skip,
       amount,
       { _id: { $in: user?.fav ?? [] }, publish: true },
