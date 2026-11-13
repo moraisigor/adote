@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 
 import { isNil } from 'lodash-es'
 import { Types } from 'mongoose'
@@ -26,7 +26,7 @@ export class SaveImageUserProvider {
     const user = await this.repository.save(new Types.ObjectId(id), { image }, { returnDocument: 'after' })
 
     if (isNil(user)) {
-      throw new BadRequestException()
+      throw new NotFoundException()
     }
 
     return new CurrentUserResponse(user)
