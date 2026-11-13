@@ -34,8 +34,8 @@ import { Post, PostSchema } from './repository/post.schema'
     ListPostProvider,
     PostProvider,
     PostRepository,
-    RemovePostListener,
     PublishPostProvider,
+    RemovePostListener,
     RemovePostProvider,
     SavePostProvider
   ],
