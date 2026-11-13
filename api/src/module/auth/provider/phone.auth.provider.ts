@@ -9,7 +9,7 @@ import { generate, sign } from '@/helper/code'
 
 import { LockAuthProvider } from './lock.auth.provider'
 
-import { EXPIRE } from '../constant'
+import { EXPIRE } from '../type/code'
 
 @Injectable()
 export class PhoneAuthProvider {
