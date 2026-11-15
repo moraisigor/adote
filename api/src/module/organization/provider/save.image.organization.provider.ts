@@ -16,8 +16,8 @@ export class SaveImageOrganizationProvider {
     private readonly repository: OrganizationRepository
   ) {}
 
-  async run(id: string, image: string, user: string): Promise<OrganizationResponse> {
-    const valid = await this.image.validate.run([image], ImageKind.ORGANIZATION, user)
+  async run(id: string, image: string, current: string): Promise<OrganizationResponse> {
+    const valid = await this.image.validate.run([image], ImageKind.ORGANIZATION, current)
 
     if (!valid) {
       throw new BadRequestException()
