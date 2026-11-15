@@ -36,9 +36,9 @@ export class RemovePostParam {
 
 export class ListPostRequest extends PageRequest {
   @IsArray()
+  @IsOptional()
   @ArrayMaxSize(10)
   @IsMongoId({ each: true, message: 'the location is not valid' })
-  @IsOptional()
   @Transform(({ value }: TransformFnParams) => {
     if (isArray(value)) {
       return value as string[]
