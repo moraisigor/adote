@@ -1,7 +1,7 @@
 const get = (env?: string) => {
-  const list: string[] = Object.values(Env)
-
   if (env) {
+    const list = Object.values<string>(Env)
+
     if (list.includes(env)) {
       return env as Env
     }
