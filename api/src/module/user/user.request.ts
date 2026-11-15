@@ -20,6 +20,8 @@ export class ListPostUserRequest extends PageRequest {
   readonly organization?: string
 }
 
+export class ListOrganizationUserRequest extends PageRequest {}
+
 export class SaveUserRequest {
   @IsString()
   @Length(2, 20)
@@ -31,7 +33,7 @@ export class SaveUserRequest {
   @ValidateNested()
   readonly contact?: ContactRequest
 
-  @IsMongoId({ message: 'the id is not valid' })
+  @IsMongoId({ message: 'the location is not valid' })
   @IsOptional()
   readonly location?: string
 }

@@ -9,12 +9,11 @@ import { Public } from '@/decorator/public.decorator'
 import type { OrganizationResponse } from '@/module/organization/organization.response'
 import type { PostResponse } from '@/module/post/post.response'
 
-import { PageRequest } from '@/helper/page'
-
 import { UserProvider } from './provider'
 import { Role } from './type/role'
 import {
   GetUserParam,
+  ListOrganizationUserRequest,
   ListPostUserRequest,
   ListUserRequest,
   SaveImageUserRequest,
@@ -51,7 +50,10 @@ export class UserController {
   }
 
   @Get('organization')
-  organization(@Query() request: PageRequest, @Current() session: Session): Promise<OrganizationResponse[]> {
+  organization(
+    @Query() request: ListOrganizationUserRequest,
+    @Current() session: Session
+  ): Promise<OrganizationResponse[]> {
     const {
       user: { id }
     } = session
