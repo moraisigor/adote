@@ -27,8 +27,8 @@ import { Organization, OrganizationSchema } from './repository/organization.sche
     GetOrganizationProvider,
     ListOrganizationProvider,
     OrganizationProvider,
-    RemoveOrganizationListener,
     OrganizationRepository,
+    RemoveOrganizationListener,
     RemoveOrganizationProvider,
     SaveImageOrganizationProvider,
     SaveOrganizationProvider
