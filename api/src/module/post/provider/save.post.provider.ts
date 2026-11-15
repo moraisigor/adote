@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 
 import { difference, isNil } from 'lodash-es'
 import { Types } from 'mongoose'
@@ -52,7 +52,7 @@ export class SavePostProvider {
     })
 
     if (isNil(result)) {
-      throw new BadRequestException()
+      throw new NotFoundException()
     }
 
     return new PostResponse(result)
