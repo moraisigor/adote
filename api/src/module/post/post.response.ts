@@ -8,7 +8,7 @@ import { url } from '@/helper/image'
 
 import type { PostView } from './repository/post.schema'
 
-export class PetPostResponse {
+class PetPostResponse {
   readonly id: string
   readonly name: string
   readonly size: Size
@@ -94,7 +94,7 @@ export class PublishPostResponse {
   readonly id: string
   readonly publish: boolean
 
-  constructor(post: PostView) {
+  constructor(post: Pick<PostView, 'id' | 'publish'>) {
     this.id = post.id
     this.publish = post.publish
   }
