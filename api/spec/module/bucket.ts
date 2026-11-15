@@ -40,7 +40,7 @@ export class Bucket {
       }
 
       if (command instanceof ListObjectsV2Command) {
-        const list = this.store.entries().map(([key, { modify }]) => ({
+        const list = Array.from(this.store.entries()).map(([key, { modify }]) => ({
           Key: key,
           LastModified: modify
         }))
