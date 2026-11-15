@@ -23,27 +23,29 @@ export class TokenStrategy extends PassportStrategy(Strategy, 'Token') {
   }
 
   async validate(token: Token): Promise<Session> {
-    const { sub, session } = token
-
-    const user = await this.repository.find({ _id: sub }, 'phone role enable', { populate: [] })
+    const user = await this.repository.find({ _id: token.sub }, 'phone role session enable', { populate: [] })
 
     if (isNil(user)) {
       throw new UnauthorizedException()
     }
 
-    const { id, phone, role, enable } = user
+    const { id, phone, role, session, enable } = user
 
     if (!enable) {
       throw new UnauthorizedException()
     }
 
-    return {
-      user: {
-        id,
-        phone,
-        role
-      },
-      session
+    if (token.session === session) {
+      return {
+        user: {
+          id,
+          phone,
+          role
+        },
+        session
+      }
     }
+
+    throw new UnauthorizedException()
   }
 }
