@@ -72,10 +72,10 @@ import { RouteConfig } from './router.config.factory'
     })
   ],
   providers: [
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
     { provide: APP_GUARD, useClass: TokenGuard },
     { provide: APP_GUARD, useClass: PermissionGuard },
     { provide: APP_GUARD, useClass: OrganizationPermissionGuard },
-    { provide: APP_GUARD, useClass: ThrottlerGuard },
     { provide: APP_FILTER, useClass: SentryGlobalFilter }
   ]
 })
