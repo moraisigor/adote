@@ -17,7 +17,7 @@ export class AddFavProvider {
     private readonly repository: UserRepository
   ) {}
 
-  async run(post: string, user: string): Promise<FavResponse> {
+  async run(post: string, current: string): Promise<FavResponse> {
     const exists = await this._post.exists({ _id: post, publish: true })
 
     if (!exists) {
@@ -27,7 +27,7 @@ export class AddFavProvider {
     const fav = new Types.ObjectId(post)
 
     const result = await this.repository.save(
-      { _id: new Types.ObjectId(user), $or: [{ [`fav.${LIMIT - 1}`]: { $exists: false } }, { fav }] },
+      { _id: new Types.ObjectId(current), $or: [{ [`fav.${LIMIT - 1}`]: { $exists: false } }, { fav }] },
       { $addToSet: { fav } },
       { returnDocument: 'after' }
     )
