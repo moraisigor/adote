@@ -33,7 +33,7 @@ export class ListImageProvider {
             return IMAGE_PATTERN.test(key)
           }
 
-          return true
+          return false
         })
         .map(({ Key: key }) => key as string)
     }
