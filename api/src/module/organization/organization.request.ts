@@ -27,7 +27,7 @@ export class SaveOrganizationParam {
   readonly id!: string
 }
 
-export class SaveImageParam {
+export class SaveImageOrganizationParam {
   @IsMongoId({ message: 'the id is not valid' })
   readonly id!: string
 }
