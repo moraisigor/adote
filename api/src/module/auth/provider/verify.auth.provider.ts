@@ -13,7 +13,7 @@ import { equals } from '@/helper/code'
 import { LockAuthProvider } from './lock.auth.provider'
 import { TokenAuthProvider } from './token.auth.provider'
 
-import { EXPIRE } from '../constant'
+import { EXPIRE } from '../type/code'
 
 const ATTEMPT = 5
 
