@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 
 import { isNil } from 'lodash-es'
 import { Types } from 'mongoose'
@@ -50,7 +50,7 @@ export class SavePetProvider {
     })
 
     if (isNil(result)) {
-      throw new BadRequestException()
+      throw new NotFoundException()
     }
 
     return new PetResponse(result)
