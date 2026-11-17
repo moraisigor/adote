@@ -27,7 +27,7 @@ export class LockAuthProvider {
     const amount = await this.memory.key.increment(this.key(phone), WINDOW)
 
     if (amount === FAIL) {
-      await this.memory.key.set(this.key(phone), amount, WINDOW)
+      await this.memory.key.set(this.key(phone), WINDOW, amount)
     }
   }
 
