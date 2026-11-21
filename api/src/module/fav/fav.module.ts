@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 
-import { PostModule } from '@/module/post/post.module'
+import { PetModule } from '@/module/pet/pet.module'
 import { UserModule } from '@/module/user/user.module'
 
 import { FavController } from './fav.controller'
@@ -11,7 +11,7 @@ import { ListFavProvider } from './provider/list.fav.provider'
 import { RemoveFavProvider } from './provider/remove.fav.provider'
 
 @Module({
-  imports: [PostModule, UserModule],
+  imports: [PetModule, UserModule],
   providers: [AddFavProvider, FavProvider, ListFavProvider, RemoveFavListener, RemoveFavProvider],
   controllers: [FavController]
 })
