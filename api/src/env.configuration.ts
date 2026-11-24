@@ -1,5 +1,14 @@
 import { plainToInstance as instance, Transform, type TransformFnParams } from 'class-transformer'
-import { IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, validateSync } from 'class-validator'
+import {
+  IsEmail,
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  validateSync
+} from 'class-validator'
 import { values } from 'lodash-es'
 
 import { Env } from './helper/env'
@@ -36,6 +45,9 @@ export class EnvConfiguration {
   @IsString()
   @IsNotEmpty()
   readonly MAIL_FROM!: string
+
+  @IsEmail()
+  readonly MAIL_CONTACT!: string
 
   // request
   @IsOptional()
