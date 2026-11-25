@@ -3,7 +3,8 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { isNil } from 'lodash-es'
 import { Types } from 'mongoose'
 
-import { PostRepository } from '@/module/post/repository/post.repository'
+import { PetRepository } from '@/module/pet/repository/pet.repository'
+import { State } from '@/module/pet/type/state'
 import { UserRepository } from '@/module/user/repository/user.repository'
 
 import { FavResponse } from '../fav.response'
@@ -13,12 +14,12 @@ const LIMIT = 100
 @Injectable()
 export class AddFavProvider {
   constructor(
-    private readonly _post: PostRepository,
+    private readonly _pet: PetRepository,
     private readonly repository: UserRepository
   ) {}
 
   async run(post: string, current: string): Promise<FavResponse> {
-    const exists = await this._post.exists({ _id: post, publish: true })
+    const exists = await this._pet.exists({ _id: post, state: State.PUBLIC })
 
     if (!exists) {
       throw new NotFoundException()
