@@ -1,13 +1,21 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
-import { SchemaTypes, type HydratedDocument, type Types } from 'mongoose'
+import { SchemaTypes, type HydratedDocument, type MergeType, type Types } from 'mongoose'
 import lean from 'mongoose-lean-virtuals'
 
 import { Contact } from '@/module/contact/contact.schema'
+import type { LocationDocument } from '@/module/location/repository/location.schema'
 
 import { Member } from './member'
 
 export type OrganizationDocument = HydratedDocument<Organization>
+
+export type OrganizationView = MergeType<
+  OrganizationDocument,
+  {
+    location?: Pick<LocationDocument, 'id' | 'city' | 'state'>
+  }
+>
 
 @Schema({
   id: true,

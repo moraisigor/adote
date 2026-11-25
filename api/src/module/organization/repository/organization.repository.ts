@@ -1,13 +1,29 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 
-import type { Model, mongo, ProjectionType, QueryFilter, QueryOptions, Types, UpdateQuery } from 'mongoose'
+import type {
+  Model,
+  mongo,
+  PopulateOptions,
+  ProjectionType,
+  QueryFilter,
+  QueryOptions,
+  Types,
+  UpdateQuery
+} from 'mongoose'
 
 import { LEAN } from '@/helper/repository'
 
-import { Organization, type OrganizationDocument } from './organization.schema'
+import { Organization, type OrganizationView } from './organization.schema'
 
 import type { OrganizationRole } from '../type/organization.role'
+
+const POPULATE: PopulateOptions[] = [
+  {
+    path: 'location',
+    select: 'city state'
+  }
+]
 
 @Injectable()
 export class OrganizationRepository {
@@ -33,7 +49,7 @@ export class OrganizationRepository {
     query?: QueryFilter<Organization>,
     projection?: ProjectionType<Organization>,
     options?: QueryOptions<Organization>
-  ): Promise<OrganizationDocument[]> {
+  ): Promise<OrganizationView[]> {
     const { sort } = options ?? {}
 
     return this.model
@@ -41,6 +57,7 @@ export class OrganizationRepository {
       .skip(skip)
       .limit(limit)
       .sort(sort ?? { _id: 1 })
+      .populate<OrganizationView>(POPULATE)
       .exec()
   }
 
@@ -48,8 +65,14 @@ export class OrganizationRepository {
     query: QueryFilter<Organization>,
     projection?: ProjectionType<Organization>,
     options?: QueryOptions<Organization>
-  ): Promise<OrganizationDocument | null> {
-    return this.model.findOne(query, projection, Object.assign({ lean: LEAN }, options)).exec()
+  ): Promise<OrganizationView | null> {
+    return this.model
+      .findOne<OrganizationView>(
+        query,
+        projection,
+        Object.assign({ lean: LEAN, populate: POPULATE }, options)
+      )
+      .exec()
   }
 
   create(organization: {
@@ -58,8 +81,8 @@ export class OrganizationRepository {
       user: Types.ObjectId
       role: OrganizationRole
     }[]
-  }): Promise<OrganizationDocument> {
-    return this.model.create(organization)
+  }): Promise<OrganizationView> {
+    return this.model.create(organization).then((model) => model.populate<OrganizationView>(POPULATE))
   }
 
   async update(query: QueryFilter<Organization>, update: UpdateQuery<Organization>): Promise<boolean> {
@@ -72,8 +95,8 @@ export class OrganizationRepository {
     id: Types.ObjectId,
     update: UpdateQuery<Organization>,
     options?: QueryOptions<Organization>
-  ): Promise<OrganizationDocument | null> {
-    return this.model.findByIdAndUpdate(id, update, options).exec()
+  ): Promise<OrganizationView | null> {
+    return this.model.findByIdAndUpdate(id, update, options).populate<OrganizationView>(POPULATE).exec()
   }
 
   async remove(query?: QueryFilter<Organization>): Promise<boolean> {
