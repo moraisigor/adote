@@ -37,7 +37,7 @@ export class User {
   @Prop({ type: Contact })
   contact?: Contact
 
-  @Prop({ type: [{ type: SchemaTypes.ObjectId, ref: 'Post' }], default: [] })
+  @Prop({ type: [{ type: SchemaTypes.ObjectId, ref: 'Pet' }], default: [] })
   fav!: Types.ObjectId[]
 
   @Prop({ type: SchemaTypes.ObjectId, ref: 'Location' })
