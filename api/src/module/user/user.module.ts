@@ -4,7 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { ImageModule } from '@/module/image/image.module'
 import { OrganizationModule } from '@/module/organization/organization.module'
 import { PermissionModule } from '@/module/permission/permission.module'
-import { PostModule } from '@/module/post/post.module'
+import { PetModule } from '@/module/pet/pet.module'
 
 import { UserProvider } from './provider'
 import { GetCurrentProvider } from './provider/get.current.provider'
@@ -24,7 +24,7 @@ import { UserController } from './user.controller'
     ImageModule,
     OrganizationModule,
     PermissionModule,
-    PostModule,
+    PetModule,
     // dependency
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }])
   ],
