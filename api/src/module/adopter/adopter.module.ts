@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common'
 import { MongooseModule } from '@nestjs/mongoose'
 
 import { PermissionModule } from '@/module/permission/permission.module'
-import { PostModule } from '@/module/post/post.module'
+import { PetModule } from '@/module/pet/pet.module'
 
 import { AdopterController } from './adopter.controller'
 import { RemoveAdopterListener } from './listener/remove.adopter.listener'
@@ -15,7 +15,7 @@ import { Adopter, AdopterSchema } from './repository/adopter.schema'
 @Module({
   imports: [
     PermissionModule,
-    PostModule,
+    PetModule,
     // dependency
     MongooseModule.forFeature([{ name: Adopter.name, schema: AdopterSchema }])
   ],
